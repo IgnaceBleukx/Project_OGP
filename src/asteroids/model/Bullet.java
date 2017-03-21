@@ -69,9 +69,16 @@ public class Bullet {
 	}
 	
 	public void setMass(){
-		this.mass = Math.pow(this.getRadius(),3) * Math.PI * 4/3;
+		this.mass = Math.pow(this.getRadius(),3) * Math.PI * 4/3 * this.density;
 	}
 
+	public double getMass(){
+		return this.mass;
+	}
+	
+	public boolean isValidMass(double mass){
+		return (mass == Math.pow(this.getRadius(),3) * Math.PI * 4/3 * this.density);
+	}
 	
 	private double xPosition;
 	private double yPosition;
