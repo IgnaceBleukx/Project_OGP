@@ -222,7 +222,7 @@ public class Ship{
 	 *				result = false
 	 */
 	public boolean isValidMass(double mass){
-		if (mass >= Math.pow(this.getRadius(),3) * 4/3 * Math.PI){
+		if (mass >= Math.pow(this.getRadius(),3) * 4/3 * Math.PI*minDensity){
 			return true;
 		}
 		else{
@@ -416,5 +416,8 @@ public class Ship{
 	private double mass;
 	private boolean thrusterState;
 	private double thrusterForce = 1.1 * Math.pow(10, 21);
+	private double minDensity = 1.42*Math.pow(10, 12);
+	
+	
 
 }
