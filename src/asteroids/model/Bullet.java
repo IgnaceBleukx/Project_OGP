@@ -96,8 +96,18 @@ public class Bullet {
 	
 	private double xVelocity;
 	private double yVelocity;
+	public final double maxVelocity = 300000;
 	
-	
+	/**
+	 * 
+	 * @param radius
+	 * @throws Throws IllegalArgumentException if the radius is not valid.
+	 * 			| if (! isValidRadius(radius))
+	 * 			|		throw IllegalArgumentException
+	 * @post Sets the radius of the current bullet to the given parameter radius if it is valid.
+	 * 			| if isValidRadius(radius)
+	 * 			|		new.getRadius = radius
+	 */
 	public void setRadius(double radius) throws IllegalArgumentException {
 		if (!isValidRadius(radius)){
 			throw new IllegalArgumentException();
@@ -107,10 +117,24 @@ public class Bullet {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return Returns the radius of the current bullet.
+	 * 			| return this.getRadius
+	 */
 	public double getRadius(){
 		return this.radius;
 	}
 	
+	private double radius;
+
+	
+	/**
+	 * 
+	 * @param radius
+	 * @return returns true if the given radius is greater than 1 and if the radius is smaller than Double.MAX_VALUE.
+	 * 			| return (radius < 1 && radius < Double.MAX_VALUE)
+	 */
 	public boolean isValidRadius(double radius){
 		if (radius > 1 && radius < Double.MAX_VALUE){
 			return true;
@@ -120,22 +144,33 @@ public class Bullet {
 		}
 	}
 	
+	/**
+	 * @post Sets the mass of the current bullet to the calculated mass using this.denisty.
+	 * 			| new.getMass() == this.getRadius ** 3 * 4/3 * pi * this.density
+	 */
 	public void setMass(){
 		this.mass = Math.pow(this.getRadius(),3) * Math.PI * 4/3 * this.density;
 	}
 
+	/**
+	 * 
+	 * @return Returns the mass of the current bullet.
+	 * 			| return this.mass
+	 */
 	public double getMass(){
 		return this.mass;
 	}
 	
+	/**
+	 * 
+	 * @param mass
+	 * @return Returns true if the given mass is equal to the current radius to the power of 3, multiplied with the denisity and 4/3 * pi.
+	 * 			| return (mass == this.getRadius() ** 3 * pi * 4/3 * this.desitity 
+	 */
 	public boolean isValidMass(double mass){
 		return (mass == Math.pow(this.getRadius(),3) * Math.PI * 4/3 * this.density);
 	}
 	
-	
-
 	private double mass;
-	public final double maxVelocity = 300000;
-	private double radius;
 	public final double density = 7.8 * Math.pow(10,12);
 }
