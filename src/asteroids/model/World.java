@@ -50,17 +50,17 @@ public class World {
 	}
 		
 	public Set<Bullet> getAllBullets() {
-		return allBullets;
+		return allBulletsWorld;
 	}
 
 	public void setAllBullets(Set<Bullet> allBullets){
-		this.allBullets = allBullets;
+		this.allBulletsWorld = allBullets;
 		
 	}
 	
 	public void addBulletToWorld(World world, Bullet bullet) throws IllegalArgumentException{
 		try{
-		world.allBullets.add(bullet);
+		world.allBulletsWorld.add(bullet);
 		}
 		catch(IllegalArgumentException exc){
 			throw new IllegalArgumentException();
@@ -70,7 +70,7 @@ public class World {
 	
 	public void removeBulletToWorld(World world, Bullet bullet) throws IllegalArgumentException{
 		try{
-		world.allBullets.remove(bullet);
+		world.allBulletsWorld.remove(bullet);
 		}
 		catch(IllegalArgumentException exc){
 			throw new IllegalArgumentException();
@@ -84,5 +84,5 @@ public class World {
 	private double width;
 	private double height;
 	private Set<Ship> allShips = new HashSet<Ship>();
-	private Set<Bullet> allBullets = new HashSet<Bullet>();
+	private Set<Bullet> allBulletsWorld = new HashSet<Bullet>();
 }
