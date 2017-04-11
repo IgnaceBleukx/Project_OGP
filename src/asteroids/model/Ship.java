@@ -1,4 +1,8 @@
 package asteroids.model;
+
+import java.util.HashSet;
+import java.util.Set;
+
 public class Ship{
 	/**
 	 * 
@@ -405,6 +409,26 @@ public class Ship{
 			return PosCollapse;	
 		}		
 	}
+	
+	
+	
+	
+
+	public Set<Bullet> getAllBulletsShip(Ship ship) {
+		return ship.allBulletsShip;
+	}
+	
+	public void setAllBulletsShip(Set<Bullet> allBulletsShip) {
+		this.allBulletsShip = allBulletsShip;
+	}
+	
+	public int getNbBulletsOnShip(Ship ship) {
+		return ship.allBulletsShip.size();
+	}
+	
+	
+	
+	
 
 	private double xVelocity;
 	private double yVelocity;
@@ -417,6 +441,7 @@ public class Ship{
 	private boolean thrusterState;
 	private double thrusterForce = 1.1 * Math.pow(10, 21);
 	private double minDensity = 1.42*Math.pow(10, 12);
+	private Set<Bullet> allBulletsShip = new HashSet<Bullet>();
 	
 	
 
