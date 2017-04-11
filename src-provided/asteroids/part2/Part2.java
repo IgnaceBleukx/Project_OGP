@@ -20,5 +20,6 @@ public class Part2 {
 
 		IFacade facade = new asteroids.facade.Facade();
 		AsteroidsFrame2.run(facade, tryFullscreen, enableSound);
+		
 	}
 }

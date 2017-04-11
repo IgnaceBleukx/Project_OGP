@@ -253,39 +253,57 @@ public class Ship{
 	
 	
 	/**
-	 * Enables the thruster of the current ship if not enabled yet.
-	 * 			| if (thrusterstate == false)
-	 * 			|		thrusterstate = true
-	 * 			|		thrust(thrusterforce / mass)
-	 * 
-	 */
-	public void thrustOn(){
-		if(! this.thrusterState == true){
+  	 * Enables the thruster of the current ship if not enabled yet.
+  	 * 			| if (thrusterstate == false)
+ 	 * 			|		thrusterstate = true
+ 	 * 			|		thrust(thrusterforce / mass)
+ 	 * 
+ 	 */
+ 	public void thrustOn(){
 		this.thrusterState = true;
-		this.thrust(this.thrusterForce / this.getMass());
-		}
-	}
+  		this.thrust(this.thrusterForce / this.getMass());
+  		}
+	
 	
 	/**
-	 * Disables the thruster of the ship if not disabled.
-	 * 			| if (thrusterstate == false)
-	 * 			|		thrusterstate = false
+	 * Enables/Disables the thruster of the current ship.
+	 * 			|		if boolean active = boolean true:
+	 * 			|			thrustOn
+	 * 			|  		else thrustOff
+	 * 
+	 */
+	public void thruster(boolean active){
+		if(active == true){
+		this.thrustOn();
+		}
+		else {
+			this.thrustOff();
+		}
+	}
+			
+	/**
+	 * Disables the thruster of the ship.
 	 * 			|		thrust(0)
 	 */
-	public void thrustOff(){
-		if (! this.thrusterState == false){	
+	 public void thrustOff(){
 		this.thrusterState = false;
-		this.thrust(0);
-		}
-	}
+	 	this.thrust(0);
+	  	}	
+		
+		
+	
 	
 	/**
 	 * 
-	 * @return Returns the current state of the thurster.
+	 * @return Returns the current state of the thruster.
 	 * 			| returns this.thrusterState
 	 */
 	public boolean inspectThruster(){
 		return this.thrusterState;
+	}
+	
+	public double getShipAcceleration(){
+		return (this.thrusterForce)/this.getMass();
 	}
 	
 	private boolean thrusterState;
@@ -448,16 +466,16 @@ public class Ship{
 	
 	
 
-	public Set<Bullet> getAllBulletsShip(Ship ship) {
-		return ship.allBulletsShip;
+	public Set<Bullet> getAllBulletsShip() {
+		return this.allBulletsShip;
 	}
 	
 	public void setAllBulletsShip(Set<Bullet> allBulletsShip) {
 		this.allBulletsShip = allBulletsShip;
 	}
 	
-	public int getNbBulletsOnShip(Ship ship) {
-		return ship.allBulletsShip.size();
+	public int getNbBulletsOnShip() {
+		return this.allBulletsShip.size();
 	}
 	
 	

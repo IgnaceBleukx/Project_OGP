@@ -1,6 +1,12 @@
 package asteroids.model;
 
 public class Bullet {
+	
+	public Bullet (double x, double y, double xVelocity, double yVelocity, double radius) {
+		this.setPosition(x, y);
+		this.setVelocity(xVelocity, yVelocity);
+		this.setRadius(radius);
+	}
 
 	/**
 	 * 

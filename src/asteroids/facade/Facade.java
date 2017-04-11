@@ -89,10 +89,8 @@ public class Facade implements asteroids.part2.facade.IFacade {
 		return false;
 	}
 
-	@Override
 	public double getShipMass(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		return ship.getMass();
 	}
 
 	@Override
@@ -101,29 +99,22 @@ public class Facade implements asteroids.part2.facade.IFacade {
 		return null;
 	}
 
-	@Override
 	public boolean isShipThrusterActive(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return false;
+		return ship.inspectThruster();
 	}
 
-	@Override
 	public void setThrusterActive(Ship ship, boolean active) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		ship.thruster(active);
 	}
 
-	@Override
 	public double getShipAcceleration(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		return ship.getShipAcceleration();
 	}
 
-	@Override
 	public Bullet createBullet(double x, double y, double xVelocity, double yVelocity, double radius)
 			throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		Bullet bullet = new Bullet(x,y,xVelocity,yVelocity,radius);
+		return bullet;
 	}
 
 	@Override
@@ -138,28 +129,21 @@ public class Facade implements asteroids.part2.facade.IFacade {
 		return false;
 	}
 
-	@Override
+
 	public double[] getBulletPosition(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return bullet.getPosition();
 	}
 
-	@Override
 	public double[] getBulletVelocity(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return bullet.getVelocity();
 	}
 
-	@Override
 	public double getBulletRadius(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getRadius();
 	}
 
-	@Override
 	public double getBulletMass(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getMass();
 	}
 
 	@Override
@@ -180,10 +164,10 @@ public class Facade implements asteroids.part2.facade.IFacade {
 		return null;
 	}
 
-	@Override
+	
 	public World createWorld(double width, double height) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		World world = new World(width, height);
+		return world;
 	}
 
 	@Override
@@ -198,58 +182,45 @@ public class Facade implements asteroids.part2.facade.IFacade {
 		return false;
 	}
 
-	@Override
 	public double[] getWorldSize(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getDimension();
 	}
 
-	@Override
 	public Set<? extends Ship> getWorldShips(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getAllShips();
 	}
 
-	@Override
 	public Set<? extends Bullet> getWorldBullets(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getAllBullets();
+		
 	}
 
-	@Override
 	public void addShipToWorld(World world, Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
+		world.addShipToWorld(world, ship);
 		
 	}
 
-	@Override
 	public void removeShipFromWorld(World world, Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
+		world.removeShipFromWorld(world, ship);
 		
 	}
 
-	@Override
 	public void addBulletToWorld(World world, Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
+		world.addBulletToWorld(world, bullet);
 		
 	}
 
-	@Override
 	public void removeBulletFromWorld(World world, Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
+		world.removeBulletToWorld(world, bullet);
 		
 	}
 
-	@Override
 	public Set<? extends Bullet> getBulletsOnShip(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return ship.getAllBulletsShip();
 	}
 
-	@Override
 	public int getNbBulletsOnShip(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		return ship.getNbBulletsOnShip();
 	}
 
 	@Override
