@@ -5,7 +5,6 @@ import java.util.Set;
 
 public class Ship{
 	/**
-	 * 
 	 * @param xVelocity
 	 * @param yVelocity
 	 * @param xPosition
@@ -44,14 +43,15 @@ public class Ship{
 		this.setOrientation(0);
 		this.setRadius(10);
 	}
+	
 	/**
 	 * 
 	 * @param xVelocity the x
 	 * @param yVelocity
 	 * @post The new velocity is set on the given velocities if they are valid. Otherwise, there will be no change.
-	 * 			| if sqrt(xVelocity**2 + yVelocity **2) < maxVelocity:
-	 * 					new.xVelocity = xVelocity
-	 * 					new.yVelocity = yVelocity
+	 * 			| if this.isValidVelocity()
+	 * 			|		new.getVelocity()[0] = xVelocity
+	 * 			|		new.getVelocity()[1] = yVelocity
 	 */
 	public void setVelocity(double xVelocity, double yVelocity){
 		if (this.isValidVelocity(xVelocity, yVelocity)){
@@ -86,16 +86,13 @@ public class Ship{
 		velocity = new double[] {this.xVelocity, this.yVelocity};
 		return velocity;		
 	}
-	/**
-	 * 
-	 * @return Returns the total velocity calculated from the current xVelocity and yVelocity of the ship.
-	 * 				| result = sqrt(xVelocity**2 + yVelocity **2)
-	 */
-	public double calcVelocity(){
-		return Math.sqrt(Math.pow(this.getVelocity()[0], 2)+Math.pow(this.getVelocity()[1], 2));
-		
-	}
 	
+	private double xVelocity;
+	private double yVelocity;
+	private final double maxVelocity = 300000;
+
+	
+		
 	/**
 	 * 
 	 * @return Returns the current orientation of the ship.
@@ -107,14 +104,17 @@ public class Ship{
 
 	/**
 	 * @param orientation
-	 * @pre  The value of the parameter orientation must be larger than or equal to 0 and smaller than or equal to pi/.
-	 * 			| 0 <= orientation <= pi/2
+	 * @pre  The value of the parameter orientation must be larger than or equal to 0 and smaller than or equal to 2 * pi.
+	 * 			| 0 <= orientation <= 2 * pi
 	 * @post Sets the current orientation of the ship to the parameter orientation.
 	 * 			| new.orientation = orientation 
 	 */
 	public void setOrientation(double orientation) {
 		this.orientation = orientation;
 	}
+	
+	private double orientation;
+
 	
 	/**
 	 * @throws NullPointerException if the position of the ship is not initialized.
@@ -137,6 +137,7 @@ public class Ship{
 			return true;
 		}
 	}
+	
 	/**
 	 * @param xPosition
 	 * @param yPosition
@@ -156,6 +157,11 @@ public class Ship{
 		this.yPosition = yPosition;
 		}
 	}
+	
+	private double xPosition;
+	private double yPosition;
+	
+	
 	/**
 	 * 
 	 * @param radius
@@ -173,6 +179,7 @@ public class Ship{
 			this.radius = radius;
 		}
 	}
+	
 	/**
 	 * 
 	 * @param radius
@@ -188,6 +195,7 @@ public class Ship{
 			return true;
 		}
 	}
+	
 	/**
 	 * 
 	 * @return Returns the current radius of the ship.
@@ -196,6 +204,10 @@ public class Ship{
 	public double getRadius(){
 		return this.radius;
 	}
+	
+	private double radius;
+
+	
 	/**
 	 * Sets the mass of the current ship to the given mass if it is valid.
 	 * @param mass
@@ -207,6 +219,7 @@ public class Ship{
 			this.mass = mass;
 		}
 	}
+	
 	/**
 	 * 
 	 * @return Returns the mass of the current ship.
@@ -215,6 +228,7 @@ public class Ship{
 	public double getMass(){
 		return this.mass;
 	}
+	
 	/**
 	 * Checks if the given double is a valid mass for the current ship.
 	 * @param mass
@@ -226,13 +240,18 @@ public class Ship{
 	 *				result = false
 	 */
 	public boolean isValidMass(double mass){
-		if (mass >= Math.pow(this.getRadius(),3) * 4/3 * Math.PI*minDensity){
+		if (mass == Math.pow(this.getRadius(),3) * 4/3 * Math.PI*minDensity){
 			return true;
 		}
 		else{
 			return false;
 		}
 	}
+	
+	private double mass;
+	private double minDensity = 1.42*Math.pow(10, 12);
+	
+	
 	/**
 	 * Enables the thruster of the current ship if not enabled yet.
 	 * 			| if (thrusterstate == false)
@@ -246,6 +265,7 @@ public class Ship{
 		this.thrust(this.thrusterForce / this.getMass());
 		}
 	}
+	
 	/**
 	 * Disables the thruster of the ship if not disabled.
 	 * 			| if (thrusterstate == false)
@@ -259,10 +279,19 @@ public class Ship{
 		}
 	}
 	
-	
+	/**
+	 * 
+	 * @return Returns the current state of the thurster.
+	 * 			| returns this.thrusterState
+	 */
 	public boolean inspectThruster(){
 		return this.thrusterState;
 	}
+	
+	private boolean thrusterState;
+	private double thrusterForce = 1.1 * Math.pow(10, 21);
+	
+
 	/**
 	 * 
 	 * @param time
@@ -281,6 +310,7 @@ public class Ship{
 			this.setPosition(this.getPosition()[0] + this.getVelocity()[0]*time, this.getPosition()[1] + this.getVelocity()[1]*time);
 		}
 	}
+	
 	/**
 	 * 
 	 * @param angle
@@ -293,6 +323,7 @@ public class Ship{
 	public void rotate(double angle){
 		this.setOrientation(this.getOrientation() + angle);
 	}
+	
 	/**
 	 * 
 	 * @param a
@@ -314,6 +345,7 @@ public class Ship{
 							
 		}
 	}
+	
 	/**
 	 * 
 	 * @param otherShip
@@ -332,6 +364,7 @@ public class Ship{
 		return  (Math.sqrt(Math.pow(this.getPosition()[0] - otherShip.getPosition()[0],2)+Math.pow(this.getPosition()[1] - otherShip.getPosition()[1],2))	- this.getRadius() - otherShip.getRadius());
 		}
 	}
+	
 	/**
 	 * 
 	 * @param otherShip
@@ -359,6 +392,7 @@ public class Ship{
 			return false;
 		}
 	}
+	
 	/**
 	 * 
 	 * @param otherShip
@@ -430,19 +464,7 @@ public class Ship{
 	
 	
 
-	private double xVelocity;
-	private double yVelocity;
-	private double xPosition;
-	private double yPosition;
-	private final double maxVelocity = 300000;
-	private double orientation;
-	private double radius;
-	private double mass;
-	private boolean thrusterState;
-	private double thrusterForce = 1.1 * Math.pow(10, 21);
-	private double minDensity = 1.42*Math.pow(10, 12);
-	private Set<Bullet> allBulletsShip = new HashSet<Bullet>();
-	
+private Set<Bullet> allBulletsShip = new HashSet<Bullet>();
 	
 
 }
