@@ -95,8 +95,7 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public World getShipWorld(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return ship.getWorld();
 	}
 
 	public boolean isShipThrusterActive(Ship ship) throws ModelException {
@@ -148,20 +147,17 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public World getBulletWorld(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return bullet.getWorld();
 	}
 
 	@Override
 	public Ship getBulletShip(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return bullet.getShip();
 	}
 
 	@Override
 	public Ship getBulletSource(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return bullet.firedFrom();
 	}
 
 	
@@ -196,22 +192,24 @@ public class Facade implements asteroids.part2.facade.IFacade {
 	}
 
 	public void addShipToWorld(World world, Ship ship) throws ModelException {
-		world.addShipToWorld(world, ship);
+		world.addShipToWorld(ship);
 		
 	}
 
 	public void removeShipFromWorld(World world, Ship ship) throws ModelException {
-		world.removeShipFromWorld(world, ship);
+		world.removeShipFromWorld(ship);
 		
 	}
 
 	public void addBulletToWorld(World world, Bullet bullet) throws ModelException {
-		world.addBulletToWorld(world, bullet);
+		world.addBulletToWorld(bullet);
+		bullet.setWorld(world);
 		
 	}
 
 	public void removeBulletFromWorld(World world, Bullet bullet) throws ModelException {
-		world.removeBulletToWorld(world, bullet);
+		world.removeBulletToWorld(bullet);
+		bullet.setWorld(null);
 		
 	}
 
@@ -225,26 +223,30 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public void loadBulletOnShip(Ship ship, Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		bullet.setShip(ship);
+		ship.loadBulletOnShip(bullet);
 	}
 
 	@Override
 	public void loadBulletsOnShip(Ship ship, Collection<Bullet> bullets) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		for (Bullet bullet : bullets){
+			bullet.setShip(ship);
+			ship.loadBulletOnShip(bullet);
+		}
 	}
 
 	@Override
 	public void removeBulletFromShip(Ship ship, Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try{
+		ship.removeBulletFromShip(bullet);
+		}	catch (IllegalArgumentException e){
+			throw new ModelException("Bullet is not part of ship and can thus not be removed from it.");
+		}
 	}
 
 	@Override
 	public void fireBullet(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		 ship.fire();
 	}
 
 	@Override

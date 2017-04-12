@@ -30,18 +30,18 @@ public class World {
 		
 	}
 	
-	public void addShipToWorld(World world, Ship ship) throws IllegalArgumentException{
+	public void addShipToWorld(Ship ship) throws IllegalArgumentException{
 		try{
-		world.allShips.add(ship);
+		this.allShips.add(ship);
 		}
 		catch(IllegalArgumentException exc){
 			throw new IllegalArgumentException();
 		}
 	}
 	
-	public void removeShipFromWorld(World world, Ship ship) throws IllegalArgumentException{
+	public void removeShipFromWorld(Ship ship) throws IllegalArgumentException{
 		try{
-		world.allShips.remove(ship);
+		this.allShips.remove(ship);
 		}
 		catch(IllegalArgumentException exc){
 			throw new IllegalArgumentException();
@@ -58,9 +58,10 @@ public class World {
 		
 	}
 	
-	public void addBulletToWorld(World world, Bullet bullet) throws IllegalArgumentException{
+	public void addBulletToWorld(Bullet bullet) throws IllegalArgumentException{
 		try{
-		world.allBulletsWorld.add(bullet);
+		this.allBulletsWorld.add(bullet);
+		bullet.setWorld(this);
 		}
 		catch(IllegalArgumentException exc){
 			throw new IllegalArgumentException();
@@ -68,9 +69,9 @@ public class World {
 		
 	}
 	
-	public void removeBulletToWorld(World world, Bullet bullet) throws IllegalArgumentException{
+	public void removeBulletToWorld(Bullet bullet) throws IllegalArgumentException{
 		try{
-		world.allBulletsWorld.remove(bullet);
+		this.allBulletsWorld.remove(bullet);
 		}
 		catch(IllegalArgumentException exc){
 			throw new IllegalArgumentException();
@@ -85,4 +86,5 @@ public class World {
 	private double height;
 	private Set<Ship> allShips = new HashSet<Ship>();
 	private Set<Bullet> allBulletsWorld = new HashSet<Bullet>();
+	
 }

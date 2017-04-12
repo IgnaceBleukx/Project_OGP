@@ -463,26 +463,70 @@ public class Ship{
 	}
 	
 	
-	
-	
 
 	public Set<Bullet> getAllBulletsShip() {
 		return this.allBulletsShip;
 	}
 	
-	public void setAllBulletsShip(Set<Bullet> allBulletsShip) {
-		this.allBulletsShip = allBulletsShip;
+	public void loadBulletOnShip(Bullet bullet){
+		if (this.getNbBulletsOnShip() < this.maxNbOfBullets){
+			this.allBulletsShip.add(bullet);
+			bullet.setPosition(this.getPosition()[0], this.getPosition()[1]);
+			bullet.setVelocity(this.getVelocity()[0], this.getVelocity()[1]);
+		}
+		
 	}
 	
 	public int getNbBulletsOnShip() {
 		return this.allBulletsShip.size();
 	}
 	
+	public void removeBulletFromShip(Bullet bullet){
+		if (this.allBulletsShip.contains(bullet)){
+			this.allBulletsShip.remove(bullet);
+			this.setMass(this.getMass() - bullet.getMass());
+		}
+		else {
+			throw new IllegalArgumentException();
+		}
+	}
 	
-	
-	
+	public void fire(){
+		if (allBulletsShip.size() == 0){
+			throw new IndexOutOfBoundsException();
+		}
+		else{
+		Bullet bulletToBeFired = allBulletsShip.iterator().next();
+		this.removeBulletFromShip(bulletToBeFired);
+		
+		double meetingpointX = this.getPosition()[0] + this.getRadius() * Math.cos(this.getOrientation());
+		double meetingpointY = this.getPosition()[1] + this.getRadius() * Math.sin(this.getOrientation());
+		
+		double bulletPosX = meetingpointX + bulletToBeFired.getRadius() * Math.cos(this.getOrientation());
+		double bulletPosY = meetingpointY + bulletToBeFired.getRadius() * Math.cos(this.getOrientation());
+		
+		bulletToBeFired.setPosition(bulletPosX, bulletPosY);
+		}
 
-private Set<Bullet> allBulletsShip = new HashSet<Bullet>();
+		
+	}
+
+	private Set<Bullet> allBulletsShip = new HashSet<Bullet>();
 	
+	
+	
+	public void setWorld(World world){
+		this.isPartOfWorld = world;
+	}
+	
+	public World getWorld(){
+		return this.isPartOfWorld;
+	}
+	
+	public boolean isValidWorld(World world){
+		return world != null;
+	}
+	private World isPartOfWorld;
+	private double maxNbOfBullets = 15;
 
 }

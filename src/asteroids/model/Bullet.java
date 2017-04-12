@@ -142,11 +142,11 @@ public class Bullet {
 	 * 			| return (radius < 1 && radius < Double.MAX_VALUE)
 	 */
 	public boolean isValidRadius(double radius){
-		if (radius > 1 && radius < Double.MAX_VALUE){
-			return true;
+		if (this.isPartOfAShip()){
+			return (radius > this.getShip().getRadius() * .1 && radius < this.getShip().getRadius());
 		}
 		else{
-			return false;
+			return (radius > 1 && radius < Double.POSITIVE_INFINITY);
 		}
 	}
 	
@@ -179,4 +179,60 @@ public class Bullet {
 	
 	private double mass;
 	public final double density = 7.8 * Math.pow(10,12);
+	
+	public void finalize(){
+		
+		this.finalize();
+	}
+	
+	/**
+	 * 
+	 * @param world
+	 * @post Sets the world of the current bullet to the given parameter world.\
+	 * 			| new.getWorld = world
+	 */
+	public void setWorld(World world){
+		this.isPartOfWorld = world;
+	}
+	
+	public World getWorld(){
+		return this.isPartOfWorld;
+	}
+	
+	public boolean isValidWorld(World world){
+		return (this.isPartOfShip == null);
+	}
+	
+	public boolean isPartOfAWorld(){
+		return !(this.getWorld() == null);
+	}
+	
+	private World isPartOfWorld;
+	
+	public boolean isPartOfAShip(){
+		return  !(this.getShip() == null);
+	}
+	
+	public void setShip(Ship ship){
+		this.isPartOfShip = ship;
+	}
+	
+	public Ship getShip(){
+		return this.isPartOfShip;
+	}
+	
+	public boolean isValidShip(Ship ship){
+		return this.isPartOfWorld == null;
+	}
+	
+	public void fired(){
+		this.firedFrom = this.getShip();
+		this.setShip(null);
+	}
+	
+	public Ship firedFrom(){
+		return this.firedFrom;
+	}
+	private Ship isPartOfShip;
+	private Ship firedFrom = null;
 }
