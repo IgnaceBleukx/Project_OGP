@@ -458,6 +458,7 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public Set<? extends Object> getEntities(World world) throws ModelException {
+
 		Set<Object> allEntities = new HashSet<Object>();
 		for (Bullet bullet : world.getAllBullets()){
 			allEntities.add(bullet);
@@ -466,7 +467,6 @@ public class Facade implements asteroids.part2.facade.IFacade {
 			allEntities.add(ship);
 		}
 		return allEntities;
-		
 	}
 
 

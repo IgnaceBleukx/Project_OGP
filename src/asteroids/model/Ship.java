@@ -506,6 +506,9 @@ public class Ship{
 		double bulletPosY = meetingpointY + bulletToBeFired.getRadius() * Math.cos(this.getOrientation());
 		
 		bulletToBeFired.setPosition(bulletPosX, bulletPosY);
+		double velocityRatio = this.getVelocity()[0] / this.getVelocity()[1];
+		bulletToBeFired.setVelocity(this.getVelocity()[0] + 250 * velocityRatio,
+										this.getVelocity()[1] + 250 * (1-velocityRatio));
 		}
 
 		
@@ -530,7 +533,12 @@ public class Ship{
 	private double maxNbOfBullets = 15;
 	
 	
-	
+	public void finalize(){
+		for(Bullet bullet : this.getAllBulletsShip()){
+			this.removeBulletFromShip(bullet);
+			
+		}
+	}
 	
 	
 
