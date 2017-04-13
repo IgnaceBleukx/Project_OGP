@@ -458,7 +458,7 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public Set<? extends Object> getEntities(World world) throws ModelException {
-		Set<Ship,Bullet> allEntities =
+		//Set<Ship,Bullet> allEntities =
 		return null;
 	}
 

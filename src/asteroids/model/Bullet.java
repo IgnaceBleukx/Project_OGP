@@ -180,10 +180,7 @@ public class Bullet {
 	private double mass;
 	public final double density = 7.8 * Math.pow(10,12);
 	
-	public void finalize(){
-		
-		this.finalize();
-	}
+	
 	
 	/**
 	 * 
@@ -235,4 +232,12 @@ public class Bullet {
 	}
 	private Ship isPartOfShip;
 	private Ship firedFrom = null;
+	
+	public void terminate(){
+		isPartOfShip.removeBulletFromShip(this);
+		isPartOfWorld.removeBulletToWorld(this);
+		this.isTerminated = true;
+	}
+	
+	private boolean isTerminated = false;
 }
