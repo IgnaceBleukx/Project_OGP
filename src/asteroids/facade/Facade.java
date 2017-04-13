@@ -1,7 +1,7 @@
 package asteroids.facade;
 
 import java.util.Collection;
-
+import java.util.HashSet;
 import java.util.Set;
 
 import asteroids.model.Bullet;
@@ -458,8 +458,15 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public Set<? extends Object> getEntities(World world) throws ModelException {
-		Set<Ship,Bullet> allEntities =
-		return null;
+		Set<Object> allEntities = new HashSet<Object>();
+		for (Bullet bullet : world.getAllBullets()){
+			allEntities.add(bullet);
+		}
+		for (Ship ship : world.getAllShips()){
+			allEntities.add(ship);
+		}
+		return allEntities;
+		
 	}
 
 
