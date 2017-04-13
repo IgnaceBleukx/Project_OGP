@@ -528,5 +528,10 @@ public class Ship{
 	}
 	private World isPartOfWorld;
 	private double maxNbOfBullets = 15;
+	
+	
+	
+	
+	
 
 }

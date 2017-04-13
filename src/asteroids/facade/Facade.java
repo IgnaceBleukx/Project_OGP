@@ -1,6 +1,7 @@
 package asteroids.facade;
 
 import java.util.Collection;
+
 import java.util.Set;
 
 import asteroids.model.Bullet;
@@ -93,7 +94,6 @@ public class Facade implements asteroids.part2.facade.IFacade {
 		return ship.getMass();
 	}
 
-	@Override
 	public World getShipWorld(Ship ship) throws ModelException {
 		return ship.getWorld();
 	}
@@ -145,17 +145,17 @@ public class Facade implements asteroids.part2.facade.IFacade {
 		return bullet.getMass();
 	}
 
-	@Override
+
 	public World getBulletWorld(Bullet bullet) throws ModelException {
 		return bullet.getWorld();
 	}
 
-	@Override
+
 	public Ship getBulletShip(Bullet bullet) throws ModelException {
 		return bullet.getShip();
 	}
 
-	@Override
+	
 	public Ship getBulletSource(Bullet bullet) throws ModelException {
 		return bullet.firedFrom();
 	}
@@ -221,13 +221,11 @@ public class Facade implements asteroids.part2.facade.IFacade {
 		return ship.getNbBulletsOnShip();
 	}
 
-	@Override
 	public void loadBulletOnShip(Ship ship, Bullet bullet) throws ModelException {
 		bullet.setShip(ship);
 		ship.loadBulletOnShip(bullet);
 	}
 
-	@Override
 	public void loadBulletsOnShip(Ship ship, Collection<Bullet> bullets) throws ModelException {
 		for (Bullet bullet : bullets){
 			bullet.setShip(ship);
@@ -235,7 +233,7 @@ public class Facade implements asteroids.part2.facade.IFacade {
 		}
 	}
 
-	@Override
+
 	public void removeBulletFromShip(Ship ship, Bullet bullet) throws ModelException {
 		try{
 		ship.removeBulletFromShip(bullet);
@@ -244,38 +242,199 @@ public class Facade implements asteroids.part2.facade.IFacade {
 		}
 	}
 
-	@Override
+
 	public void fireBullet(Ship ship) throws ModelException {
 		 ship.fire();
 	}
 
-	@Override
+
 	public double getTimeCollisionBoundary(Object object) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		double boundaryTime;
+		if(object instanceof Ship){
+			Ship entity = (Ship) object;	
+			if(entity.getVelocity()[0] > 0) {
+				if(entity.getVelocity()[1] > 0) {
+					boundaryTime = Math.min((-(entity.getVelocity()[0])+Math.sqrt(Math.pow(entity.getVelocity()[0], 2)-2*(entity.getShipAcceleration()*
+					Math.cos(entity.getOrientation()))*((entity.getPosition()[0])-((entity.getRadius())-(entity.getWorld().getDimension()[0])))))/
+							(entity.getShipAcceleration()*Math.cos(entity.getOrientation())),
+							(-(entity.getVelocity()[1])+Math.sqrt(Math.pow(entity.getVelocity()[1], 2)-2*(entity.getShipAcceleration()*
+							Math.sin(entity.getOrientation()))*((entity.getPosition()[1])-((entity.getRadius())-(entity.getWorld().getDimension()[1])))))/
+							(entity.getShipAcceleration()*Math.sin(entity.getOrientation())));
+				}
+				else{
+					boundaryTime = Math.min((-(entity.getVelocity()[0])+Math.sqrt(Math.pow(entity.getVelocity()[0], 2)-2*(entity.getShipAcceleration()*
+					Math.cos(entity.getOrientation()))*((entity.getPosition()[0])-((entity.getRadius())-(entity.getWorld().getDimension()[0])))))/
+							(entity.getShipAcceleration()*Math.cos(entity.getOrientation())),
+							(-(entity.getVelocity()[1])-Math.sqrt(Math.pow(entity.getVelocity()[1], 2)-2*(entity.getShipAcceleration()*
+									Math.sin(entity.getOrientation()))*((entity.getPosition()[1])-(entity.getRadius()))))/
+									(entity.getShipAcceleration()*Math.sin(entity.getOrientation())));					
+					}		
+			}
+			else { 
+				if(entity.getVelocity()[1] > 0) {
+					boundaryTime = Math.min((-(entity.getVelocity()[0])-Math.sqrt(Math.pow(entity.getVelocity()[0], 2)-2*(entity.getShipAcceleration()*
+					Math.cos(entity.getOrientation()))*((entity.getPosition()[0])-(entity.getRadius()))))/
+							(entity.getShipAcceleration()*Math.cos(entity.getOrientation())),
+							(-(entity.getVelocity()[1])+Math.sqrt(Math.pow(entity.getVelocity()[1], 2)-2*(entity.getShipAcceleration()*
+							Math.sin(entity.getOrientation()))*((entity.getPosition()[1])-((entity.getRadius())-(entity.getWorld().getDimension()[1])))))/
+							(entity.getShipAcceleration()*Math.sin(entity.getOrientation())));
+				}
+				else { 
+					boundaryTime = Math.min((-(entity.getVelocity()[0])-Math.sqrt(Math.pow(entity.getVelocity()[0], 2)-2*(entity.getShipAcceleration()*
+					Math.cos(entity.getOrientation()))*((entity.getPosition()[0])-(entity.getRadius()))))/
+							(entity.getShipAcceleration()*Math.cos(entity.getOrientation())),
+							(-(entity.getVelocity()[1])-Math.sqrt(Math.pow(entity.getVelocity()[1], 2)-2*(entity.getShipAcceleration()*
+							Math.sin(entity.getOrientation()))*((entity.getPosition()[1])-(entity.getRadius()))))/
+							(entity.getShipAcceleration()*Math.sin(entity.getOrientation())));
+				}
+			}
+		}
+		else {
+			Bullet entity = (Bullet) object;
+			if(entity.getVelocity()[0] > 0) {
+				if(entity.getVelocity()[1] > 0) {
+					boundaryTime = Math.min(((entity.getWorld().getDimension()[0]-entity.getRadius())-entity.getPosition()[0])/entity.getVelocity()[0],
+							((entity.getWorld().getDimension()[1]-entity.getRadius())-entity.getPosition()[1])/(entity.getVelocity()[1]));
+				}
+				else {
+					boundaryTime = Math.min(((entity.getWorld().getDimension()[0]-entity.getRadius())-entity.getPosition()[0])/entity.getVelocity()[0],
+							(entity.getRadius()-entity.getPosition()[1])/(entity.getVelocity()[1]));
+				}
+			
+			}
+			else {
+				if(entity.getVelocity()[1] > 0) {
+					boundaryTime = Math.min((entity.getRadius()-entity.getPosition()[0])/(entity.getVelocity()[0]),
+							((entity.getWorld().getDimension()[1]-entity.getRadius())-entity.getPosition()[1])/(entity.getVelocity()[1]));
+				}
+				else {
+					boundaryTime = Math.min((entity.getRadius()-entity.getPosition()[0])/(entity.getVelocity()[0]),
+							(entity.getRadius()-entity.getPosition()[1])/(entity.getVelocity()[1]));
+				}	
+			}
+		}
+		return boundaryTime;
 	}
+	
 
-	@Override
+
 	public double[] getPositionCollisionBoundary(Object object) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		double[] boundaryColPos;
+		if(object instanceof Ship){	
+			Ship entity = (Ship) object;
+			double xPosColBound = entity.getPosition()[0] + (entity.getShipAcceleration()*Math.cos(entity.getOrientation())/2)
+					*Math.pow(getTimeCollisionBoundary(entity), 2) + entity.getVelocity()[0]*getTimeCollisionBoundary(entity) + entity.getPosition()[0];
+			double yPosColBound = entity.getPosition()[1] + (entity.getShipAcceleration()*Math.sin(entity.getOrientation())/2)
+					*Math.pow(getTimeCollisionBoundary(entity), 2) + entity.getVelocity()[1]*getTimeCollisionBoundary(entity) + entity.getPosition()[1];
+			boundaryColPos = new double[] {xPosColBound,yPosColBound};
+		}
+		else {
+			Bullet entity = (Bullet) object;
+			double xPosColBound = entity.getVelocity()[0]*getTimeCollisionBoundary(entity) + entity.getPosition()[0];
+			double yPosColBound = entity.getVelocity()[1]*getTimeCollisionBoundary(entity) + entity.getPosition()[1];
+			boundaryColPos = new double[] {xPosColBound,yPosColBound};
+		}
+		
+		return boundaryColPos;
+	
 	}
-
-	@Override
+	
+	
+	
 	public double getTimeCollisionEntity(Object entity1, Object entity2) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		double timeCollisionEntities = Double.POSITIVE_INFINITY;
+		if(entity1 instanceof Ship && entity2 instanceof Ship){
+			Ship ship1 = (Ship) entity1;
+			Ship ship2 = (Ship) entity2;
+			timeCollisionEntities = ship1.getTimeToCollapse(ship2);
+		}
+		if(entity1 instanceof Ship && entity2 instanceof Bullet){
+			Ship ship = (Ship) entity1;
+			Bullet bullet = (Bullet) entity2;
+			timeCollisionEntities = 
+					-(((bullet.getVelocity()[0] - ship.getVelocity()[0]) * (bullet.getPosition()[0]-ship.getPosition()[0]) + 
+					(bullet.getVelocity()[1] - ship.getVelocity()[1]) * (bullet.getPosition()[1]-ship.getPosition()[1]) + 
+						Math.sqrt((Math.pow((bullet.getVelocity()[0] - ship.getVelocity()[0]) * (bullet.getPosition()[0]-ship.getPosition()[0]) + 
+									(bullet.getVelocity()[1] - ship.getVelocity()[1]) * (bullet.getPosition()[1]-ship.getPosition()[1]),2)) 		-
+									((Math.pow(bullet.getVelocity()[0] - ship.getVelocity()[0],2)) + (Math.pow(bullet.getVelocity()[1] - ship.getVelocity()[1],2))) * 
+										((Math.pow((bullet.getPosition()[0]) - ship.getPosition()[0],2)) + (Math.pow((bullet.getPosition()[1]) - ship.getPosition()[1],2))-
+												Math.pow((bullet.getRadius()+ship.getRadius()),2))))/((Math.pow(bullet.getVelocity()[0] - ship.getVelocity()[0],2)) + 
+														(Math.pow(bullet.getVelocity()[1] - ship.getVelocity()[1],2))));
+			
+		}
+		if(entity1 instanceof Bullet && entity2 instanceof Ship){
+			Ship ship = (Ship) entity2;
+			Bullet bullet = (Bullet) entity1;
+			timeCollisionEntities = 
+					-(((bullet.getVelocity()[0] - ship.getVelocity()[0]) * (bullet.getPosition()[0]-ship.getPosition()[0]) + 
+					(bullet.getVelocity()[1] - ship.getVelocity()[1]) * (bullet.getPosition()[1]-ship.getPosition()[1]) + 
+						Math.sqrt((Math.pow((bullet.getVelocity()[0] - ship.getVelocity()[0]) * (bullet.getPosition()[0]-ship.getPosition()[0]) + 
+									(bullet.getVelocity()[1] - ship.getVelocity()[1]) * (bullet.getPosition()[1]-ship.getPosition()[1]),2)) 		-
+									((Math.pow(bullet.getVelocity()[0] - ship.getVelocity()[0],2)) + (Math.pow(bullet.getVelocity()[1] - ship.getVelocity()[1],2))) * 
+										((Math.pow((bullet.getPosition()[0]) - ship.getPosition()[0],2)) + (Math.pow((bullet.getPosition()[1]) - ship.getPosition()[1],2))-
+												Math.pow((bullet.getRadius()+ship.getRadius()),2))))/((Math.pow(bullet.getVelocity()[0] - ship.getVelocity()[0],2)) + 
+														(Math.pow(bullet.getVelocity()[1] - ship.getVelocity()[1],2))));
+		}
+		else {
+			Bullet bullet1 = (Bullet) entity1;
+			Bullet bullet2 = (Bullet) entity2;
+			timeCollisionEntities = 
+					-(((bullet1.getVelocity()[0] - bullet2.getVelocity()[0]) * (bullet1.getPosition()[0]-bullet2.getPosition()[0]) + 
+					(bullet1.getVelocity()[1] -bullet2.getVelocity()[1]) * (bullet1.getPosition()[1]-bullet2.getPosition()[1]) + 
+						Math.sqrt((Math.pow((bullet1.getVelocity()[0] - bullet2.getVelocity()[0]) * (bullet1.getPosition()[0]-bullet2.getPosition()[0]) + 
+									(bullet1.getVelocity()[1] - bullet2.getVelocity()[1]) * (bullet1.getPosition()[1]-bullet2.getPosition()[1]),2)) 		-
+									((Math.pow(bullet1.getVelocity()[0] - bullet2.getVelocity()[0],2)) + (Math.pow(bullet1.getVelocity()[1] - bullet2.getVelocity()[1],2))) * 
+										((Math.pow((bullet1.getPosition()[0]) - bullet2.getPosition()[0],2)) + (Math.pow((bullet1.getPosition()[1]) - bullet2.getPosition()[1],2))-
+												Math.pow((bullet1.getRadius()+bullet2.getRadius()),2))))/((Math.pow(bullet1.getVelocity()[0] - bullet2.getVelocity()[0],2)) + 
+														(Math.pow(bullet1.getVelocity()[1] - bullet2.getVelocity()[1],2))));
+		}
+		
+		return timeCollisionEntities;
 	}
 
-	@Override
+	
+	
 	public double[] getPositionCollisionEntity(Object entity1, Object entity2) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		double[] posColEntities = {Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY};
+		if(entity1 instanceof Ship && entity2 instanceof Ship){
+			Ship ship1 = (Ship) entity1;
+			Ship ship2 = (Ship) entity2;
+			posColEntities = ship1.getPositionOfCollapse(ship2);
+		}
+			
+		if(entity1 instanceof Ship && entity2 instanceof Bullet){
+			Ship ship = (Ship) entity1;
+			Bullet bullet = (Bullet) entity2;
+			double xPosColEntities = ship.getPosition()[0] + (ship.getShipAcceleration()*Math.cos(ship.getOrientation())/2)
+					*Math.pow(getTimeCollisionEntity(ship,bullet), 2) + ship.getVelocity()[0]*getTimeCollisionEntity(ship,bullet) + ship.getPosition()[0];
+			double yPosColEntities = ship.getPosition()[1] + (ship.getShipAcceleration()*Math.sin(ship.getOrientation())/2)
+					*Math.pow(getTimeCollisionEntity(ship,bullet), 2) + ship.getVelocity()[1]*getTimeCollisionEntity(ship,bullet) + ship.getPosition()[1];
+			posColEntities = new double[] {xPosColEntities,yPosColEntities};
+		}
+			
+		if(entity2 instanceof Ship && entity1 instanceof Bullet){
+			Ship ship = (Ship) entity2;
+			Bullet bullet = (Bullet) entity1;
+			double xPosColEntities = ship.getPosition()[0] + (ship.getShipAcceleration()*Math.cos(ship.getOrientation())/2)
+					*Math.pow(getTimeCollisionEntity(ship,bullet), 2) + ship.getVelocity()[0]*getTimeCollisionEntity(ship,bullet) + ship.getPosition()[0];
+			double yPosColEntities = ship.getPosition()[1] + (ship.getShipAcceleration()*Math.sin(ship.getOrientation())/2)
+					*Math.pow(getTimeCollisionEntity(ship,bullet), 2) + ship.getVelocity()[1]*getTimeCollisionEntity(ship,bullet) + ship.getPosition()[1];
+			posColEntities = new double[] {xPosColEntities,yPosColEntities};
+		}
+		else {
+			Bullet bullet1 = (Bullet) entity1;
+			Bullet bullet2 = (Bullet) entity2;
+			double xPosColEntities = bullet1.getVelocity()[0]*getTimeCollisionEntity(bullet1,bullet2) + bullet1.getPosition()[0];
+			double yPosColEntities = bullet2.getVelocity()[1]*getTimeCollisionEntity(bullet1,bullet2) + bullet1.getPosition()[1];
+			posColEntities = new double[] {xPosColEntities,yPosColEntities};		
+		}	
+		return posColEntities;
 	}
-
-	@Override
+	
+	
+	
 	public double getTimeNextCollision(World world) throws ModelException {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -299,7 +458,7 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public Set<? extends Object> getEntities(World world) throws ModelException {
-		// TODO Auto-generated method stub
+		Set<Ship,Bullet> allEntities =
 		return null;
 	}
 
