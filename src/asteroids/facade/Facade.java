@@ -457,11 +457,32 @@ public class Facade implements asteroids.part2.facade.IFacade {
 		return timeNextCollision;
 	}
 
-	@Override
-	public double[] getPositionNextCollision(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+	public double[] getPositionNextCollision(World world) throws ModelException {	
+	
+		double[] posNextCollision = null;
+		double timeNextCollision = Double.POSITIVE_INFINITY;
+		Set<? extends Object> allEntities = getEntities(world);
+		timeNextCollision = getTimeNextCollision(world);
+		
+		for (Object object1 : allEntities){
+			if(getTimeCollisionBoundary(object1) == timeNextCollision){
+				posNextCollision = getPositionCollisionBoundary(object1);
+			}
+			for (Object object2 : allEntities){
+				if(object1 == object2){
+					continue;
+				}
+				else {
+					if(getTimeCollisionEntity(object1,object2) == timeNextCollision){
+						posNextCollision = getPositionCollisionEntity(object1,object2);
+					}
+				}
+			}
+		}
+		return posNextCollision;
 	}
+	
+
 
 	@Override
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
