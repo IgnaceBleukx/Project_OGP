@@ -1,6 +1,8 @@
 package asteroids.model;
 
-public class Bullet {
+import asteroids.facade.Facade;
+
+public class Bullet extends Facade {
 	
 	public Bullet (double x, double y, double xVelocity, double yVelocity, double radius) {
 		this.setPosition(x, y);

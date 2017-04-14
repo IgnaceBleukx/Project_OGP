@@ -3,7 +3,9 @@ package asteroids.model;
 import java.util.HashSet;
 import java.util.Set;
 
-public class World {
+import asteroids.facade.Facade;
+import asteroids.part2.CollisionListener; 
+public class World extends Facade{
 
 	public World (double width, double height){
 		this.setDimension(width, height);
@@ -76,6 +78,24 @@ public class World {
 		catch(IllegalArgumentException exc){
 			throw new IllegalArgumentException();
 		}
+	}
+	
+	public void evolve(World world, double dt, CollisionListener collisionListener){
+		double timeNextCollision = getTimeNextCollision(world);
+		if(timeNextCollision > dt){
+			for (Ship ship : this.getAllShips()){
+				ship.setPosition(ship.getPosition()[0] + ship.getVelocity()[0]*dt, ship.getPosition()[1] + ship.getVelocity()[1]*dt);
+				if(ship.inspectThruster() == true){
+					ship.newThruster(ship.getShipAcceleration(),dt);			
+				}
+			}
+			for (Bullet bullet : this.getAllBullets()){
+				bullet.setPosition(bullet.getPosition()[0] + bullet.getVelocity()[0]*dt, bullet.getPosition()[1] + bullet.getVelocity()[1]);
+				
+			}
+			
+		}
+		
 	}
 	
 	

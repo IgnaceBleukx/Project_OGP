@@ -250,7 +250,7 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	public double getTimeCollisionBoundary(Object object) throws ModelException {
 		
-		double boundaryTime;
+		double boundaryTime = Double.POSITIVE_INFINITY;
 		if(object instanceof Ship){
 			Ship entity = (Ship) object;	
 			if(entity.getVelocity()[0] > 0) {
@@ -484,9 +484,9 @@ public class Facade implements asteroids.part2.facade.IFacade {
 	
 
 
-	@Override
+
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
-		// TODO Auto-generated method stub
+		world.evolve(world, dt, collisionListener);
 		
 	}
 

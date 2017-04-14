@@ -3,7 +3,9 @@ package asteroids.model;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Ship{
+import asteroids.facade.Facade;
+
+public class Ship extends Facade{
 	/**
 	 * @param xVelocity
 	 * @param yVelocity
@@ -290,8 +292,6 @@ public class Ship{
 	 	this.thrust(0);
 	  	}	
 		
-		
-	
 	
 	/**
 	 * 
@@ -308,6 +308,28 @@ public class Ship{
 	
 	private boolean thrusterState;
 	private double thrusterForce = 1.1 * Math.pow(10, 21);
+	
+	
+	
+	public void newThruster(double a,double dt){
+		if (a <= 0){
+			a = 0;
+		}
+		if (isValidVelocity(this.xVelocity += a * Math.cos(orientation)*dt, this.yVelocity += a * Math.sin(orientation)*dt)){
+			this.setVelocity(this.xVelocity + a * Math.cos(orientation)*dt,this.yVelocity + a * Math.sin(orientation)*dt);
+		}	
+		else{
+			this.setVelocity(maxVelocity*Math.cos(orientation), 
+								 maxVelocity*Math.sin(orientation));
+							
+		}
+		
+	}
+	
+	
+	
+	
+	
 	
 
 	/**
