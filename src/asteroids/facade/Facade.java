@@ -435,7 +435,26 @@ public class Facade implements asteroids.part2.facade.IFacade {
 	
 	
 	public double getTimeNextCollision(World world) throws ModelException {
-		return 0;
+		
+		double timeNextCollision = Double.POSITIVE_INFINITY;
+		Set<? extends Object> allEntities = getEntities(world);
+		
+		for (Object object1 : allEntities){
+			if(getTimeCollisionBoundary(object1) < timeNextCollision){
+				timeNextCollision = getTimeCollisionBoundary(object1);
+			}
+			for (Object object2 : allEntities){
+				if(object1 == object2){
+					continue;
+				}
+				else {
+					if(getTimeCollisionEntity(object1,object2) < timeNextCollision){
+						timeNextCollision = getTimeCollisionEntity(object1,object2);
+					}	
+				}		
+			}
+		}
+		return timeNextCollision;
 	}
 
 	@Override
