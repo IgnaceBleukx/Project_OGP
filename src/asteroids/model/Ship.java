@@ -93,6 +93,14 @@ public class Ship extends Object {
 		velocity = new double[] {this.xVelocity, this.yVelocity};
 		return velocity;		
 	}
+	/**
+	 * 
+	 * @return Returns the total velocity of the current ship.
+	 * 			| return sqrt(this.getVelocity()[1] ** 2 + this.getVelocity()[0] ** 2)
+	 */ 
+	public double getTotalVelocity(){
+		return Math.sqrt(Math.pow(this.getVelocity()[0], 2) + Math.pow(this.getVelocity()[1],2));
+	}
 	
 	private double xVelocity;
 	private double yVelocity;
@@ -492,11 +500,23 @@ public class Ship extends Object {
 		}
 	}
 	
-	
-	public Set<Bullet> getAllBulletsShip(){
+
+
+	/**
+	 * 
+	 * @return Returns a hash set of all bullets loaded on the ship.
+	 */
+	public Set<Bullet> getAllBulletsShip() {
 		return this.allBulletsShip;
 	}
 	
+	/**
+	 * 
+	 * @param bullet
+	 * @post The given bullet is loaded on the ship, thus the velocity and position is equal to the velocity and position of the current ship.
+	 * 			| bullet.getPosition == this.getPosition
+	 * 			| bullet.getVelocity == this.getVelocity
+	 */
 	public void loadBulletOnShip(Bullet bullet){
 		if (this.getNbBulletsOnShip() < this.maxNbOfBullets){
 			this.allBulletsShip.add(bullet);
@@ -505,12 +525,25 @@ public class Ship extends Object {
 		}
 		
 	}
-	
+	/**
+	 * 
+	 * @return Returns the amount of bullets loaded on the ship.
+	 */
 	public int getNbBulletsOnShip() {
 		return this.allBulletsShip.size();
 	}
-	
-	public void removeBulletFromShip(Bullet bullet){
+	/**
+	 * @throws IllegalArgumentException Throws a new IllegalArgumentException if the given bullet is not loaded on the ship.
+	 * 			| if (! allBulletsShip.contains(bullet)
+	 * 			| 		throw IllegalArgumentException
+	 * @param bullet
+	 * @effect Removes the given bullet from the ship if it is loaded on it.
+	 * 			| ! this.getAllBulletsShip().contains(this)
+	 * @effect The mass of the ship is lowered with the mass of the bullet.
+	 * 			| new.getMass == this.getMass - bullet.getMass
+	 * 
+	 */
+	public void removeBulletFromShip(Bullet bullet) throws IllegalArgumentException{
 		if (this.allBulletsShip.contains(bullet)){
 			this.allBulletsShip.remove(bullet);
 			this.setMass(this.getMass() - bullet.getMass());
@@ -519,8 +552,13 @@ public class Ship extends Object {
 			throw new IllegalArgumentException();
 		}
 	}
-	
-	public void fire(){
+	/**
+	 * 
+	 * @throws IndexOutOfBoundsException
+	 * @post The first bullet in allBulletsShip is fired from the ship and thus is removed from the ship.
+	 * 			|	 * 
+	 */
+	public void fire() throws IndexOutOfBoundsException{
 		if (allBulletsShip.size() <= 0){
 			throw new IndexOutOfBoundsException();
 		}
@@ -550,30 +588,52 @@ public class Ship extends Object {
 	private Set<Bullet> allBulletsShip = new HashSet<Bullet>();
 	
 	
-	
+	/**
+	 * Sets the world of the current ship
+	 * @param world
+	 */
 	public void setWorld(World world){
 		this.isPartOfWorld = world;
 	}
-	
+	/**
+	 * 
+	 * @return Returns the world the current ship is placed in.
+	 */
 	public World getWorld(){
 		return this.isPartOfWorld;
 	}
-	
+	/**
+	 * 
+	 * @param world
+	 * @return Returns true if the world is excising and false if it is not.
+	 * 			| returns world != null
+	 */
 	public boolean isValidWorld(World world){
 		return world != null;
 	}
 	private World isPartOfWorld;
 	private double maxNbOfBullets = 15;
 	
-	
+	/**
+	 * Terminates the current ship
+	 * @post All bullets loaded on the ship are terminate.
+	 * 			| for bullet in getAllBulletsShip()
+	 * 			|		bullet.terminate
+	 * @post The current ship is removed from the world it is currently in.
+	 * 			| this.getWorld.removeShip(this)
+	 */
 	public void terminate(){
 		for(Bullet bullet : this.getAllBulletsShip()){
-			this.removeBulletFromShip(bullet);
+			bullet.terminate();
 		}
 		this.getWorld().removeShipFromWorld(this);
 		this.isTerminated = true;
 	}
-	
+	/**
+	 * 
+	 * @return Returns true if the current ship is terminated, returns false if it is not.
+	 * 			| returns this.isTerminated
+	 */
 	public boolean isTerminated(){
 		return this.isTerminated;
 	}
