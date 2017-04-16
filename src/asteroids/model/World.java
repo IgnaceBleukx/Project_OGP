@@ -268,12 +268,12 @@ public class World extends Object {
 			}
 		if((this.getCollisionEntity1() instanceof Ship && this.getCollisionEntity2() instanceof Bullet)){
 			if(this.getCollisionEntity2().firedFrom() == this.getCollisionEntity1()){
-				this.getCollisionEntity1().loadBulletOnShip(this.getCollisionEntity2());
+				//this.getCollisionEntity1().loadBulletOnShip(this.getCollisionEntity2());
 				}
 			}
 		if((this.getCollisionEntity1() instanceof Bullet && this.getCollisionEntity2() instanceof Ship)){
 			if(this.getCollisionEntity1().firedFrom() == this.getCollisionEntity2()){
-				this.getCollisionEntity2().loadBulletOnShip(this.getCollisionEntity1());
+				 //this.getCollisionEntity2().loadBulletOnShip(this.getCollisionEntity1());
 				}
 			}
 		
