@@ -360,8 +360,8 @@ public class Ship{
 	 * 
 	 * @param angle
 	 * 			The angle that needs to be added to the current orientation.
-	 * @pre  The sum of the current orientation and the given angle must be smaller or equal to pi/2 and must be larger than or equal to 0.
-	 * 			| this.getOrientation() + angle <= pi/2 && this.getOrientation() + angle >= 0.
+	 * @pre  The sum of the current orientation and the given angle must be smaller or equal to 2*PI and must be larger than or equal to 0.
+	 * 			| this.getOrientation() + angle <= 2*PI && this.getOrientation() + angle >= 0.
 	 * @post Increases the current orientation with the value of the parameter angle.
 	 * 			| new.orientation = old.orientation + angle
 	 */

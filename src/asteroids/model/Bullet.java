@@ -4,6 +4,17 @@ import asteroids.facade.Facade;
 
 public class Bullet{
 	
+	/**
+	 * @param x
+	 * @param y
+	 * @param xVelocity
+	 * @param yVelocity
+	 * @param radius
+	 * @throws IllegalArgumentException
+	 * 			If one of the given parameters is invalid, a new exception of the type IllegalArgumentException will be thrown.
+	 * This method creates a new object of type Bullet with given parameters.
+	 */
+	
 	public Bullet (double x, double y, double xVelocity, double yVelocity, double radius) {
 		this.setPosition(x, y);
 		this.setVelocity(xVelocity, yVelocity);
@@ -14,7 +25,7 @@ public class Bullet{
 	 * 
 	 * @param xPosition
 	 * @param yPosition
-	 * @post Sets the position of the current bullet to the parameters xPosition and yPositionif they are valid.
+	 * @post Sets the position of the current bullet to the parameters xPosition and yPosition if they are valid.
 	 * 			| if this.isValidPosition(xPosition, yPosition)
 	 * 			|		new.getPosition()[0] = xPosition
 	 * 			|		new.getPosition()[1] = yPostition
@@ -190,9 +201,12 @@ public class Bullet{
 	 * @post Sets the world of the current bullet to the given parameter world.\
 	 * 			| new.getWorld = world
 	 */
+	
 	public void setWorld(World world){
 		this.isPartOfWorld = world;
 	}
+	
+	
 	
 	public World getWorld(){
 		return this.isPartOfWorld;
