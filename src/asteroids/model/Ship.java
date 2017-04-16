@@ -530,15 +530,19 @@ public class Ship{
 		double meetingpointY = this.getPosition()[1] + this.getRadius() * Math.sin(this.getOrientation());
 		
 		double bulletPosX = meetingpointX + bulletToBeFired.getRadius() * Math.cos(this.getOrientation());
-		double bulletPosY = meetingpointY + bulletToBeFired.getRadius() * Math.cos(this.getOrientation());
+		double bulletPosY = meetingpointY + bulletToBeFired.getRadius() * Math.sin(this.getOrientation());
 		
 		bulletToBeFired.setPosition(bulletPosX, bulletPosY);
-		double velocityRatio = this.getVelocity()[0] / this.getVelocity()[1];
-		bulletToBeFired.setVelocity(this.getVelocity()[0] + 250 * velocityRatio,
-										this.getVelocity()[1] + 250 * (1-velocityRatio));
+		
+		double temp = 250 * Math.sqrt(Math.pow(this.getVelocity()[0],2) + Math.pow(this.getVelocity()[1],2));
+		double xSupplement = -4 * this.getVelocity()[1] + Math.sqrt(Math.pow(4 * this.getVelocity()[1], 2 ) 
+									- 4 * Math.pow(this.getVelocity()[1] , 2) * temp / this.getVelocity()[0]) /
+								(2 * this.getVelocity()[1] * this.getVelocity()[1] / this.getVelocity()[0]  + 2);
+		double ySupplement = xSupplement * this.getVelocity()[1] / this.getVelocity()[0];
+		
+		bulletToBeFired.setVelocity(this.getVelocity()[0] + xSupplement, this.getVelocity()[1] + ySupplement);
 		}
 
-		
 	}
 
 	private Set<Bullet> allBulletsShip = new HashSet<Bullet>();
