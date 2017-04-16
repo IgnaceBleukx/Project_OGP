@@ -4,8 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import asteroids.facade.Facade;
-
-public class Ship extends Facade{
+public class Ship{
 	/**
 	 * @param xVelocity
 	 * @param yVelocity
@@ -59,6 +58,9 @@ public class Ship extends Facade{
 		if (this.isValidVelocity(xVelocity, yVelocity)){
 			this.xVelocity = xVelocity;
 			this.yVelocity = yVelocity;	
+			for (Bullet bullet : this.getAllBulletsShip()){
+				bullet.setVelocity(xVelocity, yVelocity);
+			}
 		}
 	}
 	
@@ -157,6 +159,9 @@ public class Ship extends Facade{
 		else{
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
+		for (Bullet bullet : this.getAllBulletsShip()){
+			bullet.setPosition(xPosition, yPosition);
+		}
 		}
 	}
 	
@@ -514,7 +519,7 @@ public class Ship extends Facade{
 	}
 	
 	public void fire(){
-		if (allBulletsShip.size() == 0){
+		if (allBulletsShip.size() <= 0){
 			throw new IndexOutOfBoundsException();
 		}
 		else{
@@ -555,13 +560,19 @@ public class Ship extends Facade{
 	private double maxNbOfBullets = 15;
 	
 	
-	public void finalize(){
+	public void terminate(){
 		for(Bullet bullet : this.getAllBulletsShip()){
 			this.removeBulletFromShip(bullet);
-			
 		}
+		this.getWorld().removeShipFromWorld(this);
+		this.isTerminated = true;
 	}
 	
+	public boolean isTerminated(){
+		return this.isTerminated;
+	}
+	
+	private boolean isTerminated = false;
 	
 
 }

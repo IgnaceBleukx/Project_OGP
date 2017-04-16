@@ -2,7 +2,7 @@ package asteroids.model;
 
 import asteroids.facade.Facade;
 
-public class Bullet extends Facade {
+public class Bullet{
 	
 	public Bullet (double x, double y, double xVelocity, double yVelocity, double radius) {
 		this.setPosition(x, y);
@@ -239,6 +239,7 @@ public class Bullet extends Facade {
 		isPartOfShip.removeBulletFromShip(this);
 		isPartOfWorld.removeBulletToWorld(this);
 		this.isTerminated = true;
+		
 	}
 	
 	private boolean isTerminated = false;

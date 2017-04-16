@@ -80,14 +80,12 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public void terminateShip(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		ship.terminate();
 	}
 
 	@Override
 	public boolean isTerminatedShip(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return false;
+		return ship.isTerminated();
 	}
 
 	public double getShipMass(Ship ship) throws ModelException {
@@ -244,7 +242,11 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 
 	public void fireBullet(Ship ship) throws ModelException {
-		 ship.fire();
+		 try{
+			 ship.fire();
+		 }catch(IndexOutOfBoundsException e){
+			 throw new ModelException("The set of bullets of the ship is empty");
+		 }
 	}
 
 
@@ -486,15 +488,25 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
-		world.evolve(world, dt, collisionListener);
+		//world.evolve(dt, collisionListener);
 		
 	}
 
 	@Override
 	public Object getEntityAt(World world, double x, double y) throws ModelException {
-		// TODO Auto-generated method stub
+		for (Bullet bullet: world.getAllBullets()){
+			if (bullet.getPosition()[0] == x && bullet.getPosition()[1] == y){
+				return bullet;
+			}
+		}
+		for (Ship ship: world.getAllShips()){
+			if (ship.getPosition()[0] == x && ship.getPosition()[1] == y){
+				return ship;
+			}
+		}
 		return null;
-	}
+		}
+	
 
 	@Override
 	public Set<? extends Object> getEntities(World world) throws ModelException {
