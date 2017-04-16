@@ -3,9 +3,11 @@ package asteroids.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import asteroids.facade.Facade;
-import asteroids.part2.CollisionListener; 
-public class World{
+import apple.laf.JRSUIState.TitleBarHeightState;
+import asteroids.part2.CollisionListener;
+import asteroids.util.ModelException; 
+
+public class World extends Object {
 	
 	/**
 	 * @param width
@@ -152,26 +154,134 @@ public class World{
 		}
 	}
 	
-//	public void evolve(double dt, CollisionListener collisionListener){
-//		double timeNextCollision = this.getTimeNextCollision();
-//		if(timeNextCollision > dt){
-//			for (Ship ship : this.getAllShips()){
-//				ship.setPosition(ship.getPosition()[0] + ship.getVelocity()[0]*dt, ship.getPosition()[1] + ship.getVelocity()[1]*dt);
-//				if(ship.inspectThruster() == true){
-//					ship.newThruster(ship.getShipAcceleration(),dt);			
-//				}
-//			}
-//			for (Bullet bullet : this.getAllBullets()){
-//				bullet.setPosition(bullet.getPosition()[0] + bullet.getVelocity()[0]*dt, bullet.getPosition()[1] + bullet.getVelocity()[1]);
-//				
-//			}
-//			
-//		}
-//		
-//	}
 	
+	public Object getEntityAt(double x, double y){
+		for (Object object: this.getEntities()){
+			if (object.getPosition()[0] == x && object.getPosition()[1] == y){
+				return object;
+				}
+			}
+		return null;
+		}
 	
+	public Set<? extends Object> getEntities(){
 
+		Set<Object> allEntities = new HashSet<Object>();
+		for (Bullet bullet : this.getAllBullets()){
+			allEntities.add(bullet);
+		}
+		for (Ship ship : this.getAllShips()){
+			allEntities.add(ship);
+		}
+		return allEntities;
+	}
+	
+	
+	public double getTimeNextCollision() {
+		double timeNextCollision = Double.POSITIVE_INFINITY;
+		Set<? extends Object> allEntities = this.getEntities();	
+		for (Object object1 : allEntities){
+			if(getTimeCollisionBoundary(object1) < timeNextCollision){
+				timeNextCollision = getTimeCollisionBoundary(object1);
+			}
+			for (Object object2 : allEntities){
+				if(object1 == object2){
+					continue;
+				}
+				else {
+					if(getTimeCollisionEntity(object1,object2) < timeNextCollision){
+						timeNextCollision = getTimeCollisionEntity(object1,object2);
+						this.setCollisionEntity1(object1);
+						this.setCollisionEntity2(object2);
+					}	
+				}		
+			}
+		}
+		return timeNextCollision;
+	}
+
+
+	public double[] getPositionNextCollision() {	
+		
+		double[] posNextCollision = null;
+		double timeNextCollision = Double.POSITIVE_INFINITY;
+		Set<? extends Object> allEntities = this.getEntities();
+		timeNextCollision = this.getTimeNextCollision();
+		
+		for (Object object1 : allEntities){
+			if(getTimeCollisionBoundary(object1) == timeNextCollision){
+				posNextCollision = getPositionCollisionBoundary(object1);
+			}
+			for (Object object2 : allEntities){
+				if(object1 == object2){
+					continue;
+				}
+				else {
+					if(getTimeCollisionEntity(object1,object2) == timeNextCollision){
+						posNextCollision = getPositionCollisionEntity(object1,object2);
+					}
+				}
+			}
+		}
+		return posNextCollision;
+	}
+	
+	public void evolve(double dt, CollisionListener collisionListener){
+	double timeNextCollision = this.getTimeNextCollision();
+	if(timeNextCollision > dt){
+		for (Ship ship : this.getAllShips()){
+			ship.setPosition(ship.getPosition()[0] + ship.getVelocity()[0]*dt, ship.getPosition()[1] + ship.getVelocity()[1]*dt);
+			if(ship.inspectThruster() == true){
+				ship.newThruster(ship.getShipAcceleration(),dt);			
+			}
+		}
+		for (Bullet bullet : this.getAllBullets()){
+			bullet.setPosition(bullet.getPosition()[0] + bullet.getVelocity()[0]*dt, bullet.getPosition()[1] + bullet.getVelocity()[1]);
+			
+			}
+		}
+	else {
+		if(this.getCollisionEntity1() instanceof Ship && this.getCollisionEntity2() instanceof Ship){
+			Object entity1 = this.getCollisionEntity1();
+			Object entity2 = this.getCollisionEntity2();
+			double xVelocity1 = entity1.getVelocity()[0]+(2*entity2.getMass()*((entity2.getVelocity()[0]-entity1.getVelocity()[0])*
+					(entity2.getPosition()[0]-entity1.getPosition()[0])+(entity2.getVelocity()[1]-entity1.getVelocity()[1])*
+					(entity2.getPosition()[1]-entity1.getPosition()[1])))*(entity2.getPosition()[0]-entity1.getPosition()[0])/(Math.pow((entity1.getRadius()+entity2.getRadius()), 2)
+							*(entity1.getMass()+entity2.getMass()));
+			double yVelocity1 = entity1.getVelocity()[1]+(2*entity2.getMass()*((entity2.getVelocity()[0]-entity1.getVelocity()[0])*
+					(entity2.getPosition()[0]-entity1.getPosition()[0])+(entity2.getVelocity()[1]-entity1.getVelocity()[1])*
+					(entity2.getPosition()[1]-entity1.getPosition()[1])))*(entity2.getPosition()[1]-entity1.getPosition()[1])/(Math.pow((entity1.getRadius()+entity2.getRadius()), 2)
+							*(entity1.getMass()+entity2.getMass()));
+			entity1.setVelocity(xVelocity1, yVelocity1);
+			
+			double xVelocity2 = entity1.getVelocity()[0]-(2*entity1.getMass()*((entity2.getVelocity()[0]-entity1.getVelocity()[0])*
+					(entity2.getPosition()[0]-entity1.getPosition()[0])+(entity2.getVelocity()[1]-entity1.getVelocity()[1])*
+					(entity2.getPosition()[1]-entity1.getPosition()[1])))*(entity2.getPosition()[0]-entity1.getPosition()[0])/(Math.pow((entity1.getRadius()+entity2.getRadius()), 2)
+							*(entity1.getMass()+entity2.getMass()));
+			double yVelocity2 = entity1.getVelocity()[1]-(2*entity1.getMass()*((entity2.getVelocity()[0]-entity1.getVelocity()[0])*
+					(entity2.getPosition()[0]-entity1.getPosition()[0])+(entity2.getVelocity()[1]-entity1.getVelocity()[1])*
+					(entity2.getPosition()[1]-entity1.getPosition()[1])))*(entity2.getPosition()[1]-entity1.getPosition()[1])/(Math.pow((entity1.getRadius()+entity2.getRadius()), 2)
+							*(entity1.getMass()+entity2.getMass()));
+			entity2.setVelocity(xVelocity2, yVelocity2);
+			this.evolve(dt -= timeNextCollision, collisionListener);
+			
+			}
+		if((this.getCollisionEntity1() instanceof Ship && this.getCollisionEntity2() instanceof Bullet)){
+			if(this.getCollisionEntity2().firedFrom() == this.getCollisionEntity1()){
+				this.getCollisionEntity1().loadBulletOnShip(this.getCollisionEntity2());
+				}
+			}
+		if((this.getCollisionEntity1() instanceof Bullet && this.getCollisionEntity2() instanceof Ship)){
+			if(this.getCollisionEntity1().firedFrom() == this.getCollisionEntity2()){
+				this.getCollisionEntity2().loadBulletOnShip(this.getCollisionEntity1());
+				}
+			}
+		
+		}
+		
+	}
+	
+	
 
 
 	private double width;

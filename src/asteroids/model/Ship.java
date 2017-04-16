@@ -3,8 +3,9 @@ package asteroids.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import asteroids.facade.Facade;
-public class Ship{
+import asteroids.util.ModelException;
+
+public class Ship extends Object {
 	/**
 	 * @param xVelocity
 	 * @param yVelocity
@@ -54,6 +55,8 @@ public class Ship{
 	 * 			|		new.getVelocity()[0] = xVelocity
 	 * 			|		new.getVelocity()[1] = yVelocity
 	 */
+	
+	
 	public void setVelocity(double xVelocity, double yVelocity){
 		if (this.isValidVelocity(xVelocity, yVelocity)){
 			this.xVelocity = xVelocity;
@@ -485,13 +488,12 @@ public class Ship{
 					((otherShip.getPosition()[1]+this.getTimeToCollapse(otherShip)*otherShip.getVelocity()[1])*this.getRadius())) /
 					(this.getRadius()+otherShip.getRadius());
 			PosCollapse = new double[] {xPosCollapse, yPosCollapse};
-			return PosCollapse;	
-		}		
+			return PosCollapse;
+		}
 	}
 	
 	
-
-	public Set<Bullet> getAllBulletsShip() {
+	public Set<Bullet> getAllBulletsShip(){
 		return this.allBulletsShip;
 	}
 	
@@ -573,6 +575,8 @@ public class Ship{
 	}
 	
 	private boolean isTerminated = false;
+	
+
 	
 
 }

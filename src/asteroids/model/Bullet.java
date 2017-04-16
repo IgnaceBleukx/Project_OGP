@@ -1,8 +1,6 @@
 package asteroids.model;
 
-import asteroids.facade.Facade;
-
-public class Bullet{
+public class Bullet extends Object {
 	
 	/**
 	 * @param x
@@ -31,8 +29,10 @@ public class Bullet{
 	 * 			|		new.getPosition()[1] = yPostition
 	 */
 	public void setPosition(double xPosition, double yPosition){
-		if (!isValidPosition(xPosition,yPosition)){
-			throw new IllegalArgumentException();
+		if (this.getWorld() == null){
+			this.xPosition = xPosition;
+			this.yPosition = yPosition;
+			
 		}
 		else{
 			this.xPosition = xPosition;
