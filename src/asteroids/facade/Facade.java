@@ -295,10 +295,10 @@ public class Facade extends Object implements asteroids.part2.facade.IFacade{
 		return world.getEntityAt(x, y);
 		}
 
-	@Override
+
 	public Set<? extends Object> getEntities(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getEntities();
+		
 	}
 
 
