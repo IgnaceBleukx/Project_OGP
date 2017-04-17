@@ -3,13 +3,13 @@ package asteroids.model;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Object {
+public class Entity {
 	
 	public void setVelocity(double xVelocity, double yVelocity){
 		if (this.isValidVelocity(xVelocity, yVelocity)){
 			this.xVelocity = xVelocity;
 			this.yVelocity = yVelocity;	
-			for (Object bullet : this.getAllBulletsShip()){
+			for (Entity bullet : this.getAllBulletsShip()){
 				bullet.setVelocity(xVelocity, yVelocity);
 			}
 		}
@@ -110,7 +110,7 @@ public class Object {
 		else{
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
-		for (Object bullet : this.getAllBulletsShip()){
+		for (Entity bullet : this.getAllBulletsShip()){
 			bullet.setPosition(xPosition, yPosition);
 		}
 		}
@@ -255,7 +255,7 @@ public double[] getPositionCollisionBoundary(){
 
 }
 
-public double getTimeCollisionEntity(Object otherEntity){
+public double getTimeCollisionEntity(Entity otherEntity){
 	double timeCollisionEntities = Double.POSITIVE_INFINITY;
 		   timeCollisionEntities = 
 				-(((this.getVelocity()[0] - otherEntity.getVelocity()[0]) * (this.getPosition()[0]-otherEntity.getPosition()[0]) + 
@@ -270,7 +270,7 @@ public double getTimeCollisionEntity(Object otherEntity){
 	return timeCollisionEntities;
 }
 
-public double[] getPositionCollisionEntity(Object otherEntity){
+public double[] getPositionCollisionEntity(Entity otherEntity){
 	
 	double[] posColEntities = {Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY};
 	double xPosColEntities = this.getVelocity()[0]*getTimeCollisionEntity(otherEntity) + this.getPosition()[0];
@@ -300,26 +300,26 @@ public boolean isValidWorld(World world){
 private World isPartOfWorld;
 
 
-public Object getCollisionEntity1() {
+public Entity getCollisionEntity1() {
 	return CollisionEntity1;
 }
 
-public void setCollisionEntity1(Object collisionEntity1) {
+public void setCollisionEntity1(Entity collisionEntity1) {
 	CollisionEntity1 = collisionEntity1;
 }
 
 
 
-public Object getCollisionEntity2() {
+public Entity getCollisionEntity2() {
 	return CollisionEntity2;
 }
 
-public void setCollisionEntity2(Object collisionEntity2) {
+public void setCollisionEntity2(Entity collisionEntity2) {
 	CollisionEntity2 = collisionEntity2;
 }
 
-private Object CollisionEntity1;
-private Object CollisionEntity2;
+private Entity CollisionEntity1;
+private Entity CollisionEntity2;
 
 public boolean isPartOfAShip(){
 	return  !(this.getShip() == null);

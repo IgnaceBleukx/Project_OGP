@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import asteroids.model.Bullet;
+import asteroids.model.Entity;
 import asteroids.model.Ship;
 import asteroids.model.World;
 import asteroids.part1.facade.IFacade;
@@ -251,23 +252,23 @@ public class Facade extends Object implements asteroids.part2.facade.IFacade{
 
 
 	public double getTimeCollisionBoundary(Object object) throws ModelException {
-		return getTimeCollisionBoundary(object);
+		return ((Entity) object).getTimeCollisionBoundary();
 	}
 
 
 	public double[] getPositionCollisionBoundary(Object object) throws ModelException {
-		return getPositionCollisionBoundary(object);
+		return ((Entity) object).getPositionCollisionBoundary();
 	
 	}
 	
 	
 	public double getTimeCollisionEntity(Object entity1, Object entity2) throws ModelException {
-		return getTimeCollisionEntity(entity1,entity2);
+		return (((Entity) entity1).getTimeCollisionEntity((Entity) entity2));
 	}
 
 	
 	public double[] getPositionCollisionEntity(Object entity1, Object entity2) throws ModelException {
-		return getPositionCollisionEntity(entity1,entity2);
+		return ((Entity) entity1).getPositionCollisionEntity((Entity) entity2);
 	}
 	
 	

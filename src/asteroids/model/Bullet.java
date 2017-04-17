@@ -1,6 +1,6 @@
 package asteroids.model;
 
-public class Bullet extends Object {
+public class Bullet extends Entity {
 	
 	/**
 	 * @param x
