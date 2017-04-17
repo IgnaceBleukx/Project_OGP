@@ -179,7 +179,7 @@ public class World extends Entity {
 		double timeNextCollision = Double.POSITIVE_INFINITY;
 		Set<? extends Entity> allEntities = this.getEntities();	
 		for (Entity object1 : allEntities){
-			if(object1.getTimeCollisionBoundary() < timeNextCollision){
+			if(object1.getTimeCollisionBoundary() < timeNextCollision && object1.getTimeCollisionBoundary() > 0){
 				timeNextCollision = object1.getTimeCollisionBoundary();
 			}
 			for (Entity object2 : allEntities){
@@ -188,7 +188,7 @@ public class World extends Entity {
 					continue;
 				}
 				else {
-					if(object1.getTimeCollisionEntity(object2) < timeNextCollision){
+					if(object1.getTimeCollisionEntity(object2) < timeNextCollision && object1.getTimeCollisionBoundary() > 0){
 						timeNextCollision = object1.getTimeCollisionEntity(object2);
 						this.setCollisionEntity1(object1);
 						this.setCollisionEntity2(object2);

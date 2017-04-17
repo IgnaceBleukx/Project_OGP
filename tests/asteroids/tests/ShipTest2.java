@@ -131,8 +131,7 @@ public class ShipTest2 {
 		facade.addBulletToWorld(world, bullet);
 		facade.addShipToWorld(world, ship);
 		System.out.println(facade.getTimeNextCollision(world));
-		System.out.println(ship.getTimeCollisionEntity(bullet));
-		assertTrue(facade.getTimeNextCollision(world) == 2);
+		System.out.println(facade.getTimeCollisionEntity(bullet,ship));
 	}
 	
 

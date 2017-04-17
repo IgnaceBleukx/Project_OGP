@@ -240,7 +240,7 @@ public double getTimeCollisionBoundary(){
 							(this.getRadius()-this.getPosition()[1])/(this.getVelocity()[1]));
 				}	
 			}
-		System.out.println("BoundadryTime = " + boundaryTime);
+		System.out.println("BoundaryTime = " + boundaryTime);
 		return boundaryTime;
 	}
 
