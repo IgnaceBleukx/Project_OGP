@@ -3,7 +3,6 @@ package asteroids.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import asteroids.util.ModelException;
 
 public class Ship extends Object {
 	/**
