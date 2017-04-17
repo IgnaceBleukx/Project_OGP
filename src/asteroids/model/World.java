@@ -346,7 +346,6 @@ public class World extends Entity {
 				this.collisionResolver(this.getCollisionEntity1(),this.getCollisionEntity2());
 
 			}
-			this.evolve(dt-nextCollisionTime, collisionListener);
 			
 			
 		}
@@ -368,10 +367,10 @@ public class World extends Entity {
 		}	
 	}
 	private void collisionResolver(Entity entity){
-		if (entity.getPositionCollisionBoundary()[0] == 0){
+		if (entity.getPositionCollisionBoundary()[0] == entity.getRadius() || entity.getPositionCollisionBoundary()[0] == (entity.getWorld().getDimension()[0]-entity.getRadius())){
 			this.boundaryCollision(entity, "x");
 		}
-		if (entity.getPositionCollisionBoundary()[1] == 0){
+		if (entity.getPositionCollisionBoundary()[1] == entity.getRadius() || entity.getPositionCollisionBoundary()[1] == (entity.getWorld().getDimension()[1]-entity.getRadius())){
 			this.boundaryCollision(entity ,"y");
 		}
 	}
@@ -421,12 +420,16 @@ public class World extends Entity {
 		bullet2.terminate();
 	}
 	private void boundaryCollision(Entity object, String xOrY){
+		System.out.println(object.getVelocity()[0]);
 		if (xOrY == "x"){
-			object.setVelocity(object.getVelocity()[0], -object.getVelocity()[1]);
+			object.setVelocity(-object.getVelocity()[0], object.getVelocity()[1]);
+			System.out.println(object.getVelocity()[0]);
+			
 		}
 		if (xOrY == "y"){
-			object.setVelocity(-object.getVelocity()[0], object.getVelocity()[1]);
+			object.setVelocity(object.getVelocity()[0], -object.getVelocity()[1]);
 		}
+		
 	}
 	
 

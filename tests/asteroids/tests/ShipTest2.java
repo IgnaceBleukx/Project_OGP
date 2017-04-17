@@ -127,9 +127,7 @@ public class ShipTest2 {
 		Ship ship = facade.createShip(10, 10, 100, 0, 50, Math.PI, 1.1E18);
 		World world = facade.createWorld(10000, 10000);
 		facade.addShipToWorld(world, ship);
-		System.out.println(facade.getTimeNextCollision(world));
 		facade.evolve(world, 105, null);
-		System.out.println(facade.getShipVelocity(ship)[0]);
 	}
 	
 
