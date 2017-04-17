@@ -250,11 +250,21 @@ public class Bullet extends Entity {
 	private Ship firedFrom = null;
 	
 	public void terminate(){
+		if (isPartOfShip != null) {
 		isPartOfShip.removeBulletFromShip(this);
 		isPartOfWorld.removeBulletToWorld(this);
-		this.isTerminated = true;
+		this.setTerminated(true);
+		}
 		
 	}
 	
+	public boolean isTerminated() {
+		return isTerminated;
+	}
+
+	public void setTerminated(boolean isTerminated) {
+		this.isTerminated = isTerminated;
+	}
+
 	private boolean isTerminated = false;
 }

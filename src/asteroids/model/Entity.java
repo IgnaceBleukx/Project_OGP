@@ -219,10 +219,12 @@ public double getTimeCollisionBoundary(){
 		}
 		
 			if(this.getVelocity()[0] > 0) {
-				if(this.getVelocity()[1] > 0) {
-					System.out.println("object = " + this);
-					boundaryTime = Math.min(((this.getWorld().getDimension()[0]-this.getRadius())-this.getPosition()[0])/(this.getVelocity()[0]),
-							((this.getWorld().getDimension()[1]-this.getRadius())-this.getPosition()[1])/(this.getVelocity()[1]));
+				if(((this.getWorld().getDimension()[0]-this.getRadius())-this.getPosition()[0])/(this.getVelocity()[0]) > 0){
+					boundaryTime = ((this.getWorld().getDimension()[0]-this.getRadius())-this.getPosition()[0])/(this.getVelocity()[0]);
+				}
+			}
+			if(this.getVelocity()[1] > 0) {
+				if(((this.getWorld().getDimension()[1]-this.getRadius())-this.getPosition()[1])/(this.getVelocity()[1]) > 0){
 				}
 				else {
 					boundaryTime = Math.min(((this.getWorld().getDimension()[0]-this.getRadius())-this.getPosition()[0])/(this.getVelocity()[0]),

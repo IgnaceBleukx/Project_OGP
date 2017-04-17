@@ -318,6 +318,9 @@ public class World extends Entity {
 				}
 			for(Ship ship : this.getAllShips()){
 				ship.setPosition(ship.getPosition()[0] + ship.getVelocity()[0]*dt, ship.getPosition()[1] + ship.getVelocity()[1]*dt);
+				if(ship.inspectThruster() == true){
+					ship.newThruster(ship.getShipAcceleration(),dt);
+				}
 			}
 		}
 		else{
@@ -326,6 +329,9 @@ public class World extends Entity {
 				}
 			for(Ship ship : this.getAllShips()){
 				ship.setPosition(ship.getPosition()[0] + ship.getVelocity()[0]*nextCollisionTime, ship.getPosition()[1] + ship.getVelocity()[1]*nextCollisionTime);
+				if(ship.inspectThruster() == true){
+					ship.newThruster(ship.getShipAcceleration(),dt);
+				}
 			}
 			if (this.getTimeCollisionBoundary() < nextCollisionTime){
 				this.collisionResolver(getCollisionEntity1());

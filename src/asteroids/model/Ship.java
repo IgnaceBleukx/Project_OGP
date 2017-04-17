@@ -316,11 +316,16 @@ public class Ship extends Entity {
 	}
 	
 	public double getShipAcceleration(){
-		return (this.thrusterForce)/(this.getMass());
+		if(this.getMass() == 0){
+			return 0;
+		}
+		else{
+		return (this.getThrusterForce())/(this.getMass());
+		}
 	}
 	
 	private boolean thrusterState;
-	private double thrusterForce = 1.1E21;
+	private double thrusterForce = 1.1*Math.pow(10, 21);
 	
 	
 	
@@ -639,6 +644,14 @@ public class Ship extends Entity {
 		return this.isTerminated;
 	}
 	
+	public double getThrusterForce() {
+		return thrusterForce;
+	}
+
+	public void setThrusterForce(double thrusterForce) {
+		this.thrusterForce = thrusterForce;
+	}
+
 	private boolean isTerminated = false;
 	
 
