@@ -78,6 +78,7 @@ public class World extends Entity {
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException{
 		try{
 		this.allShips.add(ship);
+		ship.setWorld(this);
 		}
 		catch(NullPointerException exc){
 			throw new IllegalArgumentException();
@@ -94,6 +95,7 @@ public class World extends Entity {
 	public void removeShipFromWorld(Ship ship) throws IllegalArgumentException{
 		try{
 		this.allShips.remove(ship);
+		ship.setWorld(null);
 		}
 		catch(NullPointerException exc){
 			throw new IllegalArgumentException();
@@ -218,8 +220,8 @@ public class World extends Entity {
 		CollisionEntity2 = collisionEntity2;
 	}
 
-	private Entity CollisionEntity1;
-	private Entity CollisionEntity2;
+	private Entity CollisionEntity1 = null;
+	private Entity CollisionEntity2 = null;
 
 		
 	
