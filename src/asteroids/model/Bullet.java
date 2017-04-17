@@ -201,69 +201,119 @@ public class Bullet extends Entity {
 	 * @post Sets the world of the current bullet to the given parameter world.\
 	 * 			| new.getWorld = world
 	 */
-	
 	public void setWorld(World world){
 		this.isPartOfWorld = world;
 	}
 	
-	
-	
+	/**
+	 * @return Returns the world the current bullet is located in.
+	 */
 	public World getWorld(){
 		return this.isPartOfWorld;
 	}
 	
+	/**
+	 * @return Returns true if the world is equal to the world of the ship if the bullet is loaded on one.
+	 * 			| if (this.isPartOfAShip())
+	 * 			|		return (this.getShip().getWorld() == world)
+	 * 			| return !(world == null)
+	 */
 	public boolean isValidWorld(World world){
-		return (this.isPartOfShip == null);
+		if (this.getShip() != null){
+			return this.getShip().getWorld() == world;
+		}
+		else{
+			return !(world == null);
+		}
 	}
 	
+	/**
+	 * @return Returns true if the bullet is part of a world.
+	 * @return Returns false if the bullet is not part of a world.
+	 * 			|return this.getWorld() == null
+	 */
 	public boolean isPartOfAWorld(){
 		return !(this.getWorld() == null);
 	}
 	
 	private World isPartOfWorld;
 	
+	/**
+	 * @return Returns true if the current bullet is loaded onz a ship.
+	 * @return Returns false if the current bullet is not loaded on a ship.
+	 */
 	public boolean isPartOfAShip(){
 		return  !(this.getShip() == null);
 	}
 	
+	/**
+	 * @param ship The ship the bullet must be loaded on.
+	 * @post The bullet is part of the ship.
+	 * 			| new.getShip == ship
+	 */
 	public void setShip(Ship ship){
 		this.isPartOfShip = ship;
+		this.firedFrom = null;
 	}
 	
+	/**
+	 * @return Returns true if the current bullet is loaded on a ship.
+	 * @return Returns false if the current bullet is not loaded on a ship.
+	 * 			| return this.isPartOfAShip
+	 */
 	public Ship getShip(){
 		return this.isPartOfShip;
 	}
 	
+	/**
+	 * @return Returns true if the given ship is in the same world as the bullet and exists.
+	 			| return ship.getWorld() == this.getWorld() && ship != null
+	 */
 	public boolean isValidShip(Ship ship){
-		return this.isPartOfWorld == null;
-	}
+		return ship.getWorld() == this.getWorld() && ship != null;
+		}
 	
+	/**
+	 * @post The bullet is not a part of the ship it was loaded on anymore.
+	 * 			| new.getShip == null;
+	 */
 	public void fired(){
 		this.firedFrom = this.getShip();
 		this.setShip(null);
 	}
 	
+	/**
+	 * @return Returns the ship the bullet was previousely fired from.
+	 * @return Returns null if the bullet is loaded on a ship.
+	 * 			| return this.firedFrom
+	 */
 	public Ship firedFrom(){
 		return this.firedFrom;
 	}
+	
 	private Ship isPartOfShip;
 	private Ship firedFrom = null;
 	
+	/**
+	 * @post Terminates the current bullet. There are not references to the current bullet left.
+	 */
 	public void terminate(){
-		if (isPartOfShip != null) {
-		isPartOfShip.removeBulletFromShip(this);
-		isPartOfWorld.removeBulletToWorld(this);
-		this.setTerminated(true);
+		if (this.isPartOfAShip()) {
+		this.getShip().removeBulletFromShip(this);
 		}
+		this.getWorld().removeBulletToWorld(this);
+		this.isTerminated = true;
 		
 	}
 	
+	/**
+	 * 
+	 * @return Returns true if the current bullet is terminated.
+	 * @return Returns false if the current bullet is not terminated.
+	 * 			| return this.isTerminated
+	 */
 	public boolean isTerminated() {
 		return isTerminated;
-	}
-
-	public void setTerminated(boolean isTerminated) {
-		this.isTerminated = isTerminated;
 	}
 
 	private boolean isTerminated = false;
