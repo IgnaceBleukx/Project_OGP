@@ -222,6 +222,7 @@ public double getTimeCollisionBoundary(){
 		double xMinBound = (this.getRadius()-this.getPosition()[0])/(this.getVelocity()[0]);
 		double yMinBound = (this.getRadius()-this.getPosition()[1])/(this.getVelocity()[1]);
 		
+		
 		if(this.getVelocity()[0] > 0) {
 			boundaryTime = xMaxBound;
 		}

@@ -367,11 +367,12 @@ public class World extends Entity {
 		}	
 	}
 	private void collisionResolver(Entity entity){
-		if (entity.getPositionCollisionBoundary()[0] == entity.getRadius() || entity.getPositionCollisionBoundary()[0] == (this.getDimension()[0]-entity.getRadius())){
-			this.boundaryCollision(entity, "y");
+
+		if (entity.getPositionCollisionBoundary()[0] == entity.getRadius() || entity.getPositionCollisionBoundary()[0] == (entity.getWorld().getDimension()[0]-entity.getRadius())){
+			this.boundaryCollision(entity, "x");
 		}
-		if (entity.getPositionCollisionBoundary()[1] == entity.getRadius() || entity.getPositionCollisionBoundary()[1] == (this.getDimension()[1]-entity.getRadius())){
-			this.boundaryCollision(entity ,"x");
+		if (entity.getPositionCollisionBoundary()[1] == entity.getRadius() || entity.getPositionCollisionBoundary()[1] == (entity.getWorld().getDimension()[1]-entity.getRadius())){
+			this.boundaryCollision(entity ,"y");
 		}
 	}
 	
@@ -428,6 +429,8 @@ public class World extends Entity {
 		}
 		if (xOrY == "y"){
 			object.setVelocity(object.getVelocity()[0], -object.getVelocity()[1]);
+			System.out.println(object.getVelocity()[1]);
+
 		}
 		
 	}
