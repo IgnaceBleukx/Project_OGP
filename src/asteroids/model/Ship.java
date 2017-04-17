@@ -257,7 +257,7 @@ public class Ship extends Object {
 	 *				result = false
 	 */
 	public boolean isValidMass(double mass){
-		if (mass == Math.pow(this.getRadius(),3) * 4/3 * Math.PI*minDensity){
+		if (mass >= Math.pow(this.getRadius(),3) * 4/3 * Math.PI*minDensity){
 			return true;
 		}
 		else{
@@ -278,7 +278,6 @@ public class Ship extends Object {
  	 */
  	public void thrustOn(){
 		this.thrusterState = true;
-  		this.thrust(this.thrusterForce / this.getMass());
   		}
 	
 	
@@ -304,7 +303,6 @@ public class Ship extends Object {
 	 */
 	 public void thrustOff(){
 		this.thrusterState = false;
-	 	this.thrust(0);
 	  	}	
 		
 	
@@ -330,12 +328,12 @@ public class Ship extends Object {
 		if (a <= 0){
 			a = 0;
 		}
-		if (isValidVelocity(this.xVelocity += a * Math.cos(orientation)*dt, this.yVelocity += a * Math.sin(orientation)*dt)){
-			this.setVelocity(this.xVelocity + a * Math.cos(orientation)*dt,this.yVelocity + a * Math.sin(orientation)*dt);
+		if (isValidVelocity(this.getVelocity()[0] + a * Math.cos(this.getOrientation())*dt, this.getVelocity()[1] + a * Math.sin(this.getOrientation()*dt))){
+			this.setVelocity(this.getVelocity()[0] + a * Math.cos(this.getOrientation())*dt,this.getVelocity()[1] + a * Math.sin(this.getOrientation())*dt);
 		}	
 		else{
-			this.setVelocity(maxVelocity*Math.cos(orientation), 
-								 maxVelocity*Math.sin(orientation));
+			this.setVelocity(this.maxVelocity*Math.cos(this.getOrientation()), 
+								 this.maxVelocity*Math.sin(this.getOrientation()));
 							
 		}
 		
