@@ -257,11 +257,7 @@ public class Ship extends Object {
 	 *				result = false
 	 */
 	public boolean isValidMass(double mass){
-<<<<<<< HEAD
-		if (mass >= Math.pow(this.getRadius(),3) * (4/3)* Math.PI*minDensity){
-=======
 		if (mass >= Math.pow(this.getRadius(),3) * 4/3 * Math.PI*minDensity){
->>>>>>> branch 'master' of https://github.com/IgnaceBleukx/Project_OGP
 			return true;
 		}
 		else{
@@ -332,13 +328,10 @@ public class Ship extends Object {
 		if (a <= 0){
 			a = 0;
 		}
-<<<<<<< HEAD
-		if (isValidVelocity(this.getVelocity()[0] += a * Math.cos(orientation)*dt, this.getVelocity()[1] += a * Math.sin(orientation)*dt)){
-			this.setVelocity(this.getVelocity()[0] + a * Math.cos(orientation)*dt,this.getVelocity()[1] + a * Math.sin(orientation)*dt);
-=======
+
 		if (isValidVelocity(this.getVelocity()[0] + a * Math.cos(this.getOrientation())*dt, this.getVelocity()[1] + a * Math.sin(this.getOrientation()*dt))){
 			this.setVelocity(this.getVelocity()[0] + a * Math.cos(this.getOrientation())*dt,this.getVelocity()[1] + a * Math.sin(this.getOrientation())*dt);
->>>>>>> branch 'master' of https://github.com/IgnaceBleukx/Project_OGP
+
 		}	
 		else{
 			this.setVelocity(this.maxVelocity*Math.cos(this.getOrientation()), 

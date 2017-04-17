@@ -255,24 +255,7 @@ public double[] getPositionCollisionBoundary(){
 
 }
 
-<<<<<<< HEAD
-public double getTimeCollisionEntity(Object otherShip){
-		if (((otherShip.getVelocity()[0] - this.getVelocity()[0]) * (otherShip.getPosition()[0]-this.getPosition()[0]) + 
-				(otherShip.getVelocity()[1] - this.getVelocity()[1]) * (otherShip.getPosition()[1]-this.getPosition()[1])) >= 0){
-			return Double.POSITIVE_INFINITY;
-		}
-		
-		else {
-			return -(((otherShip.getVelocity()[0] - this.getVelocity()[0]) * (otherShip.getPosition()[0]-this.getPosition()[0]) + 
-				(otherShip.getVelocity()[1] - this.getVelocity()[1]) * (otherShip.getPosition()[1]-this.getPosition()[1]) + 
-					Math.sqrt((Math.pow((otherShip.getVelocity()[0] - this.getVelocity()[0]) * (otherShip.getPosition()[0]-this.getPosition()[0]) + 
-								(otherShip.getVelocity()[1] - this.getVelocity()[1]) * (otherShip.getPosition()[1]-this.getPosition()[1]),2)) 		-
-								((Math.pow(otherShip.getVelocity()[0] - this.getVelocity()[0],2)) + (Math.pow(otherShip.getVelocity()[1] - this.getVelocity()[1],2))) * 
-									((Math.pow((otherShip.getPosition()[0]) - this.getPosition()[0],2)) + (Math.pow((otherShip.getPosition()[1]) - this.getPosition()[1],2))-
-											Math.pow((otherShip.getRadius()+this.getRadius()),2))))/((Math.pow(otherShip.getVelocity()[0] - this.getVelocity()[0],2)) + 
-													(Math.pow(otherShip.getVelocity()[1] - this.getVelocity()[1],2))));
-		}
-=======
+
 public double getTimeCollisionEntity(Object otherEntity){
 	double timeCollisionEntities = Double.POSITIVE_INFINITY;
 		   timeCollisionEntities = 
@@ -286,7 +269,7 @@ public double getTimeCollisionEntity(Object otherEntity){
 													(Math.pow(this.getVelocity()[1] - otherEntity.getVelocity()[1],2))));
 	
 	return timeCollisionEntities;
->>>>>>> branch 'master' of https://github.com/IgnaceBleukx/Project_OGP
+
 }
 
 
@@ -294,13 +277,10 @@ public double getTimeCollisionEntity(Object otherEntity){
 public double[] getPositionCollisionEntity(Object otherEntity){
 	
 	double[] posColEntities = {Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY};
-<<<<<<< HEAD
-	double xPosColEntities = entity1.getVelocity()[0]*(this.getTimeCollisionEntity(entity2)) + entity1.getPosition()[0];
-	double yPosColEntities = entity1.getVelocity()[1]*(this.getTimeCollisionEntity(entity2)) + entity1.getPosition()[1];
-=======
+
 	double xPosColEntities = this.getVelocity()[0]*getTimeCollisionEntity(otherEntity) + this.getPosition()[0];
 	double yPosColEntities = this.getVelocity()[1]*getTimeCollisionEntity(otherEntity) + this.getPosition()[1];
->>>>>>> branch 'master' of https://github.com/IgnaceBleukx/Project_OGP
+
 	posColEntities = new double[] {xPosColEntities,yPosColEntities};			
 	return posColEntities;
 }

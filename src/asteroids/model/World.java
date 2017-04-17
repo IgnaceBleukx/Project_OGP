@@ -217,11 +217,8 @@ public class World extends Object {
 				}
 				else {
 					if(object1.getTimeCollisionEntity(object2) == timeNextCollision){
-<<<<<<< HEAD
-						posNextCollision = getPositionCollisionEntity(object1,object2);
-=======
 						posNextCollision = object1.getPositionCollisionEntity(object2);
->>>>>>> branch 'master' of https://github.com/IgnaceBleukx/Project_OGP
+
 					}
 				}
 			}

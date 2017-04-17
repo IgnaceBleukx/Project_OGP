@@ -3,11 +3,10 @@ package asteroids.facade;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.World;
-import asteroids.part1.facade.IFacade;
+import asteroids.part2.facade.IFacade;
 import asteroids.part2.CollisionListener;
 import asteroids.util.ModelException;
 
@@ -251,7 +250,7 @@ public class Facade extends Object implements asteroids.part2.facade.IFacade{
 
 
 	public double getTimeCollisionBoundary(Object object) throws ModelException {
-		return getTimeCollisionBoundary(object);
+		return 0;
 	}
 
 
@@ -262,12 +261,12 @@ public class Facade extends Object implements asteroids.part2.facade.IFacade{
 	
 	
 	public double getTimeCollisionEntity(Object entity1, Object entity2) throws ModelException {
-		return entity1.
+		return 0;
 	}
 
 	
 	public double[] getPositionCollisionEntity(Object entity1, Object entity2) throws ModelException {
-		return getPositionCollisionEntity(entity1,entity2);
+		return null;
 	}
 	
 	
@@ -292,12 +291,17 @@ public class Facade extends Object implements asteroids.part2.facade.IFacade{
 	public Object getEntityAt(World world, double x, double y) throws ModelException {
 		return world.getEntityAt(x, y);
 		}
-	
 
 	@Override
 	public Set<? extends Object> getEntities(World world) throws ModelException {
-		return world.getEntities();
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+
+	
+
+
 
 	
 
