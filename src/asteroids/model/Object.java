@@ -211,48 +211,51 @@ public class Object {
 	
 
 	
-public double getTimeCollisionBoundary(Object object){
+public double getTimeCollisionBoundary(){
 		
 		double boundaryTime = Double.POSITIVE_INFINITY;
-		if(object.getWorld() == null){
+		if(this.getWorld() == null){
 			return boundaryTime;
 		}
 		
-			if(object.getVelocity()[0] > 0) {
-				if(object.getVelocity()[1] > 0) {
-					boundaryTime = Math.min(((object.getWorld().getDimension()[0]-object.getRadius())-object.getPosition()[0])/(object.getVelocity()[0]),
-							((object.getWorld().getDimension()[1]-object.getRadius())-object.getPosition()[1])/(object.getVelocity()[1]));
+			if(this.getVelocity()[0] > 0) {
+				if(this.getVelocity()[1] > 0) {
+					System.out.println("object = " + this);
+					boundaryTime = Math.min(((this.getWorld().getDimension()[0]-this.getRadius())-this.getPosition()[0])/(this.getVelocity()[0]),
+							((this.getWorld().getDimension()[1]-this.getRadius())-this.getPosition()[1])/(this.getVelocity()[1]));
 				}
 				else {
-					boundaryTime = Math.min(((object.getWorld().getDimension()[0]-object.getRadius())-object.getPosition()[0])/(object.getVelocity()[0]),
-							(object.getRadius()-object.getPosition()[1])/(object.getVelocity()[1]));
+					boundaryTime = Math.min(((this.getWorld().getDimension()[0]-this.getRadius())-this.getPosition()[0])/(this.getVelocity()[0]),
+							(this.getRadius()-this.getPosition()[1])/(this.getVelocity()[1]));
 				}
 			
 			}
 			else {
-				if(object.getVelocity()[1] > 0) {
-					boundaryTime = Math.min((object.getRadius()-object.getPosition()[0])/(object.getVelocity()[0]),
-							((object.getWorld().getDimension()[1]-object.getRadius())-object.getPosition()[1])/(object.getVelocity()[1]));
+				if(this.getVelocity()[1] > 0) {
+					boundaryTime = Math.min((this.getRadius()-this.getPosition()[0])/(this.getVelocity()[0]),
+							((this.getWorld().getDimension()[1]-this.getRadius())-this.getPosition()[1])/(this.getVelocity()[1]));
 				}
 				else {
-					boundaryTime = Math.min((object.getRadius()-object.getPosition()[0])/(object.getVelocity()[0]),
-							(object.getRadius()-object.getPosition()[1])/(object.getVelocity()[1]));
+					boundaryTime = Math.min((this.getRadius()-this.getPosition()[0])/(this.getVelocity()[0]),
+							(this.getRadius()-this.getPosition()[1])/(this.getVelocity()[1]));
 				}	
 			}
+		System.out.println("BoundadryTime = " + boundaryTime);
 		return boundaryTime;
 	}
 
-public double[] getPositionCollisionBoundary(Object object){
+public double[] getPositionCollisionBoundary(){
 	
 	double[] boundaryColPos;
-	double xPosColBound = object.getVelocity()[0]*getTimeCollisionBoundary(object) + object.getPosition()[0];
-	double yPosColBound = object.getVelocity()[1]*getTimeCollisionBoundary(object) + object.getPosition()[1];
+	double xPosColBound = this.getVelocity()[0]*this.getTimeCollisionBoundary() + this.getPosition()[0];
+	double yPosColBound = this.getVelocity()[1]*this.getTimeCollisionBoundary() + this.getPosition()[1];
 	boundaryColPos = new double[] {xPosColBound,yPosColBound};
 
 	return boundaryColPos;
 
 }
 
+<<<<<<< HEAD
 public double getTimeCollisionEntity(Object otherShip){
 		if (((otherShip.getVelocity()[0] - this.getVelocity()[0]) * (otherShip.getPosition()[0]-this.getPosition()[0]) + 
 				(otherShip.getVelocity()[1] - this.getVelocity()[1]) * (otherShip.getPosition()[1]-this.getPosition()[1])) >= 0){
@@ -269,15 +272,35 @@ public double getTimeCollisionEntity(Object otherShip){
 											Math.pow((otherShip.getRadius()+this.getRadius()),2))))/((Math.pow(otherShip.getVelocity()[0] - this.getVelocity()[0],2)) + 
 													(Math.pow(otherShip.getVelocity()[1] - this.getVelocity()[1],2))));
 		}
+=======
+public double getTimeCollisionEntity(Object otherEntity){
+	double timeCollisionEntities = Double.POSITIVE_INFINITY;
+		   timeCollisionEntities = 
+				-(((this.getVelocity()[0] - otherEntity.getVelocity()[0]) * (this.getPosition()[0]-otherEntity.getPosition()[0]) + 
+				(this.getVelocity()[1] - otherEntity.getVelocity()[1]) * (this.getPosition()[1]-otherEntity.getPosition()[1]) + 
+					Math.sqrt((Math.pow((this.getVelocity()[0] - otherEntity.getVelocity()[0]) * (this.getPosition()[0]-otherEntity.getPosition()[0]) + 
+								(this.getVelocity()[1] - otherEntity.getVelocity()[1]) * (this.getPosition()[1]-otherEntity.getPosition()[1]),2)) 		-
+								((Math.pow(this.getVelocity()[0] - otherEntity.getVelocity()[0],2)) + (Math.pow(this.getVelocity()[1] - otherEntity.getVelocity()[1],2))) * 
+									((Math.pow((this.getPosition()[0]) - otherEntity.getPosition()[0],2)) + (Math.pow((this.getPosition()[1]) - otherEntity.getPosition()[1],2))-
+											Math.pow((this.getRadius()+otherEntity.getRadius()),2))))/((Math.pow(this.getVelocity()[0] - otherEntity.getVelocity()[0],2)) + 
+													(Math.pow(this.getVelocity()[1] - otherEntity.getVelocity()[1],2))));
+	
+	return timeCollisionEntities;
+>>>>>>> branch 'master' of https://github.com/IgnaceBleukx/Project_OGP
 }
 
 
 
-public double[] getPositionCollisionEntity(Object entity1, Object entity2){
+public double[] getPositionCollisionEntity(Object otherEntity){
 	
 	double[] posColEntities = {Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY};
+<<<<<<< HEAD
 	double xPosColEntities = entity1.getVelocity()[0]*(this.getTimeCollisionEntity(entity2)) + entity1.getPosition()[0];
 	double yPosColEntities = entity1.getVelocity()[1]*(this.getTimeCollisionEntity(entity2)) + entity1.getPosition()[1];
+=======
+	double xPosColEntities = this.getVelocity()[0]*getTimeCollisionEntity(otherEntity) + this.getPosition()[0];
+	double yPosColEntities = this.getVelocity()[1]*getTimeCollisionEntity(otherEntity) + this.getPosition()[1];
+>>>>>>> branch 'master' of https://github.com/IgnaceBleukx/Project_OGP
 	posColEntities = new double[] {xPosColEntities,yPosColEntities};			
 	return posColEntities;
 }
