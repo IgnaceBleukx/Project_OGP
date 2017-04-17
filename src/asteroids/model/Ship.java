@@ -627,10 +627,10 @@ public class Ship extends Entity {
 	 * 			| this.getWorld.removeShip(this)
 	 */
 	public void terminate(){
-		for(Bullet bullet : this.getAllBulletsShip()){
-			System.out.println("bullet ="+ bullet);
-			System.out.println(this.getAllBulletsShip());
+		while(!this.getAllBulletsShip().isEmpty()){
+			Bullet bullet = this.getAllBulletsShip().iterator().next();
 			bullet.terminate();
+			System.out.println("tot hier");
 		}
 		this.getWorld().removeShipFromWorld(this);
 		this.isTerminated = true;

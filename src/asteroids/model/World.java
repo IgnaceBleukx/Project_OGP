@@ -337,13 +337,16 @@ public class World extends Entity {
 					ship.newThruster(ship.getShipAcceleration(),dt);
 				}
 			}
-			if (getCollisionEntity2() == null){
-				this.collisionResolver(getCollisionEntity1());
+			if (this.getCollisionEntity2() == null){
+				System.out.println(this.getCollisionEntity2());
+				System.out.println(this.getCollisionEntity1());
+				this.collisionResolver(this.getCollisionEntity1());
 			}
 			else{
-				this.collisionResolver(getCollisionEntity1(),getCollisionEntity2());
+				this.collisionResolver(this.getCollisionEntity1(),this.getCollisionEntity2());
 
 			}
+			this.evolve(dt-nextCollisionTime, collisionListener);
 			
 			
 		}
@@ -374,6 +377,7 @@ public class World extends Entity {
 	}
 	
 	private void shipCollision(Ship ship1, Ship ship2){
+
 		double xVelocity1 = ship1.getVelocity()[0]+(2*ship2.getMass()*((ship2.getVelocity()[0]-ship1.getVelocity()[0])*
 				(ship2.getPosition()[0]-ship1.getPosition()[0])+(ship2.getVelocity()[1]-ship1.getVelocity()[1])*
 				(ship2.getPosition()[1]-ship1.getPosition()[1])))*(ship2.getPosition()[0]-ship1.getPosition()[0])/(Math.pow((ship1.getRadius()+ship2.getRadius()), 2)
@@ -382,7 +386,11 @@ public class World extends Entity {
 				(ship2.getPosition()[0]-ship1.getPosition()[0])+(ship2.getVelocity()[1]-ship1.getVelocity()[1])*
 				(ship2.getPosition()[1]-ship1.getPosition()[1])))*(ship2.getPosition()[1]-ship1.getPosition()[1])/(Math.pow((ship1.getRadius()+ship2.getRadius()), 2)
 						*(ship1.getMass()+ship2.getMass()));
+		
+		System.out.println(xVelocity1);
+		System.out.println(yVelocity1);
 		ship1.setVelocity(xVelocity1, yVelocity1);
+
 		
 		double xVelocity2 = ship1.getVelocity()[0]-(2*ship1.getMass()*((ship2.getVelocity()[0]-ship1.getVelocity()[0])*
 				(ship2.getPosition()[0]-ship1.getPosition()[0])+(ship2.getVelocity()[1]-ship1.getVelocity()[1])*
@@ -392,6 +400,9 @@ public class World extends Entity {
 				(ship2.getPosition()[0]-ship1.getPosition()[0])+(ship2.getVelocity()[1]-ship1.getVelocity()[1])*
 				(ship2.getPosition()[1]-ship1.getPosition()[1])))*(ship2.getPosition()[1]-ship1.getPosition()[1])/(Math.pow((ship1.getRadius()+ship2.getRadius()), 2)
 						*(ship1.getMass()+ship1.getMass()));
+		
+		System.out.println(xVelocity2);
+		System.out.println(yVelocity2);
 		ship2.setVelocity(xVelocity2,yVelocity2);
 	}
 	private void shipBulletCollision(Ship ship, Bullet bullet){

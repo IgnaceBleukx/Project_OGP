@@ -124,12 +124,12 @@ public class ShipTest2 {
 	}
 	@Test
 	public void testTimeNextCollision() throws ModelException {
-		Ship ship = facade.createShip(10, 10, 10, 0, 50, Math.PI, 1.1E18);
+		Ship ship = facade.createShip(10, 10, 100, 0, 50, Math.PI, 1.1E18);
 		World world = facade.createWorld(10000, 10000);
 		facade.addShipToWorld(world, ship);
-		Bullet bullet = facade.createBullet(1000, 10, 0, 0, 30);
-		facade.addBulletToWorld(world, bullet);
 		System.out.println(facade.getTimeNextCollision(world));
+		facade.evolve(world, 105, null);
+		System.out.println(facade.getShipVelocity(ship)[0]);
 	}
 	
 

@@ -301,7 +301,8 @@ public class Bullet extends Entity {
 		if (this.isPartOfAShip()) {
 		this.getShip().removeBulletFromShip(this);
 		}
-		this.getWorld().removeBulletToWorld(this);
+		if (this.getWorld() != null){
+		this.getWorld().removeBulletToWorld(this);}
 		this.isTerminated = true;
 		
 	}
