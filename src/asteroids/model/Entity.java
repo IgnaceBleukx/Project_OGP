@@ -212,40 +212,40 @@ public class Entity {
 
 	
 public double getTimeCollisionBoundary(){
-		
+	
 		double boundaryTime = Double.POSITIVE_INFINITY;
 		if(this.getWorld() == null){
 			return boundaryTime;
 		}
+		double xMaxBound = ((this.getWorld().getDimension()[0]-this.getRadius())-this.getPosition()[0])/(this.getVelocity()[0]);
+		double yMaxBound = ((this.getWorld().getDimension()[1]-this.getRadius())-this.getPosition()[1])/(this.getVelocity()[1]);
+		double xMinBound = (this.getRadius()-this.getPosition()[0])/(this.getVelocity()[0]);
+		double yMinBound = (this.getRadius()-this.getPosition()[1])/(this.getVelocity()[1]);
 		
-			if(this.getVelocity()[0] > 0) {
-				if(((this.getWorld().getDimension()[0]-this.getRadius())-this.getPosition()[0])/(this.getVelocity()[0]) > 0){
-					boundaryTime = ((this.getWorld().getDimension()[0]-this.getRadius())-this.getPosition()[0])/(this.getVelocity()[0]);
-				}
+		if(this.getVelocity()[0] > 0) {
+			boundaryTime = xMaxBound;
+		}
+		if(this.getVelocity()[1] > 0){
+			if(0 < yMaxBound && yMaxBound < boundaryTime){
+				boundaryTime = yMaxBound;
 			}
-			if(this.getVelocity()[1] > 0) {
-				if(((this.getWorld().getDimension()[1]-this.getRadius())-this.getPosition()[1])/(this.getVelocity()[1]) > 0){
-				}
-				else {
-					boundaryTime = Math.min(((this.getWorld().getDimension()[0]-this.getRadius())-this.getPosition()[0])/(this.getVelocity()[0]),
-							(this.getRadius()-this.getPosition()[1])/(this.getVelocity()[1]));
-				}
-			
+		}
+		if(this.getVelocity()[0] < 0){
+			if(0 < xMinBound && xMinBound < boundaryTime){
+				boundaryTime = xMinBound;
 			}
-			else {
-				if(this.getVelocity()[1] > 0) {
-					boundaryTime = Math.min((this.getRadius()-this.getPosition()[0])/(this.getVelocity()[0]),
-							((this.getWorld().getDimension()[1]-this.getRadius())-this.getPosition()[1])/(this.getVelocity()[1]));
-				}
-				else {
-					boundaryTime = Math.min((this.getRadius()-this.getPosition()[0])/(this.getVelocity()[0]),
-							(this.getRadius()-this.getPosition()[1])/(this.getVelocity()[1]));
-				}	
+		}
+		if(this.getVelocity()[1] < 0){
+			if(0 < yMinBound && yMinBound < boundaryTime){
+				boundaryTime = yMinBound;
 			}
-		System.out.println("BoundaryTime = " + boundaryTime);
+		}
 		return boundaryTime;
 	}
 
+		
+		
+		
 public double[] getPositionCollisionBoundary(){
 	
 	double[] boundaryColPos;
@@ -320,8 +320,8 @@ public void setCollisionEntity2(Entity collisionEntity2) {
 	CollisionEntity2 = collisionEntity2;
 }
 
-private Entity CollisionEntity1;
-private Entity CollisionEntity2;
+private Entity CollisionEntity1 = null;
+private Entity CollisionEntity2 = null;
 
 public boolean isPartOfAShip(){
 	return  !(this.getShip() == null);

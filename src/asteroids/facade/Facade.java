@@ -11,7 +11,7 @@ import asteroids.part2.facade.IFacade;
 import asteroids.part2.CollisionListener;
 import asteroids.util.ModelException;
 
-public class Facade extends Object implements asteroids.part2.facade.IFacade{
+public class Facade extends Entity implements asteroids.part2.facade.IFacade{
 	
 	public Ship createShip() throws ModelException{
 		Ship newShip = new Ship();

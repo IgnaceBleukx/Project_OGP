@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import asteroids.facade.Facade;
 import asteroids.model.Ship;
-import asteroids.model.Object;
 import asteroids.model.Bullet;
 import asteroids.model.World;
 import asteroids.part2.facade.IFacade;
@@ -125,17 +124,12 @@ public class ShipTest2 {
 	}
 	@Test
 	public void testTimeNextCollision() throws ModelException {
-		Ship ship = facade.createShip(10, 10, 10, 0, 50, Math.PI, 1.1E18);
-		Ship ship2 = facade.createShip(-10, 10, 10, 0, 50, Math.PI, 1.1E18);
-		Ship ship3 = facade.createShip(-10, -10, 10, 0, 50, Math.PI, 1.1E18);
-		Ship ship4 = facade.createShip(10, -10, 10, 0, 50, Math.PI, 1.1E18);
+		Ship ship = facade.createShip(10, 10, 1000, 0, 50, Math.PI, 1.1E18);
+		System.out.println(facade.getShipVelocity(ship)[0]);
 		World world = facade.createWorld(10000, 10000);
+		facade.addShipToWorld(world, ship);
 		Bullet bullet = facade.createBullet(100, 100, 0, 0, 30);
 		facade.addBulletToWorld(world, bullet);
-		facade.addShipToWorld(world, ship);
-		facade.addShipToWorld(world, ship4);
-		facade.addShipToWorld(world, ship3);
-		facade.addShipToWorld(world, ship2);
 		System.out.println(facade.getTimeNextCollision(world));
 	}
 	

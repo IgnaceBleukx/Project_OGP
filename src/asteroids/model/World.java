@@ -174,13 +174,14 @@ public class World extends Entity {
 		return allEntities;
 	}
 	
-	
+
 	public double getTimeNextCollision() {
 		double timeNextCollision = Double.POSITIVE_INFINITY;
 		Set<? extends Entity> allEntities = this.getEntities();	
 		for (Entity object1 : allEntities){
 			if(object1.getTimeCollisionBoundary() < timeNextCollision && object1.getTimeCollisionBoundary() > 0){
 				timeNextCollision = object1.getTimeCollisionBoundary();
+				this.setCollisionEntity1(object1);
 			}
 			for (Entity object2 : allEntities){
 
@@ -312,6 +313,7 @@ public class World extends Entity {
 
 	public void evolve(double dt,CollisionListener collisionListener){
 		double nextCollisionTime = this.getTimeNextCollision();
+		System.out.println(nextCollisionTime);
 		if (nextCollisionTime > dt){
 			for(Bullet bullet : this.getAllBullets()){
 				bullet.setPosition(bullet.getPosition()[0] + bullet.getVelocity()[0]*dt, bullet.getPosition()[1] + bullet.getVelocity()[1]*dt);
@@ -333,7 +335,7 @@ public class World extends Entity {
 					ship.newThruster(ship.getShipAcceleration(),dt);
 				}
 			}
-			if (this.getTimeCollisionBoundary() < nextCollisionTime){
+			if (getCollisionEntity2() == null){
 				this.collisionResolver(getCollisionEntity1());
 			}
 			else{
