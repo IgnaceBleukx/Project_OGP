@@ -189,8 +189,8 @@ public class World extends Object {
 					continue;
 				}
 				else {
-					if(getTimeCollisionEntity(object1,object2) < timeNextCollision){
-						timeNextCollision = getTimeCollisionEntity(object1,object2);
+					if(object1.getTimeCollisionEntity(object2) < timeNextCollision){
+						timeNextCollision = object1.getTimeCollisionEntity(object2);
 						this.setCollisionEntity1(object1);
 						this.setCollisionEntity2(object2);
 					}	
@@ -217,7 +217,7 @@ public class World extends Object {
 					continue;
 				}
 				else {
-					if(getTimeCollisionEntity(object1,object2) == timeNextCollision){
+					if(object1.getTimeCollisionEntity(object2) == timeNextCollision){
 						posNextCollision = getPositionCollisionEntity(object1,object2);
 					}
 				}

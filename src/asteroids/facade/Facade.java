@@ -262,7 +262,7 @@ public class Facade extends Object implements asteroids.part2.facade.IFacade{
 	
 	
 	public double getTimeCollisionEntity(Object entity1, Object entity2) throws ModelException {
-		return getTimeCollisionEntity(entity1,entity2);
+		return entity1.
 	}
 
 	

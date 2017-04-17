@@ -198,7 +198,7 @@ public class Object {
 	 *				result = false
 	 */
 	public boolean isValidMass(double mass){
-		if (mass == Math.pow(this.getRadius(),3) * 4/3 * Math.PI*minDensity){
+		if (mass >= Math.pow(this.getRadius(),3) * 4/3 * Math.PI*minDensity){
 			return true;
 		}
 		else{
@@ -253,26 +253,31 @@ public double[] getPositionCollisionBoundary(Object object){
 
 }
 
-public double getTimeCollisionEntity(Object entity1, Object entity2){
-	double timeCollisionEntities = Double.POSITIVE_INFINITY;
-		   timeCollisionEntities = 
-				-(((entity1.getVelocity()[0] - entity2.getVelocity()[0]) * (entity1.getPosition()[0]-entity2.getPosition()[0]) + 
-				(entity1.getVelocity()[1] - entity2.getVelocity()[1]) * (entity1.getPosition()[1]-entity2.getPosition()[1]) + 
-					Math.sqrt((Math.pow((entity1.getVelocity()[0] - entity2.getVelocity()[0]) * (entity1.getPosition()[0]-entity2.getPosition()[0]) + 
-								(entity1.getVelocity()[1] - entity2.getVelocity()[1]) * (entity1.getPosition()[1]-entity2.getPosition()[1]),2)) 		-
-								((Math.pow(entity1.getVelocity()[0] - entity2.getVelocity()[0],2)) + (Math.pow(entity1.getVelocity()[1] - entity2.getVelocity()[1],2))) * 
-									((Math.pow((entity1.getPosition()[0]) - entity2.getPosition()[0],2)) + (Math.pow((entity1.getPosition()[1]) - entity2.getPosition()[1],2))-
-											Math.pow((entity1.getRadius()+entity2.getRadius()),2))))/((Math.pow(entity1.getVelocity()[0] - entity2.getVelocity()[0],2)) + 
-													(Math.pow(entity1.getVelocity()[1] - entity2.getVelocity()[1],2))));
-	
-	return timeCollisionEntities;
+public double getTimeCollisionEntity(Object otherShip){
+		if (((otherShip.getVelocity()[0] - this.getVelocity()[0]) * (otherShip.getPosition()[0]-this.getPosition()[0]) + 
+				(otherShip.getVelocity()[1] - this.getVelocity()[1]) * (otherShip.getPosition()[1]-this.getPosition()[1])) >= 0){
+			return Double.POSITIVE_INFINITY;
+		}
+		
+		else {
+			return -(((otherShip.getVelocity()[0] - this.getVelocity()[0]) * (otherShip.getPosition()[0]-this.getPosition()[0]) + 
+				(otherShip.getVelocity()[1] - this.getVelocity()[1]) * (otherShip.getPosition()[1]-this.getPosition()[1]) + 
+					Math.sqrt((Math.pow((otherShip.getVelocity()[0] - this.getVelocity()[0]) * (otherShip.getPosition()[0]-this.getPosition()[0]) + 
+								(otherShip.getVelocity()[1] - this.getVelocity()[1]) * (otherShip.getPosition()[1]-this.getPosition()[1]),2)) 		-
+								((Math.pow(otherShip.getVelocity()[0] - this.getVelocity()[0],2)) + (Math.pow(otherShip.getVelocity()[1] - this.getVelocity()[1],2))) * 
+									((Math.pow((otherShip.getPosition()[0]) - this.getPosition()[0],2)) + (Math.pow((otherShip.getPosition()[1]) - this.getPosition()[1],2))-
+											Math.pow((otherShip.getRadius()+this.getRadius()),2))))/((Math.pow(otherShip.getVelocity()[0] - this.getVelocity()[0],2)) + 
+													(Math.pow(otherShip.getVelocity()[1] - this.getVelocity()[1],2))));
+		}
 }
+
+
 
 public double[] getPositionCollisionEntity(Object entity1, Object entity2){
 	
 	double[] posColEntities = {Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY};
-	double xPosColEntities = entity1.getVelocity()[0]*getTimeCollisionEntity(entity1,entity2) + entity1.getPosition()[0];
-	double yPosColEntities = entity1.getVelocity()[1]*getTimeCollisionEntity(entity1,entity2) + entity1.getPosition()[1];
+	double xPosColEntities = entity1.getVelocity()[0]*(this.getTimeCollisionEntity(entity2)) + entity1.getPosition()[0];
+	double yPosColEntities = entity1.getVelocity()[1]*(this.getTimeCollisionEntity(entity2)) + entity1.getPosition()[1];
 	posColEntities = new double[] {xPosColEntities,yPosColEntities};			
 	return posColEntities;
 }
@@ -368,5 +373,3 @@ private Set<Bullet> allBulletsShip = new HashSet<Bullet>();
 private double maxNbOfBullets = 15;
 
 }
-
-
