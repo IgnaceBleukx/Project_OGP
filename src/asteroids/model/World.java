@@ -5,7 +5,7 @@ import java.util.Set;
 
 import asteroids.part2.CollisionListener;
 
-public class World extends Object {
+public class World extends Entity {
 	
 	/**
 	 * @param width
@@ -79,7 +79,7 @@ public class World extends Object {
 		try{
 		this.allShips.add(ship);
 		}
-		catch(IllegalArgumentException exc){
+		catch(NullPointerException exc){
 			throw new IllegalArgumentException();
 		}
 	}
@@ -95,7 +95,7 @@ public class World extends Object {
 		try{
 		this.allShips.remove(ship);
 		}
-		catch(IllegalArgumentException exc){
+		catch(NullPointerException exc){
 			throw new IllegalArgumentException();
 		}
 		
@@ -153,8 +153,8 @@ public class World extends Object {
 	}
 	
 	
-	public Object getEntityAt(double x, double y){
-		for (Object object: this.getEntities()){
+	public Entity getEntityAt(double x, double y){
+		for (Entity object: this.getEntities()){
 			if (object.getPosition()[0] == x && object.getPosition()[1] == y){
 				return object;
 				}
@@ -162,9 +162,9 @@ public class World extends Object {
 		return null;
 		}
 	
-	public Set<? extends Object> getEntities(){
+	public Set<? extends Entity> getEntities(){
 
-		Set<Object> allEntities = new HashSet<Object>();
+		Set<Entity> allEntities = new HashSet<Entity>();
 		for (Bullet bullet : this.getAllBullets()){
 			allEntities.add(bullet);
 		}
@@ -177,12 +177,12 @@ public class World extends Object {
 	
 	public double getTimeNextCollision() {
 		double timeNextCollision = Double.POSITIVE_INFINITY;
-		Set<? extends Object> allEntities = this.getEntities();	
-		for (Object object1 : allEntities){
+		Set<? extends Entity> allEntities = this.getEntities();	
+		for (Entity object1 : allEntities){
 			if(object1.getTimeCollisionBoundary() < timeNextCollision){
 				timeNextCollision = object1.getTimeCollisionBoundary();
 			}
-			for (Object object2 : allEntities){
+			for (Entity object2 : allEntities){
 
 				if(object1 == object2){
 					continue;
@@ -198,20 +198,44 @@ public class World extends Object {
 		}
 		return timeNextCollision;
 	}
+	
+	public Entity getCollisionEntity1() {
+		return CollisionEntity1;
+	}
+
+	public void setCollisionEntity1(Entity collisionEntity1) {
+		CollisionEntity1 = collisionEntity1;
+	}
+
+
+
+	public Entity getCollisionEntity2() {
+		return CollisionEntity2;
+	}
+
+	public void setCollisionEntity2(Entity collisionEntity2) {
+		CollisionEntity2 = collisionEntity2;
+	}
+
+	private Entity CollisionEntity1;
+	private Entity CollisionEntity2;
+
+		
+	
 
 
 	public double[] getPositionNextCollision() {	
 		
 		double[] posNextCollision = null;
 		double timeNextCollision = Double.POSITIVE_INFINITY;
-		Set<? extends Object> allEntities = this.getEntities();
+		Set<? extends Entity> allEntities = this.getEntities();
 		timeNextCollision = this.getTimeNextCollision();
 		
-		for (Object object1 : allEntities){
+		for (Entity object1 : allEntities){
 			if(object1.getTimeCollisionBoundary() == timeNextCollision){
 				posNextCollision = object1.getPositionCollisionBoundary();
 			}
-			for (Object object2 : allEntities){
+			for (Entity object2 : allEntities){
 				if(object1 == object2){
 					continue;
 				}
@@ -316,7 +340,7 @@ public class World extends Object {
 		
 	}
 
-	private void collisionResolver(Object entity1, Object entity2){
+	private void collisionResolver(Entity entity1, Entity entity2){
 		if (entity1 instanceof Ship && entity2 instanceof Ship){
 			this.shipCollision((Ship)entity1,(Ship)entity2);
 		}
@@ -330,7 +354,7 @@ public class World extends Object {
 			this.bulletCollision((Bullet)entity1, (Bullet)entity2);
 		}	
 	}
-	private void collisionResolver(Object entity){
+	private void collisionResolver(Entity entity){
 		if (entity.getPositionCollisionBoundary()[0] == 0){
 			this.boundaryCollision(entity, "x");
 		}
@@ -365,8 +389,8 @@ public class World extends Object {
 			ship.loadBulletOnShip(bullet);
 		}
 		else{
-			ship.terminate();
 			bullet.terminate();
+			ship.terminate();
 			
 		}
 		
@@ -375,7 +399,7 @@ public class World extends Object {
 		bullet1.terminate();
 		bullet2.terminate();
 	}
-	private void boundaryCollision(Object object, String xOrY){
+	private void boundaryCollision(Entity object, String xOrY){
 		if (xOrY == "x"){
 			object.setVelocity(object.getVelocity()[0], -object.getVelocity()[1]);
 		}

@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class Ship extends Object {
+public class Ship extends Entity {
 	/**
 	 * @param xVelocity
 	 * @param yVelocity
@@ -623,6 +623,8 @@ public class Ship extends Object {
 	 */
 	public void terminate(){
 		for(Bullet bullet : this.getAllBulletsShip()){
+			System.out.println("bullet ="+ bullet);
+			System.out.println(this.getAllBulletsShip());
 			bullet.terminate();
 		}
 		this.getWorld().removeShipFromWorld(this);
