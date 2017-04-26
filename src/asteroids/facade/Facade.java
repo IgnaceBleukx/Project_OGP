@@ -101,7 +101,7 @@ public class Facade extends Entity implements asteroids.part2.facade.IFacade{
 	}
 
 	public void setThrusterActive(Ship ship, boolean active) throws ModelException {
-		ship.thruster(active);
+		ship.thrustOn();
 	}
 
 	public double getShipAcceleration(Ship ship) throws ModelException {
@@ -297,7 +297,7 @@ public class Facade extends Entity implements asteroids.part2.facade.IFacade{
 
 
 	public Set<? extends Object> getEntities(World world) throws ModelException {
-		return world.getEntities();
+		return world.getAllEntities();
 		
 	}
 

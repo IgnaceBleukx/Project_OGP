@@ -210,8 +210,18 @@ public class Entity {
 	private double minDensity = 1.42*Math.pow(10, 12);
 	
 
+	public void move(double time) throws IllegalArgumentException{
+		System.out.println("time = " + time);
+		if (time < 0){
+			throw new IllegalArgumentException();
+			}
+		else {
+			this.setPosition(this.getPosition()[0] + this.getVelocity()[0]*time, this.getPosition()[1] + this.getVelocity()[1]*time);
 	
-public double getTimeCollisionBoundary(){
+		}
+	}
+	
+	public double getTimeCollisionBoundary(){
 	
 		double boundaryTime = Double.POSITIVE_INFINITY;
 		if(this.getWorld() == null){
@@ -275,10 +285,9 @@ public double getTimeCollisionEntity(Entity otherEntity){
 
 public double[] getPositionCollisionEntity(Entity otherEntity){
 	
-	double[] posColEntities = {Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY};
 	double xPosColEntities = this.getVelocity()[0]*getTimeCollisionEntity(otherEntity) + this.getPosition()[0];
 	double yPosColEntities = this.getVelocity()[1]*getTimeCollisionEntity(otherEntity) + this.getPosition()[1];
-	posColEntities = new double[] {xPosColEntities,yPosColEntities};			
+	double[] posColEntities = new double[] {xPosColEntities,yPosColEntities};			
 	return posColEntities;
 }
 

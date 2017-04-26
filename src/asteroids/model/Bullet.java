@@ -318,4 +318,33 @@ public class Bullet extends Entity {
 	}
 
 	private boolean isTerminated = false;
+
+	public void setCollisionState(boolean state){
+		this.canCollide = state;
+	}
+	
+	public boolean getCollisionState(){
+		return this.canCollide;
+	}
+	private boolean canCollide = true;
+
+	public void setBoundaryCollisions(int boundaryCollisions){
+		this.boundaryCollisions = boundaryCollisions;
+	}
+	public int getBoundaryCollisions(){
+		return this.boundaryCollisions;
+	}
+	private int boundaryCollisions = 0;
+
+	public void setMaxBoundaryCollisions(int collisions){
+		this.maxBoundaryCollisions = collisions;
+	}
+	public int getMaxBoundaryCollisions(){
+		return this.maxBoundaryCollisions;
+	}
+	private int maxBoundaryCollisions = 2;
 }
+
+
+
+	

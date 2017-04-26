@@ -5,6 +5,7 @@ import java.util.Set;
 
 import asteroids.part2.CollisionListener;
 
+@SuppressWarnings({ "unused", "unused", "unused" })
 public class World extends Entity {
 	
 	/**
@@ -156,7 +157,7 @@ public class World extends Entity {
 	
 	
 	public Entity getEntityAt(double x, double y){
-		for (Entity object: this.getEntities()){
+		for (Entity object: this.getAllEntities()){
 			if (object.getPosition()[0] == x && object.getPosition()[1] == y){
 				return object;
 				}
@@ -164,7 +165,7 @@ public class World extends Entity {
 		return null;
 		}
 	
-	public Set<? extends Entity> getEntities(){
+	public Set<? extends Entity> getAllEntities(){
 
 		Set<Entity> allEntities = new HashSet<Entity>();
 		for (Bullet bullet : this.getAllBullets()){
@@ -179,11 +180,12 @@ public class World extends Entity {
 
 	public double getTimeNextCollision() {
 		double timeNextCollision = Double.POSITIVE_INFINITY;
-		Set<? extends Entity> allEntities = this.getEntities();	
+		Set<? extends Entity> allEntities = this.getAllEntities();	
 		for (Entity object1 : allEntities){
 			if(object1.getTimeCollisionBoundary() < timeNextCollision && object1.getTimeCollisionBoundary() > 0){
 				timeNextCollision = object1.getTimeCollisionBoundary();
 				this.setCollisionEntity1(object1);
+				this.setCollisionEntity2(null);
 			}
 			for (Entity object2 : allEntities){
 
@@ -228,10 +230,9 @@ public class World extends Entity {
 
 
 	public double[] getPositionNextCollision() {	
-		
 		double[] posNextCollision = null;
 		double timeNextCollision = Double.POSITIVE_INFINITY;
-		Set<? extends Entity> allEntities = this.getEntities();
+		Set<? extends Entity> allEntities = this.getAllEntities();
 		timeNextCollision = this.getTimeNextCollision();
 		
 		for (Entity object1 : allEntities){
@@ -253,89 +254,19 @@ public class World extends Entity {
 		return posNextCollision;
 	}
 	
-	public void evolve1(double dt, CollisionListener collisionListener){
-//	double timeNextCollision = this.getTimeNextCollision();
-//	System.out.println(dt);
-//	if(timeNextCollision > dt){
-//		for (Ship ship : this.getAllShips()){
-//			ship.setPosition(ship.getPosition()[0] + ship.getVelocity()[0]*dt, ship.getPosition()[1] + ship.getVelocity()[1]*dt);
-//			if(ship.inspectThruster() == true){
-//				ship.newThruster(ship.getShipAcceleration(),dt);			
-//			}
-//		}
-//		for (Bullet bullet : this.getAllBullets()){
-//			bullet.setPosition(bullet.getPosition()[0] + bullet.getVelocity()[0]*dt, bullet.getPosition()[1] + bullet.getVelocity()[1]*dt);
-//			
-//			}
-//		}
-//	else {
-//		if(this.getCollisionEntity1() instanceof Ship && this.getCollisionEntity2() instanceof Ship){
-//			Object entity1 = this.getCollisionEntity1();
-//			Object entity2 = this.getCollisionEntity2();
-//			double xVelocity1 = entity1.getVelocity()[0]+(2*entity2.getMass()*((entity2.getVelocity()[0]-entity1.getVelocity()[0])*
-//					(entity2.getPosition()[0]-entity1.getPosition()[0])+(entity2.getVelocity()[1]-entity1.getVelocity()[1])*
-//					(entity2.getPosition()[1]-entity1.getPosition()[1])))*(entity2.getPosition()[0]-entity1.getPosition()[0])/(Math.pow((entity1.getRadius()+entity2.getRadius()), 2)
-//							*(entity1.getMass()+entity2.getMass()));
-//			double yVelocity1 = entity1.getVelocity()[1]+(2*entity2.getMass()*((entity2.getVelocity()[0]-entity1.getVelocity()[0])*
-//					(entity2.getPosition()[0]-entity1.getPosition()[0])+(entity2.getVelocity()[1]-entity1.getVelocity()[1])*
-//					(entity2.getPosition()[1]-entity1.getPosition()[1])))*(entity2.getPosition()[1]-entity1.getPosition()[1])/(Math.pow((entity1.getRadius()+entity2.getRadius()), 2)
-//							*(entity1.getMass()+entity2.getMass()));
-//			entity1.setVelocity(xVelocity1, yVelocity1);
-//			
-//			double xVelocity2 = entity1.getVelocity()[0]-(2*entity1.getMass()*((entity2.getVelocity()[0]-entity1.getVelocity()[0])*
-//					(entity2.getPosition()[0]-entity1.getPosition()[0])+(entity2.getVelocity()[1]-entity1.getVelocity()[1])*
-//					(entity2.getPosition()[1]-entity1.getPosition()[1])))*(entity2.getPosition()[0]-entity1.getPosition()[0])/(Math.pow((entity1.getRadius()+entity2.getRadius()), 2)
-//							*(entity1.getMass()+entity2.getMass()));
-//			double yVelocity2 = entity1.getVelocity()[1]-(2*entity1.getMass()*((entity2.getVelocity()[0]-entity1.getVelocity()[0])*
-//					(entity2.getPosition()[0]-entity1.getPosition()[0])+(entity2.getVelocity()[1]-entity1.getVelocity()[1])*
-//					(entity2.getPosition()[1]-entity1.getPosition()[1])))*(entity2.getPosition()[1]-entity1.getPosition()[1])/(Math.pow((entity1.getRadius()+entity2.getRadius()), 2)
-//							*(entity1.getMass()+entity2.getMass()));
-//			entity2.setVelocity(xVelocity2, yVelocity2);
-//			System.out.println("TimeNextCollision:" + timeNextCollision);
-//			this.evolve(dt - timeNextCollision, collisionListener);
-//			
-//			}
-//		if((this.getCollisionEntity1() instanceof Ship && this.getCollisionEntity2() instanceof Bullet)){
-//			if(this.getCollisionEntity2().firedFrom() == this.getCollisionEntity1()){
-//				//this.getCollisionEntity1().loadBulletOnShip(this.getCollisionEntity2());
-//				}
-//			}
-//		if((this.getCollisionEntity1() instanceof Bullet && this.getCollisionEntity2() instanceof Ship)){
-//			if(this.getCollisionEntity1().firedFrom() == this.getCollisionEntity2()){
-//				 //this.getCollisionEntity2().loadBulletOnShip(this.getCollisionEntity1());
-//				}
-//			}
-//		else{
-//			this.boundaryCollision(entity1, x);
-//		}
-//		
-//		}
-//		
-	}
 
+	
 	public void evolve(double dt,CollisionListener collisionListener){
 		double nextCollisionTime = this.getTimeNextCollision();
 		System.out.println(nextCollisionTime);
 		if (nextCollisionTime > dt){
-			for(Bullet bullet : this.getAllBullets()){
-				bullet.setPosition(bullet.getPosition()[0] + bullet.getVelocity()[0]*dt, bullet.getPosition()[1] + bullet.getVelocity()[1]*dt);
-				}
-			for(Ship ship : this.getAllShips()){
-				ship.setPosition(ship.getPosition()[0] + ship.getVelocity()[0]*dt, ship.getPosition()[1] + ship.getVelocity()[1]*dt);
-				if(ship.inspectThruster() == true){
-					ship.newThruster(ship.getShipAcceleration(),dt);
-				}
+			for(Entity entity : this.getAllEntities()){
+				entity.move(dt);
 			}
 		}
 		else{
-			for(Bullet bullet : this.getAllBullets()){
-				bullet.setPosition(bullet.getPosition()[0] + bullet.getVelocity()[0]*nextCollisionTime, bullet.getPosition()[1] + bullet.getVelocity()[1]*nextCollisionTime);
-				}
-			for(Ship ship : this.getAllShips()){
-				ship.setPosition(ship.getPosition()[0] + ship.getVelocity()[0]*nextCollisionTime, ship.getPosition()[1] + ship.getVelocity()[1]*nextCollisionTime);
-				if(ship.inspectThruster() == true){
-					ship.newThruster(ship.getShipAcceleration(),dt);
-				}
+			for (Entity entity: this.getAllEntities()){
+				entity.move(nextCollisionTime);
 			}
 			if (this.getCollisionEntity2() == null){
 				System.out.println(this.getCollisionEntity2());
@@ -344,8 +275,8 @@ public class World extends Entity {
 			}
 			else{
 				this.collisionResolver(this.getCollisionEntity1(),this.getCollisionEntity2());
-
 			}
+			this.evolve(dt - nextCollisionTime, collisionListener);
 			
 			
 		}
@@ -366,17 +297,26 @@ public class World extends Entity {
 			this.bulletCollision((Bullet)entity1, (Bullet)entity2);
 		}	
 	}
+	
 	private void collisionResolver(Entity entity){
-
-		if (entity.getPositionCollisionBoundary()[0] == entity.getRadius() || entity.getPositionCollisionBoundary()[0] == (entity.getWorld().getDimension()[0]-entity.getRadius())){
-			this.boundaryCollision(entity, "x");
+		if (entity instanceof Bullet){
+			if (((Bullet) entity).getBoundaryCollisions() < ((Bullet) entity).getMaxBoundaryCollisions()){
+				((Bullet) entity).setBoundaryCollisions(((Bullet) entity).getBoundaryCollisions() + 1);
+			}
+			else{
+				((Bullet) entity).terminate();
+				return;
+			}
 		}
-		if (entity.getPositionCollisionBoundary()[1] == entity.getRadius() || entity.getPositionCollisionBoundary()[1] == (entity.getWorld().getDimension()[1]-entity.getRadius())){
-			this.boundaryCollision(entity ,"y");
+		if (entity.getPositionCollisionBoundary()[0] == entity.getRadius() || (entity.getPositionCollisionBoundary()[0] == (this.getDimension()[0]-entity.getRadius()))){
+			this.boundaryCollision(entity, "y");
+		}
+		if (entity.getPositionCollisionBoundary()[1] == entity.getRadius() || (entity.getPositionCollisionBoundary()[1] == (this.getDimension()[1]-entity.getRadius()))){
+			this.boundaryCollision(entity ,"x");
 		}
 	}
 	
-	private void shipCollision(Ship ship1, Ship ship2){
+	private void shipCollision1(Ship ship1, Ship ship2){
 
 		double xVelocity1 = ship1.getVelocity()[0]+(2*ship2.getMass()*((ship2.getVelocity()[0]-ship1.getVelocity()[0])*
 				(ship2.getPosition()[0]-ship1.getPosition()[0])+(ship2.getVelocity()[1]-ship1.getVelocity()[1])*
@@ -405,16 +345,41 @@ public class World extends Entity {
 		System.out.println(yVelocity2);
 		ship2.setVelocity(xVelocity2,yVelocity2);
 	}
-	private void shipBulletCollision(Ship ship, Bullet bullet){
-		if (bullet.firedFrom() == ship){
-			ship.loadBulletOnShip(bullet);
-		}
-		else{
-			bullet.terminate();
-			ship.terminate();
-			
-		}
+	
+	private void shipCollision2(Ship ship1, Ship ship2){
+		double collisionAngle = Math.atan((ship1.getVelocity()[0] / ship1.getVelocity()[1])) +
+									Math.atan((ship2.getVelocity()[0] / ship2.getVelocity()[1]));
+		double calculatedVelocity1 = Math.sqrt(Math.pow(ship1.getVelocity()[0],2) + Math.pow(ship1.getVelocity()[1],2));
+		double calculatedVelocity2 = Math.sqrt(Math.pow(ship2.getVelocity()[0],2) + Math.pow(ship2.getVelocity()[1],2));
+
+		double xVelocity1 = calculatedVelocity1;
+	}
+	
+	private void shipCollision(Ship ship1, Ship ship2){
+		double deltaX = ship2.getPosition()[0] - ship1.getPosition()[0];
+		double deltaY = ship2.getPosition()[1] - ship1.getPosition()[1];
+		double deltaR = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) );
+		double deltaV = Math.sqrt(Math.pow(ship2.getVelocity()[0] - ship1.getVelocity()[0],2 ) + Math.pow(ship2.getVelocity()[1] - ship1.getVelocity()[1], 2));
+		double sigma = ship1.getDistanceBetween(ship2);
 		
+		double j = (2 * ship1.getMass()*ship2.getMass() * (deltaV * deltaR)) / (sigma * (ship1.getMass() + ship2.getMass()));
+		double xJ = (j * deltaX) / sigma;
+		double yJ = (j * deltaY) / sigma;
+		
+		ship1.setVelocity(ship1.getVelocity()[0] + xJ/ship1.getMass(), ship1.getVelocity()[1] + yJ/ship1.getMass());
+		ship2.setVelocity(ship2.getVelocity()[0] - xJ/ship2.getMass(), ship2.getVelocity()[1] - yJ/ship2.getMass());
+	}
+	
+	private void shipBulletCollision(Ship ship, Bullet bullet){
+		if (bullet.getCollisionState() == true){
+			if (bullet.firedFrom() == ship){
+				ship.loadBulletOnShip(bullet);
+			}
+			else{
+				bullet.terminate();
+				ship.terminate();	
+		}
+		}
 	}
 	private void bulletCollision(Bullet bullet1, Bullet bullet2){
 		bullet1.terminate();
@@ -423,14 +388,10 @@ public class World extends Entity {
 	private void boundaryCollision(Entity object, String xOrY){
 		System.out.println(object.getVelocity()[0]);
 		if (xOrY == "x"){
-			object.setVelocity(-object.getVelocity()[0], object.getVelocity()[1]);
-			System.out.println(object.getVelocity()[0]);
-			
+			object.setVelocity(-object.getVelocity()[0], object.getVelocity()[1]);			
 		}
 		if (xOrY == "y"){
 			object.setVelocity(object.getVelocity()[0], -object.getVelocity()[1]);
-			System.out.println(object.getVelocity()[1]);
-
 		}
 		
 	}

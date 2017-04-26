@@ -278,24 +278,8 @@ public class Ship extends Entity {
  	 */
  	public void thrustOn(){
 		this.thrusterState = true;
-  		}
-	
-	
-	/**
-	 * Enables/Disables the thruster of the current ship.
-	 * 			|		if boolean active = boolean true:
-	 * 			|			thrustOn
-	 * 			|  		else thrustOff
-	 * 
-	 */
-	public void thruster(boolean active){
-		if(active == true){
-		this.thrustOn();
+		this.thrust(thrusterForce);  		
 		}
-		else {
-			this.thrustOff();
-		}
-	}
 			
 	/**
 	 * Disables the thruster of the ship.
@@ -327,30 +311,6 @@ public class Ship extends Entity {
 	private boolean thrusterState;
 	private double thrusterForce = 1.1*Math.pow(10, 21);
 	
-	
-	
-	public void newThruster(double a,double dt){
-		if (a <= 0){
-			a = 0;
-		}
-
-		if (isValidVelocity(this.getVelocity()[0] + a * Math.cos(this.getOrientation())*dt, this.getVelocity()[1] + a * Math.sin(this.getOrientation()*dt))){
-			this.setVelocity(this.getVelocity()[0] + a * Math.cos(this.getOrientation())*dt,this.getVelocity()[1] + a * Math.sin(this.getOrientation())*dt);
-
-		}	
-		else{
-			this.setVelocity(this.maxVelocity*Math.cos(this.getOrientation()), 
-								 this.maxVelocity*Math.sin(this.getOrientation()));
-							
-		}
-		
-	}
-	
-	
-	
-	
-	
-	
 
 	/**
 	 * 
@@ -362,14 +322,16 @@ public class Ship extends Entity {
 	 * 			| new.xPosition = old.xPosition + old.xVelocity * time
 	 * 			| new.yPosition = old.yPosition + old.yVelocity * time
 	 */
-	public void move(double time) throws IllegalArgumentException{
-		if (time < 0){
-			throw new IllegalArgumentException();
-			}
-		else {
-			this.setPosition(this.getPosition()[0] + this.getVelocity()[0]*time, this.getPosition()[1] + this.getVelocity()[1]*time);
-		}
-	}
+	
+//	@Override
+//	public void move(double time) throws IllegalArgumentException{
+//		if (time < 0){
+//			throw new IllegalArgumentException();
+//			}
+//		else {
+//			this.setPosition(this.getPosition()[0] + this.getVelocity()[0]*time, this.getPosition()[1] + this.getVelocity()[1]*time);
+//		}
+//	}
 	
 	/**
 	 * 
@@ -454,13 +416,14 @@ public class Ship extends Entity {
 	}
 	
 	/**
-	 * 
+	 * @throws Throws IllegalArgumentException if there are any problems with the otherShip.
 	 * @param otherShip
 	 * 			The other ship that might collapse with the current ship.
 	 * @return Returns the time in seconds until the 2 ships collapse. Calculated from the current time.
 	 * 			
 	 */
-	public double getTimeToCollapse(Ship otherShip){
+	public double getTimeToCollapse(Ship otherShip) throws IllegalArgumentException {
+		try{
 		if (((otherShip.getVelocity()[0] - this.getVelocity()[0]) * (otherShip.getPosition()[0]-this.getPosition()[0]) + 
 				(otherShip.getVelocity()[1] - this.getVelocity()[1]) * (otherShip.getPosition()[1]-this.getPosition()[1])) >= 0){
 			return Double.POSITIVE_INFINITY;
@@ -476,17 +439,22 @@ public class Ship extends Entity {
 											Math.pow((otherShip.getRadius()+this.getRadius()),2))))/((Math.pow(otherShip.getVelocity()[0] - this.getVelocity()[0],2)) + 
 													(Math.pow(otherShip.getVelocity()[1] - this.getVelocity()[1],2))));
 		}
+		}catch (IllegalArgumentException e ){
+			throw new IllegalArgumentException();
+		}
+		
 	}
 	
 	/**
-	 * 
+	 * @throws Throws IllegalArgumentException
 	 * @param otherShip
 	 * 			The other Ship that might collapse with the current ship.
 	 * @return Double.POSITIVE_INFINITY if the ships never collapse.
 	 * @return An array of length 2 with the xCoordinate of the collapseposition on index 0 and the yCoordinate of the collapseposition on index 1.
 	 * 			| result = [xPositionOfCollapse, yPositionOfCollapse]
 	 */
-	public double[] getPositionOfCollapse(Ship otherShip){
+	public double[] getPositionOfCollapse(Ship otherShip) throws IllegalArgumentException{
+		try{
 		if (this.getTimeToCollapse(otherShip) == Double.POSITIVE_INFINITY){
 			return null;
 		}
@@ -502,6 +470,10 @@ public class Ship extends Entity {
 			PosCollapse = new double[] {xPosCollapse, yPosCollapse};
 			return PosCollapse;
 		}
+		}catch (IllegalArgumentException e){
+			throw new IllegalArgumentException();
+		}
+		
 	}
 	
 
@@ -524,6 +496,7 @@ public class Ship extends Entity {
 	public void loadBulletOnShip(Bullet bullet){
 		if (this.getNbBulletsOnShip() < this.maxNbOfBullets){
 			this.allBulletsShip.add(bullet);
+			bullet.setCollisionState(false);
 			bullet.setPosition(this.getPosition()[0], this.getPosition()[1]);
 			bullet.setVelocity(this.getVelocity()[0], this.getVelocity()[1]);
 		}
@@ -585,6 +558,7 @@ public class Ship extends Entity {
 		double ySupplement = xSupplement * this.getVelocity()[1] / this.getVelocity()[0];
 		
 		bulletToBeFired.setVelocity(this.getVelocity()[0] + xSupplement, this.getVelocity()[1] + ySupplement);
+		bulletToBeFired.setCollisionState(true);
 		}
 
 	}
