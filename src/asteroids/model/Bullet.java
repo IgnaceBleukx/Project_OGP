@@ -69,8 +69,7 @@ public class Bullet extends Entity {
 	
 	private double xPosition;
 	private double yPosition;
-	
-	
+		
 	/**
 	 * 
 	 * @param xVelocity
@@ -103,7 +102,6 @@ public class Bullet extends Entity {
 	 * @return Returns true if the total calculated velocity is less than this.maxVelocity.
 	 * 			| return (sqrt(xVelocity ** 2 + yVelocity ** 2) 
 	 */
-	
 	public boolean isValidVelocity(double xVelocity, double yVelocity){
 		if (Math.sqrt(Math.pow(xVelocity,2) + Math.pow(yVelocity, 2)) < this.maxVelocity){
 			return true;
@@ -147,7 +145,6 @@ public class Bullet extends Entity {
 	
 	private double radius;
 
-	
 	/**
 	 * 
 	 * @param radius
@@ -192,8 +189,6 @@ public class Bullet extends Entity {
 	
 	private double mass;
 	public final double density = 7.8 * Math.pow(10,12);
-	
-	
 	
 	/**
 	 * 
@@ -277,7 +272,7 @@ public class Bullet extends Entity {
 	 * @post The bullet is not a part of the ship it was loaded on anymore.
 	 * 			| new.getShip == null;
 	 */
-	public void fired(){
+	public void setFiredState(){
 		this.firedFrom = this.getShip();
 		this.setShip(null);
 	}

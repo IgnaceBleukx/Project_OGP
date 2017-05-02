@@ -26,14 +26,6 @@ public class ShipTest2 {
 	
 	
 	@Test
-	public void testNewThruster() throws ModelException {
-		Ship ship = facade.createShip(50, 100, 10, 0, 50, Math.PI, 1.1E18);
-		ship.newThruster(1000, 5);
-		assertEquals(-4990, facade.getShipVelocity(ship)[0], EPSILON);
-		
-	}
-	
-	@Test
 	public void testBulletsShipVelocity() throws ModelException {
 		Ship ship = facade.createShip(50, 100, 10, 0, 50, Math.PI, 1.1E18);
 		World world = facade.createWorld(10000, 10000);

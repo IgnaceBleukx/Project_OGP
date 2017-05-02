@@ -110,9 +110,6 @@ public class Entity {
 		else{
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
-		for (Entity bullet : this.getAllBulletsShip()){
-			bullet.setPosition(xPosition, yPosition);
-		}
 		}
 	}
 	
@@ -208,7 +205,6 @@ public class Entity {
 	
 	private double mass;
 	private double minDensity = 1.42*Math.pow(10, 12);
-	
 
 	public void move(double time) throws IllegalArgumentException{
 		System.out.println("time = " + time);
@@ -291,12 +287,6 @@ public double[] getPositionCollisionEntity(Entity otherEntity){
 	return posColEntities;
 }
 
-
-
-
-
-
-
 public void setWorld(World world){
 	this.isPartOfWorld = world;
 }
@@ -332,34 +322,6 @@ public void setCollisionEntity2(Entity collisionEntity2) {
 
 private Entity CollisionEntity1 = null;
 private Entity CollisionEntity2 = null;
-
-public boolean isPartOfAShip(){
-	return  !(this.getShip() == null);
-}
-
-public void setShip(Ship ship){
-	this.isPartOfShip = ship;
-}
-
-public Ship getShip(){
-	return this.isPartOfShip;
-}
-
-public boolean isValidShip(Ship ship){
-	return this.isPartOfWorld == null;
-}
-
-public void fired(){
-	this.firedFrom = this.getShip();
-	this.setShip(null);
-}
-
-public Ship firedFrom(){
-	return this.firedFrom;
-}
-private Ship isPartOfShip;
-private Ship firedFrom = null;
-
 
 public void loadBulletOnShip(Bullet bullet){
 	if (this.getNbBulletsOnShip() < this.maxNbOfBullets){

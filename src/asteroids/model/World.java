@@ -300,59 +300,36 @@ public class World extends Entity {
 	
 	private void collisionResolver(Entity entity){
 		if (entity instanceof Bullet){
-			if (((Bullet) entity).getBoundaryCollisions() < ((Bullet) entity).getMaxBoundaryCollisions()){
-				((Bullet) entity).setBoundaryCollisions(((Bullet) entity).getBoundaryCollisions() + 1);
-			}
-			else{
-				((Bullet) entity).terminate();
-				return;
-			}
+			bulletBoundaryCollision((Bullet) entity);
 		}
-		if (entity.getPositionCollisionBoundary()[0] == entity.getRadius() || (entity.getPositionCollisionBoundary()[0] == (this.getDimension()[0]-entity.getRadius()))){
-			this.boundaryCollision(entity, "y");
+		else{
+			entityBoundaryCollision(entity);
 		}
-		if (entity.getPositionCollisionBoundary()[1] == entity.getRadius() || (entity.getPositionCollisionBoundary()[1] == (this.getDimension()[1]-entity.getRadius()))){
-			this.boundaryCollision(entity ,"x");
+		}
+		
+
+	private void bulletBoundaryCollision(Bullet bullet){
+		if (bullet.getBoundaryCollisions() < bullet.getMaxBoundaryCollisions()){
+			entityBoundaryCollision(bullet);
+		}
+		else{
+			bullet.terminate();
 		}
 	}
 	
-	private void shipCollision1(Ship ship1, Ship ship2){
-
-		double xVelocity1 = ship1.getVelocity()[0]+(2*ship2.getMass()*((ship2.getVelocity()[0]-ship1.getVelocity()[0])*
-				(ship2.getPosition()[0]-ship1.getPosition()[0])+(ship2.getVelocity()[1]-ship1.getVelocity()[1])*
-				(ship2.getPosition()[1]-ship1.getPosition()[1])))*(ship2.getPosition()[0]-ship1.getPosition()[0])/(Math.pow((ship1.getRadius()+ship2.getRadius()), 2)
-						*(ship1.getMass()+ship2.getMass()));
-		double yVelocity1 = ship1.getVelocity()[1]+(2*ship2.getMass()*((ship2.getVelocity()[0]-ship1.getVelocity()[0])*
-				(ship2.getPosition()[0]-ship1.getPosition()[0])+(ship2.getVelocity()[1]-ship1.getVelocity()[1])*
-				(ship2.getPosition()[1]-ship1.getPosition()[1])))*(ship2.getPosition()[1]-ship1.getPosition()[1])/(Math.pow((ship1.getRadius()+ship2.getRadius()), 2)
-						*(ship1.getMass()+ship2.getMass()));
-		
-		System.out.println(xVelocity1);
-		System.out.println(yVelocity1);
-		ship1.setVelocity(xVelocity1, yVelocity1);
-
-		
-		double xVelocity2 = ship1.getVelocity()[0]-(2*ship1.getMass()*((ship2.getVelocity()[0]-ship1.getVelocity()[0])*
-				(ship2.getPosition()[0]-ship1.getPosition()[0])+(ship2.getVelocity()[1]-ship1.getVelocity()[1])*
-				(ship2.getPosition()[1]-ship1.getPosition()[1])))*(ship2.getPosition()[0]-ship1.getPosition()[0])/(Math.pow((ship1.getRadius()+ship2.getRadius()), 2)
-						*(ship1.getMass()+ship2.getMass()));
-		double yVelocity2 = ship1.getVelocity()[1]-(2*ship1.getMass()*((ship2.getVelocity()[0]-ship1.getVelocity()[0])*
-				(ship2.getPosition()[0]-ship1.getPosition()[0])+(ship2.getVelocity()[1]-ship1.getVelocity()[1])*
-				(ship2.getPosition()[1]-ship1.getPosition()[1])))*(ship2.getPosition()[1]-ship1.getPosition()[1])/(Math.pow((ship1.getRadius()+ship2.getRadius()), 2)
-						*(ship1.getMass()+ship1.getMass()));
-		
-		System.out.println(xVelocity2);
-		System.out.println(yVelocity2);
-		ship2.setVelocity(xVelocity2,yVelocity2);
-	}
-	
-	private void shipCollision2(Ship ship1, Ship ship2){
-		double collisionAngle = Math.atan((ship1.getVelocity()[0] / ship1.getVelocity()[1])) +
-									Math.atan((ship2.getVelocity()[0] / ship2.getVelocity()[1]));
-		double calculatedVelocity1 = Math.sqrt(Math.pow(ship1.getVelocity()[0],2) + Math.pow(ship1.getVelocity()[1],2));
-		double calculatedVelocity2 = Math.sqrt(Math.pow(ship2.getVelocity()[0],2) + Math.pow(ship2.getVelocity()[1],2));
-
-		double xVelocity1 = calculatedVelocity1;
+	private void entityBoundaryCollision(Entity entity){
+		if (entity.getPosition()[0] >= (this.getDimension()[0] - entity.getRadius())*0.99 && entity.getPosition()[0] <= (this.getDimension()[0] - entity.getRadius()) *1.01){
+			entity.setVelocity(-entity.getVelocity()[0], entity.getVelocity()[1]);
+		}
+		if (entity.getPosition()[0] >= entity.getRadius()*0.99 && entity.getPosition()[0] >= entity.getRadius()){
+			entity.setVelocity(-entity.getVelocity()[0], entity.getVelocity()[1]);
+		}
+		if (entity.getPosition()[1] >= (this.getDimension()[1] - entity.getRadius())*0.99 && entity.getPosition()[1] <= (this.getDimension()[1] - entity.getRadius()) *1.01){
+			entity.setVelocity(entity.getVelocity()[0], -entity.getVelocity()[1]);
+		}
+		if (entity.getPosition()[1] >= entity.getRadius()*0.99 && entity.getPosition()[1] >= entity.getRadius()){
+			entity.setVelocity(entity.getVelocity()[0], -entity.getVelocity()[1]);
+		}
 	}
 	
 	private void shipCollision(Ship ship1, Ship ship2){
