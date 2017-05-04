@@ -56,172 +56,6 @@ public class Ship extends Entity {
 	 */
 	
 	
-	public void setVelocity(double xVelocity, double yVelocity){
-		if (this.isValidVelocity(xVelocity, yVelocity)){
-			this.xVelocity = xVelocity;
-			this.yVelocity = yVelocity;	
-			for (Bullet bullet : this.getAllBulletsShip()){
-				bullet.setVelocity(xVelocity, yVelocity);
-			}
-		}
-	}
-	
-	/**
-	 * @return Returns true if the calculated velocity of xVelocity and yVelociity does not exceed the maximum velocity for the ship.
-	 * @return Returns false if the calculated velocity of xVelocity and yVelocity does exceed the maximum velocity for the ship.
-	 * 			| result = sqrt(xVelocity**2 + yVelocity **2) < maxVelocity
-	 */
-	public boolean isValidVelocity(double xVelocity, double yVelocity){
-		if (xVelocity == Double.NaN || yVelocity == Double.NaN){
-			return false;
-		}
-		if (Math.sqrt(Math.pow(this.xVelocity + xVelocity,2) + Math.pow(this.yVelocity + yVelocity, 2))<= maxVelocity){
-			return true;
-		}
-		else {
-			return false;
-			}
-	}
-	
-	/**
-	 * @return Returns an array of length 2 with the current xVelocity on index 0 and the current yVelocity on index 1.
-	 * 			| result = [xVelocity, yVelocity]
-	 */
-	public double[] getVelocity(){
-		double[] velocity;
-		velocity = new double[] {this.xVelocity, this.yVelocity};
-		return velocity;		
-	}
-	/**
-	 * 
-	 * @return Returns the total velocity of the current ship.
-	 * 			| return sqrt(this.getVelocity()[1] ** 2 + this.getVelocity()[0] ** 2)
-	 */ 
-	public double getTotalVelocity(){
-		return Math.sqrt(Math.pow(this.getVelocity()[0], 2) + Math.pow(this.getVelocity()[1],2));
-	}
-	
-	private double xVelocity;
-	private double yVelocity;
-	private final double maxVelocity = 300000;
-		
-	/**
-	 * 
-	 * @return Returns the current orientation of the ship.
-	 * 			| result = this.orientation
-	 */
-	public double getOrientation() {
-		return this.orientation;
-	}
-
-	/**
-	 * @param orientation
-	 * @pre  The value of the parameter orientation must be larger than or equal to 0 and smaller than or equal to 2 * pi.
-	 * 			| 0 <= orientation <= 2 * pi
-	 * @post Sets the current orientation of the ship to the parameter orientation.
-	 * 			| new.orientation = orientation 
-	 */
-	public void setOrientation(double orientation) {
-		this.orientation = orientation;
-	}
-	
-	private double orientation;
-
-	
-	/**
-	 * @throws NullPointerException if the position of the ship is not initialized.
-	 * 			| if xPosition == 0.0d || yPosition == 0.0d:
-	 * 					throw NullPointerException
-	 * @return Returns the current position of the ship in an array of length 2 with the xPosition on index 0 and yPosition on index 1.
-	 * 			result = [xPosition, yPosition]
-	 */
-	public double[] getPosition(){		
-		double[] position;
-		position = new double[] {this.xPosition, this.yPosition};
-		return position;		
-	}
-	
-	public boolean isValidPosition(double xPosition, double yPosition){
-		if (xPosition == Double.NaN || yPosition == Double.NaN){
-			return false;
-		}
-		else{
-			return true;
-		}
-	}
-	
-	/**
-	 * @param xPosition
-	 * @param yPosition
-	 * @throws IllegalArgumentException if the given xPosition or yPosition is not a valid number.
-	 * 			| if (xPosition == NaN || yPosition == NaN)
-	 * 					throw IllegalArgumentException	 * 					
-	 * @post Sets the current position of the ship to the parameters xPosition and yPosition.
-	 * 			| new.xPosition = xPosition
-	 * 			| new.yPosition = yPosition
-	 */
-	public void setPosition(double xPosition, double yPosition) throws IllegalArgumentException{
-		if (!isValidPosition(xPosition, yPosition)){
-			throw new IllegalArgumentException();
-		}
-		else{
-		this.xPosition = xPosition;
-		this.yPosition = yPosition;
-		for (Bullet bullet : this.getAllBulletsShip()){
-			bullet.setPosition(xPosition, yPosition);
-		}
-		}
-	}
-	
-	private double xPosition;
-	private double yPosition;
-	
-	
-	/**
-	 * 
-	 * @param radius
-	 * @throws IllegalArgumentException if the radius is not valid.
-	 *			| if (! isValidRadius(radius)
-	 *				throw IllegalArgumentException
-	 * @post Sets the radius of the ship on the parameter radius.
-	 * 			| new.radius = radius
-	 */			
-	public void setRadius(double radius) throws IllegalArgumentException{
-		if (!isValidRadius(radius)){
-			throw new IllegalArgumentException();
-		}
-		else{
-			this.radius = radius;
-		}
-	}
-	
-	/**
-	 * 
-	 * @param radius
-	 * 			The radius to check.
-	 * @return True if the radius is larger than 10. False if the radius smaller than 10 or the given radius is not a number.
-	 * 			| result = radius > 10
-	 */
-	public boolean isValidRadius(double radius){
-		if (radius < 10 || radius == Double.NaN){
-			return false;
-		}
-		else{
-			return true;
-		}
-	}
-	
-	/**
-	 * 
-	 * @return Returns the current radius of the ship.
-	 * 			| result = this.radius
-	 */
-	public double getRadius(){
-		return this.radius;
-	}
-	
-	private double radius;
-
 	
 	/**
 	 * Sets the mass of the current ship to the given mass if it is valid.
@@ -232,6 +66,14 @@ public class Ship extends Entity {
 	public void setMass(double mass){
 		if (this.isValidMass(mass)){
 			this.mass = mass;
+		}
+		else{
+			this.mass = Math.PI * 4 / 3. * Math.pow(50, 3) * 1.42E12; 
+			for(Bullet bullet: this.getAllBulletsShip()){
+				this.mass += bullet.getMass();
+			}
+			System.out.println("Radius = "+ this.getRadius());
+			System.out.println("Mass = " + this.getMass());
 		}
 	}
 	
@@ -255,16 +97,11 @@ public class Ship extends Entity {
 	 *				result = false
 	 */
 	public boolean isValidMass(double mass){
-		if (mass >= Math.pow(this.getRadius(),3) * 4/3 * Math.PI*minDensity){
-			return true;
-		}
-		else{
-			return false;
-		}
+		return (!Double.isNaN(mass));
 	}
 	
 	private double mass;
-	private double minDensity = 1.42*Math.pow(10, 12);
+	private double density = 1.42E12;
 	
 	
 	/**
@@ -334,12 +171,12 @@ public class Ship extends Entity {
 		if (a <= 0){
 			a = 0;
 		}
-		if (isValidVelocity(this.xVelocity += a * Math.cos(orientation), this.yVelocity += a * Math.sin(orientation))){
-			this.setVelocity(this.xVelocity + a * Math.cos(orientation),this.yVelocity + a * Math.sin(orientation));
+		if (isValidVelocity(this.getVelocity()[0] + a * Math.cos(this.getOrientation()), this.getVelocity()[1] + a * Math.sin(this.getOrientation()))){
+			this.setVelocity(this.getVelocity()[1] + a * Math.cos(this.getOrientation()),this.getVelocity()[1] + a * Math.sin(this.getOrientation()));
 		}	
 		else{
-			this.setVelocity(maxVelocity*Math.cos(orientation), 
-								 maxVelocity*Math.sin(orientation));
+			this.setVelocity(this.getMaxVelocity()*Math.cos(this.getOrientation()), 
+								 this.getMaxVelocity()*Math.sin(this.getOrientation()));
 							
 		}
 	}
@@ -362,6 +199,8 @@ public class Ship extends Entity {
 	public void loadBulletOnShip(Bullet bullet){
 		if (this.getNbBulletsOnShip() < this.maxNbOfBullets){
 			this.allBulletsShip.add(bullet);
+			bullet.setShip(this);
+			bullet.setWorld(this.getWorld());
 			bullet.setCollisionState(false);
 			bullet.setPosition(this.getPosition()[0], this.getPosition()[1]);
 			bullet.setVelocity(this.getVelocity()[0], this.getVelocity()[1]);
@@ -389,6 +228,7 @@ public class Ship extends Entity {
 	public void removeBulletFromShip(Bullet bullet) throws IllegalArgumentException{
 		if (this.allBulletsShip.contains(bullet)){
 			this.allBulletsShip.remove(bullet);
+			bullet.setShip(null);
 			this.setMass(this.getMass() - bullet.getMass());
 		}
 		else {
@@ -495,16 +335,18 @@ public class Ship extends Entity {
 	private boolean isTerminated = false;
 	
 	public void boundaryCollision(){
+		System.out.println("xPosision = " + this.getPosition()[0]);
+		System.out.println("yPosition = " + this.getPosition()[1]);
 		if (this.getPosition()[0] >= this.getRadius() * 0.99 && this.getPosition()[0] <= this.getRadius() *1.01){
 			this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
 		}
 		if (this.getPosition()[1] >= this.getRadius() * 0.99 && this.getPosition()[1] <= this.getRadius() *1.01){
 			this.setVelocity(this.getVelocity()[0],-this.getVelocity()[1]);
 		}
-		if (this.getPosition()[0] >= (this.getWorld().getDimension()[0] - this.getRadius())*0.99 && this.getPosition()[0] >= (this.getWorld().getDimension()[0] - this.getRadius())*1.01){
+		if (this.getPosition()[0] >= (this.getWorld().getDimension()[0] - this.getRadius())*0.99 && this.getPosition()[0] <= (this.getWorld().getDimension()[0] - this.getRadius())*1.01){
 			this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
 		}
-		if (this.getPosition()[1] >= (this.getWorld().getDimension()[1] - this.getRadius())*0.99 && this.getPosition()[1] >= (this.getWorld().getDimension()[1] - this.getRadius())*1.01){
+		if (this.getPosition()[1] >= (this.getWorld().getDimension()[1] - this.getRadius())*0.99 && this.getPosition()[1] <= (this.getWorld().getDimension()[1] - this.getRadius())*1.01){
 			this.setVelocity(this.getVelocity()[0], -this.getVelocity()[1]);
 		}
 		else{

@@ -36,6 +36,9 @@ public class Entity {
 		return velocity;		
 	}
 	
+	public double getMaxVelocity(){
+		return this.maxVelocity;
+	}
 	private double xVelocity;
 	private double yVelocity;
 	private final double maxVelocity = 300000;
@@ -154,50 +157,6 @@ public class Entity {
 	
 	private double radius;
 
-	
-	/**
-	 * Sets the mass of the current ship to the given mass if it is valid.
-	 * @param mass
-	 * 		if (isValidMass(mass)
-	 * 			this.mass = mass
-	 */
-	public void setMass(double mass){
-		if (this.isValidMass(mass)){
-			this.mass = mass;
-		}
-	}
-	
-	/**
-	 * 
-	 * @return Returns the mass of the current ship.
-	 * result = this.mass;
- 	 */
-	public double getMass(){
-		return this.mass;
-	}
-	
-	/**
-	 * Checks if the given double is a valid mass for the current ship.
-	 * @param mass
-	 * @return Returns true if the mass is valid
-	 * 			if(mass >= this.radius **3 * 4/3 * pi)
-	 * 				result = true
-	 * @return Returns false if the mass is invalid.
-	 * 			if(mass < this.radius **3 * 4/3 * pi)
-	 *				result = false
-	 */
-	public boolean isValidMass(double mass){
-		if (mass == Math.pow(this.getRadius(),3) * 4/3 * Math.PI*minDensity){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-	
-	private double mass;
-	private double minDensity = 1.42*Math.pow(10, 12);
-
 	public void move(double time) throws IllegalArgumentException{
 		System.out.println("time = " + time);
 		if (time < 0){
@@ -275,53 +234,26 @@ public class Entity {
 		return boundaryColPos;
 		}
 
+
 	public double getTimeCollisionEntity(Entity otherEntity){
-		try{
-			if (((otherEntity.getVelocity()[0] - this.getVelocity()[0]) * (otherEntity.getPosition()[0]-this.getPosition()[0]) + 
-					(otherEntity.getVelocity()[1] - this.getVelocity()[1]) * (otherEntity.getPosition()[1]-this.getPosition()[1])) >= 0){
-				return Double.POSITIVE_INFINITY;
-			}
-			
-			else {
-				return -(((otherEntity.getVelocity()[0] - this.getVelocity()[0]) * (otherEntity.getPosition()[0]-this.getPosition()[0]) + 
-					(otherEntity.getVelocity()[1] - this.getVelocity()[1]) * (otherEntity.getPosition()[1]-this.getPosition()[1]) + 
-						Math.sqrt((Math.pow((otherEntity.getVelocity()[0] - this.getVelocity()[0]) * (otherEntity.getPosition()[0]-this.getPosition()[0]) + 
-									(otherEntity.getVelocity()[1] - this.getVelocity()[1]) * (otherEntity.getPosition()[1]-this.getPosition()[1]),2)) 		-
-									((Math.pow(otherEntity.getVelocity()[0] - this.getVelocity()[0],2)) + (Math.pow(otherEntity.getVelocity()[1] - this.getVelocity()[1],2))) * 
-										((Math.pow((otherEntity.getPosition()[0]) - this.getPosition()[0],2)) + (Math.pow((otherEntity.getPosition()[1]) - this.getPosition()[1],2))-
-												Math.pow((otherEntity.getRadius()+this.getRadius()),2))))/((Math.pow(otherEntity.getVelocity()[0] - this.getVelocity()[0],2)) + 
-														(Math.pow(otherEntity.getVelocity()[1] - this.getVelocity()[1],2))));
-			}
-			}catch (IllegalArgumentException e ){
-				throw new IllegalArgumentException();
-			}
+		double deltaRX = otherEntity.getPosition()[0] - this.getPosition()[0];
+		double deltaRY = otherEntity.getPosition()[1] - this.getPosition()[1];
+		double deltaVX = otherEntity.getVelocity()[0] - this.getVelocity()[0];
+		double deltaVY = otherEntity.getVelocity()[1] - this.getVelocity()[1];
+		double deltaRTotal = Math.sqrt(Math.pow(deltaRX, 2) + Math.pow(deltaRY, 2));
+		double deltaVTotal = Math.sqrt(Math.pow(deltaVX, 2) + Math.pow(deltaVY, 2));
+		double deltaVDeltaR = deltaVX * deltaRX + deltaVY * deltaRY;
+		double sigma = this.getRadius() + otherEntity.getRadius();
+		double d = Math.pow(deltaVDeltaR, 2) - Math.pow(deltaVTotal, 2)*(Math.pow(deltaRTotal, 2)-Math.pow(sigma, 2));
+		if (deltaVDeltaR >= 0 || d<=0 || !this.getWorld().equals(otherEntity.getWorld())){
+			return Double.POSITIVE_INFINITY;
+		}
+		else{
+			return ((-deltaVDeltaR + Math.sqrt(d)) / Math.pow(deltaVTotal, 2));
+		}
 	}
 	
-	@Deprecated
-	public double getTimeCollisionEntity1(Entity otherEntity){
-	double timeCollisionEntities = Double.POSITIVE_INFINITY;
-		   timeCollisionEntities = 
-				-(((this.getVelocity()[0] - otherEntity.getVelocity()[0]) * (this.getPosition()[0]-otherEntity.getPosition()[0]) + 
-				(this.getVelocity()[1] - otherEntity.getVelocity()[1]) * (this.getPosition()[1]-otherEntity.getPosition()[1]) + 
-					Math.sqrt((Math.pow((this.getVelocity()[0] - otherEntity.getVelocity()[0]) * (this.getPosition()[0]-otherEntity.getPosition()[0]) + 
-								(this.getVelocity()[1] - otherEntity.getVelocity()[1]) * (this.getPosition()[1]-otherEntity.getPosition()[1]),2)) 		-
-								((Math.pow(this.getVelocity()[0] - otherEntity.getVelocity()[0],2)) + (Math.pow(this.getVelocity()[1] - otherEntity.getVelocity()[1],2))) * 
-									((Math.pow((this.getPosition()[0]) - otherEntity.getPosition()[0],2)) + (Math.pow((this.getPosition()[1]) - otherEntity.getPosition()[1],2))-
-											Math.pow((this.getRadius()+otherEntity.getRadius()),2))))/((Math.pow(this.getVelocity()[0] - otherEntity.getVelocity()[0],2)) + 
-													(Math.pow(this.getVelocity()[1] - otherEntity.getVelocity()[1],2))));
 	
-	return timeCollisionEntities;
-}
-
-@Deprecated
-	public double[] getPositionCollisionEntity1(Entity otherEntity){
-	
-	double xPosColEntities = this.getVelocity()[0]*getTimeCollisionEntity(otherEntity) + this.getPosition()[0];
-	double yPosColEntities = this.getVelocity()[1]*getTimeCollisionEntity(otherEntity) + this.getPosition()[1];
-	double[] posColEntities = new double[] {xPosColEntities,yPosColEntities};			
-	return posColEntities;
-}
-
 	public double[] getPositionCollisionEntity(Entity otherEntity) throws IllegalArgumentException{
 	try{
 	if (this.getTimeCollisionEntity(otherEntity) == Double.POSITIVE_INFINITY){
@@ -346,18 +278,16 @@ public class Entity {
 }
 
 	public void setWorld(World world){
-		this.isPartOfWorld = world;
+		this.world = world;
 	}
-
 	public World getWorld(){
-		return this.isPartOfWorld;
+		return this.world;
 	}
-
 	public boolean isValidWorld(World world){
 		return world != null;
 	}
 
-	private World isPartOfWorld;
+	private World world;
 }
 
 

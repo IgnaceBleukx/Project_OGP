@@ -50,8 +50,8 @@ public class Part3TestFull {
 
   @Before
   public void setUp() throws ModelException {
-    facade = new asteroids.part3.facade.Facade();
-    nbStudentsInTeam = facade.getNbStudentsInTeam();
+	facade = new asteroids.part3.facade.Facade();
+	nbStudentsInTeam = facade.getNbStudentsInTeam();
     filledWorld = facade.createWorld(2000, 2000);
     ship1 = facade.createShip(100, 120, 10, 5, 50, 0, 1.0E20);
     for (int i = 1; i < 10; i++) {

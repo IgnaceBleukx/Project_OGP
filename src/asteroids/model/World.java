@@ -150,6 +150,7 @@ public class World extends Entity {
 	public void removeBulletFromWorld(Bullet bullet) throws IllegalArgumentException{
 		try{
 		this.allBulletsWorld.remove(bullet);
+		bullet.setWorld(null);
 		}
 		catch(IllegalArgumentException exc){
 			throw new IllegalArgumentException();
@@ -249,8 +250,7 @@ public class World extends Entity {
 			for (Entity entity: this.getAllEntities()){
 				entity.move(nextCollisionTime);
 			}
-			System.out.print(this.getEntitiesNextCollision().toString()+"\n");
-			if (this.getEntitiesNextCollision()[1] == null){
+			if (entitiesNextCollision[1] == null){
 				this.collisionResolver(this.getEntitiesNextCollision()[0]);
 			}
 			else{

@@ -79,7 +79,7 @@ public class Facade implements asteroids.part2.facade.IFacade{
 	}
 
 	public double[] getCollisionPosition(Ship ship1, Ship ship2) throws ModelException{
-		return ship1.getPositionCollisionEntity(ship2);
+		return ((Entity) ship1).getPositionCollisionEntity(ship2);
 	}
 
 	@Override
@@ -119,15 +119,13 @@ public class Facade implements asteroids.part2.facade.IFacade{
 	}
 
 	@Override
-	public void terminateBullet(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		
+	public void terminateBullet(Bullet bullet) throws ModelException {	
+		bullet.terminate();
 	}
 
 	@Override
 	public boolean isTerminatedBullet(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return false;
+		return bullet.isTerminated();
 	}
 
 
@@ -224,7 +222,6 @@ public class Facade implements asteroids.part2.facade.IFacade{
 	}
 
 	public void loadBulletOnShip(Ship ship, Bullet bullet) throws ModelException {
-		bullet.setShip(ship);
 		ship.loadBulletOnShip(bullet);
 	}
 
