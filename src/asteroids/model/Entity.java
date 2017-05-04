@@ -1,17 +1,11 @@
 package asteroids.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class Entity {
 	
 	public void setVelocity(double xVelocity, double yVelocity){
 		if (this.isValidVelocity(xVelocity, yVelocity)){
 			this.xVelocity = xVelocity;
 			this.yVelocity = yVelocity;	
-			for (Entity bullet : this.getAllBulletsShip()){
-				bullet.setVelocity(xVelocity, yVelocity);
-			}
 		}
 	}
 	
@@ -45,8 +39,6 @@ public class Entity {
 	private double xVelocity;
 	private double yVelocity;
 	private final double maxVelocity = 300000;
-
-
 	
 	/**
 	 * 
@@ -250,21 +242,63 @@ public class Entity {
 		return boundaryTime;
 	}
 
+	public boolean overlap(Entity otherEntity){
+		if (this == otherEntity){
+			return true;
+		}
 		
+		if (this.getDistanceBetween(otherEntity) < 0){
+			return true;
+		}
 		
-		
-public double[] getPositionCollisionBoundary(){
+		else {
+			return false;
+		}
+	}
 	
-	double[] boundaryColPos;
-	double xPosColBound = this.getVelocity()[0]*this.getTimeCollisionBoundary() + this.getPosition()[0];
-	double yPosColBound = this.getVelocity()[1]*this.getTimeCollisionBoundary() + this.getPosition()[1];
-	boundaryColPos = new double[] {xPosColBound,yPosColBound};
+	public double getDistanceBetween(Entity otherEntity){
+		if (this == otherEntity){
+			return 0;
+		}
+		else {
+		return  (Math.sqrt(Math.pow(this.getPosition()[0] - otherEntity.getPosition()[0],2)+Math.pow(this.getPosition()[1] - otherEntity.getPosition()[1],2))	- this.getRadius() - otherEntity.getRadius());
+		}
+	}
+		
+	public double[] getPositionCollisionBoundary(){
+	
+		double[] boundaryColPos;
+		double xPosColBound = this.getVelocity()[0]*this.getTimeCollisionBoundary() + this.getPosition()[0];
+		double yPosColBound = this.getVelocity()[1]*this.getTimeCollisionBoundary() + this.getPosition()[1];
+		boundaryColPos = new double[] {xPosColBound,yPosColBound};
 
-	return boundaryColPos;
+		return boundaryColPos;
+		}
 
-}
-
-public double getTimeCollisionEntity(Entity otherEntity){
+	public double getTimeCollisionEntity(Entity otherEntity){
+		try{
+			if (((otherEntity.getVelocity()[0] - this.getVelocity()[0]) * (otherEntity.getPosition()[0]-this.getPosition()[0]) + 
+					(otherEntity.getVelocity()[1] - this.getVelocity()[1]) * (otherEntity.getPosition()[1]-this.getPosition()[1])) >= 0){
+				return Double.POSITIVE_INFINITY;
+			}
+			
+			else {
+				return -(((otherEntity.getVelocity()[0] - this.getVelocity()[0]) * (otherEntity.getPosition()[0]-this.getPosition()[0]) + 
+					(otherEntity.getVelocity()[1] - this.getVelocity()[1]) * (otherEntity.getPosition()[1]-this.getPosition()[1]) + 
+						Math.sqrt((Math.pow((otherEntity.getVelocity()[0] - this.getVelocity()[0]) * (otherEntity.getPosition()[0]-this.getPosition()[0]) + 
+									(otherEntity.getVelocity()[1] - this.getVelocity()[1]) * (otherEntity.getPosition()[1]-this.getPosition()[1]),2)) 		-
+									((Math.pow(otherEntity.getVelocity()[0] - this.getVelocity()[0],2)) + (Math.pow(otherEntity.getVelocity()[1] - this.getVelocity()[1],2))) * 
+										((Math.pow((otherEntity.getPosition()[0]) - this.getPosition()[0],2)) + (Math.pow((otherEntity.getPosition()[1]) - this.getPosition()[1],2))-
+												Math.pow((otherEntity.getRadius()+this.getRadius()),2))))/((Math.pow(otherEntity.getVelocity()[0] - this.getVelocity()[0],2)) + 
+														(Math.pow(otherEntity.getVelocity()[1] - this.getVelocity()[1],2))));
+			}
+			}catch (IllegalArgumentException e ){
+				throw new IllegalArgumentException();
+			}
+	}
+	
+	@Deprecated
+	public double getTimeCollisionEntity1(Entity otherEntity){
 	double timeCollisionEntities = Double.POSITIVE_INFINITY;
 		   timeCollisionEntities = 
 				-(((this.getVelocity()[0] - otherEntity.getVelocity()[0]) * (this.getPosition()[0]-otherEntity.getPosition()[0]) + 
@@ -279,7 +313,8 @@ public double getTimeCollisionEntity(Entity otherEntity){
 	return timeCollisionEntities;
 }
 
-public double[] getPositionCollisionEntity(Entity otherEntity){
+@Deprecated
+	public double[] getPositionCollisionEntity1(Entity otherEntity){
 	
 	double xPosColEntities = this.getVelocity()[0]*getTimeCollisionEntity(otherEntity) + this.getPosition()[0];
 	double yPosColEntities = this.getVelocity()[1]*getTimeCollisionEntity(otherEntity) + this.getPosition()[1];
@@ -287,62 +322,42 @@ public double[] getPositionCollisionEntity(Entity otherEntity){
 	return posColEntities;
 }
 
-public void setWorld(World world){
-	this.isPartOfWorld = world;
-}
-
-public World getWorld(){
-	return this.isPartOfWorld;
-}
-
-public boolean isValidWorld(World world){
-	return world != null;
-}
-
-private World isPartOfWorld;
-
-
-public Entity getCollisionEntity1() {
-	return CollisionEntity1;
-}
-
-public void setCollisionEntity1(Entity collisionEntity1) {
-	CollisionEntity1 = collisionEntity1;
-}
-
-
-
-public Entity getCollisionEntity2() {
-	return CollisionEntity2;
-}
-
-public void setCollisionEntity2(Entity collisionEntity2) {
-	CollisionEntity2 = collisionEntity2;
-}
-
-private Entity CollisionEntity1 = null;
-private Entity CollisionEntity2 = null;
-
-public void loadBulletOnShip(Bullet bullet){
-	if (this.getNbBulletsOnShip() < this.maxNbOfBullets){
-		this.allBulletsShip.add(bullet);
-		bullet.setPosition(this.getPosition()[0], this.getPosition()[1]);
-		bullet.setVelocity(this.getVelocity()[0], this.getVelocity()[1]);
+	public double[] getPositionCollisionEntity(Entity otherEntity) throws IllegalArgumentException{
+	try{
+	if (this.getTimeCollisionEntity(otherEntity) == Double.POSITIVE_INFINITY){
+		return null;
+	}
+	
+	else {
+		double[] PosCollapse;
+		double xPosCollapse = (((this.getPosition()[0]+this.getTimeCollisionEntity(otherEntity)*this.getVelocity()[0])*otherEntity.getRadius())+
+				((otherEntity.getPosition()[0]+this.getTimeCollisionEntity(otherEntity)*this.getVelocity()[0])*this.getRadius())) /
+				(this.getRadius()+otherEntity.getRadius());
+		double yPosCollapse = (((this.getPosition()[1]+this.getTimeCollisionEntity(otherEntity)*this.getVelocity()[1])*otherEntity.getRadius())+
+				((otherEntity.getPosition()[1]+this.getTimeCollisionEntity(otherEntity)*otherEntity.getVelocity()[1])*this.getRadius())) /
+				(this.getRadius()+otherEntity.getRadius());
+		PosCollapse = new double[] {xPosCollapse, yPosCollapse};
+		return PosCollapse;
+	}
+	}catch (IllegalArgumentException e){
+		throw new IllegalArgumentException();
 	}
 	
 }
 
-public int getNbBulletsOnShip() {
-	return this.allBulletsShip.size();
-}
+	public void setWorld(World world){
+		this.isPartOfWorld = world;
+	}
 
-public Set<Bullet> getAllBulletsShip() {
-	return this.allBulletsShip;
-}
+	public World getWorld(){
+		return this.isPartOfWorld;
+	}
 
-private Set<Bullet> allBulletsShip = new HashSet<Bullet>();
-private double maxNbOfBullets = 15;
+	public boolean isValidWorld(World world){
+		return world != null;
+	}
 
+	private World isPartOfWorld;
 }
 
 

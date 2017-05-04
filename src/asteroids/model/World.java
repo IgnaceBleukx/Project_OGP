@@ -5,7 +5,6 @@ import java.util.Set;
 
 import asteroids.part2.CollisionListener;
 
-@SuppressWarnings({ "unused", "unused", "unused" })
 public class World extends Entity {
 	
 	/**
@@ -142,11 +141,13 @@ public class World extends Entity {
 	
 	/**@param bullet
 	 * @throws IllegalArgumentException
-	 * 			If given parameter is invalid, a new exception of the type IllegalArgumentException will be thrown.
-	 * This method removes the Bullet 'bullet' from the set of all bullets in the world 'allBulletsWorld'.
+	 * 			If the given bullet is not part of the set of this.getAllBullets, a exception of the type IllegalArgumentException will be thrown.
+	 * This method removes the Bullet 'bullet' from the set of all bullets in the world 'allBulletsWorld' if it is part of the world.
+	 * 			| if (this.getAllBullets().contains(bullet)
+	 * 					! new.getAllbullets().contains(bullet)
 	 */
 	
-	public void removeBulletToWorld(Bullet bullet) throws IllegalArgumentException{
+	public void removeBulletFromWorld(Bullet bullet) throws IllegalArgumentException{
 		try{
 		this.allBulletsWorld.remove(bullet);
 		}
@@ -154,16 +155,6 @@ public class World extends Entity {
 			throw new IllegalArgumentException();
 		}
 	}
-	
-	
-	public Entity getEntityAt(double x, double y){
-		for (Entity object: this.getAllEntities()){
-			if (object.getPosition()[0] == x && object.getPosition()[1] == y){
-				return object;
-				}
-			}
-		return null;
-		}
 	
 	public Set<? extends Entity> getAllEntities(){
 
@@ -177,88 +168,78 @@ public class World extends Entity {
 		return allEntities;
 	}
 	
-
-	public double getTimeNextCollision() {
-		double timeNextCollision = Double.POSITIVE_INFINITY;
-		Set<? extends Entity> allEntities = this.getAllEntities();	
-		for (Entity object1 : allEntities){
-			if(object1.getTimeCollisionBoundary() < timeNextCollision && object1.getTimeCollisionBoundary() > 0){
-				timeNextCollision = object1.getTimeCollisionBoundary();
-				this.setCollisionEntity1(object1);
-				this.setCollisionEntity2(null);
-			}
-			for (Entity object2 : allEntities){
-
-				if(object1 == object2){
-					continue;
+	public Entity getEntityAt(double x, double y){
+		for (Entity object: this.getAllEntities()){
+			if (object.getPosition()[0] == x && object.getPosition()[1] == y){
+				return object;
 				}
-				else {
-					if(object1.getTimeCollisionEntity(object2) < timeNextCollision && object1.getTimeCollisionBoundary() > 0){
-						timeNextCollision = object1.getTimeCollisionEntity(object2);
-						this.setCollisionEntity1(object1);
-						this.setCollisionEntity2(object2);
-					}	
-				}		
 			}
+		return null;
 		}
-		return timeNextCollision;
-	}
 	
-	public Entity getCollisionEntity1() {
-		return CollisionEntity1;
-	}
+//	public double getTimeNextCollision(){
+//		double nextCollisionTime = Double.POSITIVE_INFINITY;
+//		for(Entity entity1:this.getAllEntities()){
+//			if (entity1.getTimeCollisionBoundary() < nextCollisionTime && entity1.getTimeCollisionBoundary() >= 0){
+//				nextCollisionTime = entity1.getTimeCollisionBoundary();
+//			}
+//			for(Entity entity2:this.getAllEntities()){
+//				if (entity1 == entity2){
+//					continue;
+//				}
+//				else{
+//					if (entity1.getTimeCollisionEntity(entity2) < nextCollisionTime){
+//						nextCollisionTime = entity1.getTimeCollisionEntity(entity2);
+//					}
+//				}
+//			}
+//		}
+//		return nextCollisionTime;
+//	}
 
-	public void setCollisionEntity1(Entity collisionEntity1) {
-		CollisionEntity1 = collisionEntity1;
-	}
-
-
-
-	public Entity getCollisionEntity2() {
-		return CollisionEntity2;
-	}
-
-	public void setCollisionEntity2(Entity collisionEntity2) {
-		CollisionEntity2 = collisionEntity2;
-	}
-
-	private Entity CollisionEntity1 = null;
-	private Entity CollisionEntity2 = null;
-
-		
-	
-
-
-	public double[] getPositionNextCollision() {	
-		double[] posNextCollision = null;
-		double timeNextCollision = Double.POSITIVE_INFINITY;
-		Set<? extends Entity> allEntities = this.getAllEntities();
-		timeNextCollision = this.getTimeNextCollision();
-		
-		for (Entity object1 : allEntities){
-			if(object1.getTimeCollisionBoundary() == timeNextCollision){
-				posNextCollision = object1.getPositionCollisionBoundary();
+	public Entity[] getEntitiesNextCollision(){
+		Entity collisionEntity1 = null;
+		Entity collisionEntity2 = null;
+		double nextCollisionTime = Double.POSITIVE_INFINITY;
+		for(Entity entity1:this.getAllEntities()){
+			if (entity1.getTimeCollisionBoundary() < nextCollisionTime && entity1.getTimeCollisionBoundary() >= 0){
+				nextCollisionTime = entity1.getTimeCollisionBoundary();
+				collisionEntity1 = entity1;
+				collisionEntity2 = null;
 			}
-			for (Entity object2 : allEntities){
-				if(object1 == object2){
+			for(Entity entity2:this.getAllEntities()){
+				if (entity1.equals(entity2)){
 					continue;
 				}
-				else {
-					if(object1.getTimeCollisionEntity(object2) == timeNextCollision){
-						posNextCollision = object1.getPositionCollisionEntity(object2);
-
+				else{
+					if (entity1.getTimeCollisionEntity(entity2) < nextCollisionTime){
+						nextCollisionTime = entity1.getTimeCollisionEntity(entity2);
+						collisionEntity1 = entity1;
+						collisionEntity2 = entity2;
 					}
 				}
 			}
 		}
-		return posNextCollision;
+		System.out.println("entity1 = " + collisionEntity1.toString());
+//		System.out.println("entity2 = " + collisionEntity2.toString());
+		Entity[] collisionEntities = {collisionEntity1,collisionEntity2};
+		return collisionEntities;
 	}
 	
-
 	
 	public void evolve(double dt,CollisionListener collisionListener){
-		double nextCollisionTime = this.getTimeNextCollision();
-		System.out.println(nextCollisionTime);
+		Entity[] entitiesNextCollision = this.getEntitiesNextCollision();
+		double nextCollisionTime = Double.POSITIVE_INFINITY;
+		
+		if (entitiesNextCollision[1] != null){
+			nextCollisionTime = entitiesNextCollision[0].getTimeCollisionEntity(entitiesNextCollision[1]);
+		}
+		else{
+			nextCollisionTime = entitiesNextCollision[0].getTimeCollisionBoundary();
+		}
+		System.out.println("nextCollisionTime = " + nextCollisionTime);
+		System.out.println("dt = "+ dt);
+		
 		if (nextCollisionTime > dt){
 			for(Entity entity : this.getAllEntities()){
 				entity.move(dt);
@@ -268,13 +249,12 @@ public class World extends Entity {
 			for (Entity entity: this.getAllEntities()){
 				entity.move(nextCollisionTime);
 			}
-			if (this.getCollisionEntity2() == null){
-				System.out.println(this.getCollisionEntity2());
-				System.out.println(this.getCollisionEntity1());
-				this.collisionResolver(this.getCollisionEntity1());
+			System.out.print(this.getEntitiesNextCollision().toString()+"\n");
+			if (this.getEntitiesNextCollision()[1] == null){
+				this.collisionResolver(this.getEntitiesNextCollision()[0]);
 			}
 			else{
-				this.collisionResolver(this.getCollisionEntity1(),this.getCollisionEntity2());
+				this.collisionResolver(this.getEntitiesNextCollision()[0],this.getEntitiesNextCollision()[1]);
 			}
 			this.evolve(dt - nextCollisionTime, collisionListener);
 			
@@ -285,96 +265,28 @@ public class World extends Entity {
 
 	private void collisionResolver(Entity entity1, Entity entity2){
 		if (entity1 instanceof Ship && entity2 instanceof Ship){
-			this.shipCollision((Ship)entity1,(Ship)entity2);
+			((Ship) entity1).shipCollision((Ship) entity2);
 		}
 		if (entity1 instanceof Ship && entity2 instanceof Bullet){
-			this.shipBulletCollision((Ship)entity1,(Bullet)entity2);
+			((Ship) entity1).shipBulletCollision((Bullet) entity2);
 		}
 		if (entity1 instanceof Bullet && entity2 instanceof Ship){
-			this.shipBulletCollision((Ship) entity2,(Bullet)entity1);
+			((Ship) entity2).shipBulletCollision((Bullet) entity1);
 		}
 		if (entity1 instanceof Bullet && entity2 instanceof Bullet){
-			this.bulletCollision((Bullet)entity1, (Bullet)entity2);
+			((Bullet) entity1).bulletCollision((Bullet) entity2);
 		}	
 	}
 	
 	private void collisionResolver(Entity entity){
 		if (entity instanceof Bullet){
-			bulletBoundaryCollision((Bullet) entity);
+			((Bullet) entity).boundaryCollision();
 		}
-		else{
-			entityBoundaryCollision(entity);
-		}
-		}
-		
-
-	private void bulletBoundaryCollision(Bullet bullet){
-		if (bullet.getBoundaryCollisions() < bullet.getMaxBoundaryCollisions()){
-			entityBoundaryCollision(bullet);
-		}
-		else{
-			bullet.terminate();
+		else if(entity instanceof Ship) {
+			((Ship) entity).boundaryCollision();
 		}
 	}
 	
-	private void entityBoundaryCollision(Entity entity){
-		if (entity.getPosition()[0] >= (this.getDimension()[0] - entity.getRadius())*0.99 && entity.getPosition()[0] <= (this.getDimension()[0] - entity.getRadius()) *1.01){
-			entity.setVelocity(-entity.getVelocity()[0], entity.getVelocity()[1]);
-		}
-		if (entity.getPosition()[0] >= entity.getRadius()*0.99 && entity.getPosition()[0] >= entity.getRadius()){
-			entity.setVelocity(-entity.getVelocity()[0], entity.getVelocity()[1]);
-		}
-		if (entity.getPosition()[1] >= (this.getDimension()[1] - entity.getRadius())*0.99 && entity.getPosition()[1] <= (this.getDimension()[1] - entity.getRadius()) *1.01){
-			entity.setVelocity(entity.getVelocity()[0], -entity.getVelocity()[1]);
-		}
-		if (entity.getPosition()[1] >= entity.getRadius()*0.99 && entity.getPosition()[1] >= entity.getRadius()){
-			entity.setVelocity(entity.getVelocity()[0], -entity.getVelocity()[1]);
-		}
-	}
-	
-	private void shipCollision(Ship ship1, Ship ship2){
-		double deltaX = ship2.getPosition()[0] - ship1.getPosition()[0];
-		double deltaY = ship2.getPosition()[1] - ship1.getPosition()[1];
-		double deltaR = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) );
-		double deltaV = Math.sqrt(Math.pow(ship2.getVelocity()[0] - ship1.getVelocity()[0],2 ) + Math.pow(ship2.getVelocity()[1] - ship1.getVelocity()[1], 2));
-		double sigma = ship1.getDistanceBetween(ship2);
-		
-		double j = (2 * ship1.getMass()*ship2.getMass() * (deltaV * deltaR)) / (sigma * (ship1.getMass() + ship2.getMass()));
-		double xJ = (j * deltaX) / sigma;
-		double yJ = (j * deltaY) / sigma;
-		
-		ship1.setVelocity(ship1.getVelocity()[0] + xJ/ship1.getMass(), ship1.getVelocity()[1] + yJ/ship1.getMass());
-		ship2.setVelocity(ship2.getVelocity()[0] - xJ/ship2.getMass(), ship2.getVelocity()[1] - yJ/ship2.getMass());
-	}
-	
-	private void shipBulletCollision(Ship ship, Bullet bullet){
-		if (bullet.getCollisionState() == true){
-			if (bullet.firedFrom() == ship){
-				ship.loadBulletOnShip(bullet);
-			}
-			else{
-				bullet.terminate();
-				ship.terminate();	
-		}
-		}
-	}
-	private void bulletCollision(Bullet bullet1, Bullet bullet2){
-		bullet1.terminate();
-		bullet2.terminate();
-	}
-	private void boundaryCollision(Entity object, String xOrY){
-		System.out.println(object.getVelocity()[0]);
-		if (xOrY == "x"){
-			object.setVelocity(-object.getVelocity()[0], object.getVelocity()[1]);			
-		}
-		if (xOrY == "y"){
-			object.setVelocity(object.getVelocity()[0], -object.getVelocity()[1]);
-		}
-		
-	}
-	
-
-
 	private double width;
 	private double height;
 	private Set<Ship> allShips = new HashSet<Ship>();

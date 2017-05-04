@@ -297,7 +297,7 @@ public class Bullet extends Entity {
 		this.getShip().removeBulletFromShip(this);
 		}
 		if (this.getWorld() != null){
-		this.getWorld().removeBulletToWorld(this);}
+		this.getWorld().removeBulletFromWorld(this);}
 		this.isTerminated = true;
 		
 	}
@@ -338,6 +338,33 @@ public class Bullet extends Entity {
 		return this.maxBoundaryCollisions;
 	}
 	private int maxBoundaryCollisions = 2;
+
+	public void boundaryCollision() {
+		if (this.getBoundaryCollisions() < this.getMaxBoundaryCollisions()){
+			if (this.getPosition()[0] >= this.getRadius() * 0.99 && this.getPosition()[0] <= this.getRadius() *1.01){
+				this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
+			}
+			if (this.getPosition()[1] >= this.getRadius() * 0.99 && this.getPosition()[1] <= this.getRadius() *1.01){
+				this.setVelocity(this.getVelocity()[0],-this.getVelocity()[1]);
+			}
+			if (this.getPosition()[0] >= (this.getWorld().getDimension()[0] - this.getRadius())*0.99 && this.getPosition()[0] >= (this.getWorld().getDimension()[0] - this.getRadius())*1.01){
+				this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
+			}
+			if (this.getPosition()[1] >= (this.getWorld().getDimension()[1] - this.getRadius())*0.99 && this.getPosition()[1] >= (this.getWorld().getDimension()[1] - this.getRadius())*1.01){
+				this.setVelocity(this.getVelocity()[0], -this.getVelocity()[1]);
+			}
+			else{
+				throw new IllegalStateException();
+			}
+		}
+	}
+
+	public void bulletCollision(Bullet otherBullet){
+		otherBullet.terminate();
+		this.terminate();
+	}
+
+
 }
 
 

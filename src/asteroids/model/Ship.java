@@ -104,8 +104,6 @@ public class Ship extends Entity {
 	private double xVelocity;
 	private double yVelocity;
 	private final double maxVelocity = 300000;
-
-	
 		
 	/**
 	 * 
@@ -311,28 +309,6 @@ public class Ship extends Entity {
 	private boolean thrusterState;
 	private double thrusterForce = 1.1*Math.pow(10, 21);
 	
-
-	/**
-	 * 
-	 * @param time
-	 * @throws IllegalArgumentException if the give time is smaller than 0.
-	 * 			| if (time < 0)
-	 * 				throw IllegalArgumentException
-	 * @effect The position of the ship will be changed based on the given velocity and orientation in a given time.
-	 * 			| new.xPosition = old.xPosition + old.xVelocity * time
-	 * 			| new.yPosition = old.yPosition + old.yVelocity * time
-	 */
-	
-//	@Override
-//	public void move(double time) throws IllegalArgumentException{
-//		if (time < 0){
-//			throw new IllegalArgumentException();
-//			}
-//		else {
-//			this.setPosition(this.getPosition()[0] + this.getVelocity()[0]*time, this.getPosition()[1] + this.getVelocity()[1]*time);
-//		}
-//	}
-	
 	/**
 	 * 
 	 * @param angle
@@ -368,116 +344,6 @@ public class Ship extends Entity {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param otherShip
-	 * 			| The other ship whereto the distance from the current ship must be calculated
-	 * @return Returns the distance between ship1 and ship2, calculated from the edge of the ships.
-	 * 			| result = sqrt((this.xPosition - otherShip.xPosition)**2 + (this.yPosition - otherShip.yPosition)**2)
-	 * @return Returns 0 if the otherShip is the same as the current Ship.
-	 * 			| if (this == otherShip)
-	 * 				return 0
-	 */
-	public double getDistanceBetween(Ship otherShip){
-		if (this == otherShip){
-			return 0;
-		}
-		else {
-		return  (Math.sqrt(Math.pow(this.getPosition()[0] - otherShip.getPosition()[0],2)+Math.pow(this.getPosition()[1] - otherShip.getPosition()[1],2))	- this.getRadius() - otherShip.getRadius());
-		}
-	}
-	
-	/**
-	 * 
-	 * @param otherShip
-	 * 			| The other ship that might overlap with the current ship.
-	 * @return Returns true if ship1 and ship2 overlap
-	 * 			| if (this.getDistanceBetween(otherShip) < 0)
-	 * 				result == true
-	 * @return Returns true if ship1 and ship2 are the same ship
-	 * 			|if (this == otherShip)
-	 * 				result == true
-	 * @return Returns false if ship1 and ship2 do not overlap.
-	 * 			| if (getDistanceBetweend(otherShip) >= 0)
-	 * 				result == false
-	 */	
-	public boolean overlap(Ship otherShip){
-		if (this == otherShip){
-			return true;
-		}
-		
-		if (this.getDistanceBetween(otherShip) < 0){
-			return true;
-		}
-		
-		else {
-			return false;
-		}
-	}
-	
-	/**
-	 * @throws Throws IllegalArgumentException if there are any problems with the otherShip.
-	 * @param otherShip
-	 * 			The other ship that might collapse with the current ship.
-	 * @return Returns the time in seconds until the 2 ships collapse. Calculated from the current time.
-	 * 			
-	 */
-	public double getTimeToCollapse(Ship otherShip) throws IllegalArgumentException {
-		try{
-		if (((otherShip.getVelocity()[0] - this.getVelocity()[0]) * (otherShip.getPosition()[0]-this.getPosition()[0]) + 
-				(otherShip.getVelocity()[1] - this.getVelocity()[1]) * (otherShip.getPosition()[1]-this.getPosition()[1])) >= 0){
-			return Double.POSITIVE_INFINITY;
-		}
-		
-		else {
-			return -(((otherShip.getVelocity()[0] - this.getVelocity()[0]) * (otherShip.getPosition()[0]-this.getPosition()[0]) + 
-				(otherShip.getVelocity()[1] - this.getVelocity()[1]) * (otherShip.getPosition()[1]-this.getPosition()[1]) + 
-					Math.sqrt((Math.pow((otherShip.getVelocity()[0] - this.getVelocity()[0]) * (otherShip.getPosition()[0]-this.getPosition()[0]) + 
-								(otherShip.getVelocity()[1] - this.getVelocity()[1]) * (otherShip.getPosition()[1]-this.getPosition()[1]),2)) 		-
-								((Math.pow(otherShip.getVelocity()[0] - this.getVelocity()[0],2)) + (Math.pow(otherShip.getVelocity()[1] - this.getVelocity()[1],2))) * 
-									((Math.pow((otherShip.getPosition()[0]) - this.getPosition()[0],2)) + (Math.pow((otherShip.getPosition()[1]) - this.getPosition()[1],2))-
-											Math.pow((otherShip.getRadius()+this.getRadius()),2))))/((Math.pow(otherShip.getVelocity()[0] - this.getVelocity()[0],2)) + 
-													(Math.pow(otherShip.getVelocity()[1] - this.getVelocity()[1],2))));
-		}
-		}catch (IllegalArgumentException e ){
-			throw new IllegalArgumentException();
-		}
-		
-	}
-	
-	/**
-	 * @throws Throws IllegalArgumentException
-	 * @param otherShip
-	 * 			The other Ship that might collapse with the current ship.
-	 * @return Double.POSITIVE_INFINITY if the ships never collapse.
-	 * @return An array of length 2 with the xCoordinate of the collapseposition on index 0 and the yCoordinate of the collapseposition on index 1.
-	 * 			| result = [xPositionOfCollapse, yPositionOfCollapse]
-	 */
-	public double[] getPositionOfCollapse(Ship otherShip) throws IllegalArgumentException{
-		try{
-		if (this.getTimeToCollapse(otherShip) == Double.POSITIVE_INFINITY){
-			return null;
-		}
-		
-		else {
-			double[] PosCollapse;
-			double xPosCollapse = (((this.getPosition()[0]+this.getTimeToCollapse(otherShip)*this.getVelocity()[0])*otherShip.getRadius())+
-					((otherShip.getPosition()[0]+this.getTimeToCollapse(otherShip)*this.getVelocity()[0])*this.getRadius())) /
-					(this.getRadius()+otherShip.getRadius());
-			double yPosCollapse = (((this.getPosition()[1]+this.getTimeToCollapse(otherShip)*this.getVelocity()[1])*otherShip.getRadius())+
-					((otherShip.getPosition()[1]+this.getTimeToCollapse(otherShip)*otherShip.getVelocity()[1])*this.getRadius())) /
-					(this.getRadius()+otherShip.getRadius());
-			PosCollapse = new double[] {xPosCollapse, yPosCollapse};
-			return PosCollapse;
-		}
-		}catch (IllegalArgumentException e){
-			throw new IllegalArgumentException();
-		}
-		
-	}
-	
-
-
 	/**
 	 * 
 	 * @return Returns a hash set of all bullets loaded on the ship.
@@ -628,7 +494,49 @@ public class Ship extends Entity {
 
 	private boolean isTerminated = false;
 	
+	public void boundaryCollision(){
+		if (this.getPosition()[0] >= this.getRadius() * 0.99 && this.getPosition()[0] <= this.getRadius() *1.01){
+			this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
+		}
+		if (this.getPosition()[1] >= this.getRadius() * 0.99 && this.getPosition()[1] <= this.getRadius() *1.01){
+			this.setVelocity(this.getVelocity()[0],-this.getVelocity()[1]);
+		}
+		if (this.getPosition()[0] >= (this.getWorld().getDimension()[0] - this.getRadius())*0.99 && this.getPosition()[0] >= (this.getWorld().getDimension()[0] - this.getRadius())*1.01){
+			this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
+		}
+		if (this.getPosition()[1] >= (this.getWorld().getDimension()[1] - this.getRadius())*0.99 && this.getPosition()[1] >= (this.getWorld().getDimension()[1] - this.getRadius())*1.01){
+			this.setVelocity(this.getVelocity()[0], -this.getVelocity()[1]);
+		}
+		else{
+			throw new IllegalStateException();
+		}
+	}
 
+
+	public void shipCollision(Ship otherShip){
+		double deltaX = otherShip.getPosition()[0] - this.getPosition()[0];
+		double deltaY = otherShip.getPosition()[1] - this.getPosition()[1];
+		double deltaR = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) );
+		double deltaV = Math.sqrt(Math.pow(otherShip.getVelocity()[0] - this.getVelocity()[0],2 ) + Math.pow(otherShip.getVelocity()[1] - this.getVelocity()[1], 2));
+		double sigma = this.getDistanceBetween(otherShip);
+		
+		double j = (2 * this.getMass()*otherShip.getMass() * (deltaV * deltaR)) / (sigma * (this.getMass() + otherShip.getMass()));
+		double xJ = (j * deltaX) / sigma;
+		double yJ = (j * deltaY) / sigma;
+		
+		this.setVelocity(this.getVelocity()[0] + xJ/this.getMass(), this.getVelocity()[1] + yJ/this.getMass());
+		otherShip.setVelocity(otherShip.getVelocity()[0] - xJ/otherShip.getMass(), otherShip.getVelocity()[1] - yJ/otherShip.getMass());
+	}
+	
+	public void shipBulletCollision(Bullet bullet){
+		if (bullet.firedFrom()== this){
+			this.loadBulletOnShip(bullet);
+		}
+		else{
+			bullet.terminate();
+			this.terminate();
+		}
+	}
 	
 
 }
