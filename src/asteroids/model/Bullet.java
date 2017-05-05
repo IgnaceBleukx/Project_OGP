@@ -19,6 +19,53 @@ public class Bullet extends Entity {
 	}
 
 
+	/**
+	 * 
+	 * @param radius
+	 * @throws IllegalArgumentException if the radius is not valid.
+	 *			| if (! isValidRadius(radius)
+	 *				throw IllegalArgumentException
+	 * @post Sets the radius of the ship on the parameter radius.
+	 * 			| new.radius = radius
+	 */			
+	public void setRadius(double radius) throws IllegalArgumentException{
+		if (!isValidRadius(radius)){
+			throw new IllegalArgumentException();
+		}
+		else{
+			this.radius = radius;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param radius
+	 * 			The radius to check.
+	 * @return True if the radius is larger than 10. False if the radius smaller than 10 or the given radius is not a number.
+	 * 			| result = radius > 10
+	 */
+	public boolean isValidRadius(double radius){
+		if (Double.isNaN(radius)){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+	
+	/**
+	 * 
+	 * @return Returns the current radius of the ship.
+	 * 			| result = this.radius
+	 */
+	public double getRadius(){
+		return this.radius;
+	}
+	
+	private double radius;
+
+	
+	
 	public void setMass(double mass){
 		if (this.isValidMass(mass)){
 			this.mass = mass;

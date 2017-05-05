@@ -31,7 +31,7 @@ public class Part2TestsFull {
   private static final double BIG_EPSILON = 1.0E14;
   private static final double VERY_BIG_EPSILON = 1.0E34;
 
-  static int nbStudentsInTeam;
+  static int nbStudentsInTeam = 2;
   IFacade facade;
   World filledWorld;
   Ship ship1, ship2, ship3;

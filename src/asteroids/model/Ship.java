@@ -1,5 +1,6 @@
 package asteroids.model;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,6 +31,13 @@ public class Ship extends Entity {
 			throw new IllegalArgumentException();
 		}
 	}
+	
+	public double getMinimumRadius(){
+		return this.minimumRadius;
+	}
+	
+	private double minimumRadius = 10;
+
 	
 	/**
 	 * This method creates a new object of the type Ship with default paramaters.'
@@ -197,15 +205,20 @@ public class Ship extends Entity {
 	 * 			| bullet.getVelocity == this.getVelocity
 	 */
 	public void loadBulletOnShip(Bullet bullet){
-		if (this.getNbBulletsOnShip() < this.maxNbOfBullets){
+		if (this.getNbBulletsOnShip() < this.maxNbOfBullets && bullet != null){
 			this.allBulletsShip.add(bullet);
 			bullet.setShip(this);
-			bullet.setWorld(this.getWorld());
 			bullet.setCollisionState(false);
 			bullet.setPosition(this.getPosition()[0], this.getPosition()[1]);
 			bullet.setVelocity(this.getVelocity()[0], this.getVelocity()[1]);
 		}
 		
+	}
+	
+	public void loadBulletsOnShip(Collection<Bullet> bullets){
+		for (Bullet bullet : bullets){
+			this.loadBulletOnShip(bullet);
+		}
 	}
 	/**
 	 * 
@@ -242,13 +255,10 @@ public class Ship extends Entity {
 	 * 			|	 * 
 	 */
 	public void fire() throws IndexOutOfBoundsException{
-		if (allBulletsShip.size() <= 0){
-			throw new IndexOutOfBoundsException();
-		}
-		else{
+		if (this.getWorld() != null && this.getNbBulletsOnShip() > 0){
 		Bullet bulletToBeFired = allBulletsShip.iterator().next();
 		this.removeBulletFromShip(bulletToBeFired);
-		
+		this.getWorld().addBulletToWorld(bulletToBeFired);
 		double meetingpointX = this.getPosition()[0] + this.getRadius() * Math.cos(this.getOrientation());
 		double meetingpointY = this.getPosition()[1] + this.getRadius() * Math.sin(this.getOrientation());
 		

@@ -192,12 +192,19 @@ public class Facade implements asteroids.part2.facade.IFacade{
 	}
 
 	public void addShipToWorld(World world, Ship ship) throws ModelException {
+		try{
 		world.addShipToWorld(ship);
-		
+		}catch (IllegalArgumentException exc){
+			throw new ModelException("The ship is null");
+		}
 	}
 
 	public void removeShipFromWorld(World world, Ship ship) throws ModelException {
-		world.removeShipFromWorld(ship);
+		try{
+			world.removeShipFromWorld(ship);
+		}catch(IllegalArgumentException exc){
+			throw new ModelException("The given ship equals null");
+		}
 		
 	}
 
@@ -227,7 +234,6 @@ public class Facade implements asteroids.part2.facade.IFacade{
 
 	public void loadBulletsOnShip(Ship ship, Collection<Bullet> bullets) throws ModelException {
 		for (Bullet bullet : bullets){
-			bullet.setShip(ship);
 			ship.loadBulletOnShip(bullet);
 		}
 	}
@@ -297,8 +303,11 @@ public class Facade implements asteroids.part2.facade.IFacade{
 
 
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
+		try{
 		world.evolve(dt, collisionListener);
-		
+		}catch (IllegalArgumentException exc){
+			throw new ModelException("Negative time");
+		}
 	}
 
 

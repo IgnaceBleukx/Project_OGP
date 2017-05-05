@@ -221,7 +221,7 @@ public class World extends Entity {
 				}
 			}
 		}
-		System.out.println("entity1 = " + collisionEntity1.toString());
+//		System.out.println("entity1 = " + collisionEntity1.toString());
 //		System.out.println("entity2 = " + collisionEntity2.toString());
 		Entity[] collisionEntities = {collisionEntity1,collisionEntity2};
 		return collisionEntities;
@@ -240,7 +240,9 @@ public class World extends Entity {
 		}
 		System.out.println("nextCollisionTime = " + nextCollisionTime);
 		System.out.println("dt = "+ dt);
-		
+		if (dt < 0){
+			throw new IllegalArgumentException();
+		}
 		if (nextCollisionTime > dt){
 			for(Entity entity : this.getAllEntities()){
 				entity.move(dt);

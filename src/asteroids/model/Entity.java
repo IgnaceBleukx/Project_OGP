@@ -138,14 +138,24 @@ public class Entity {
 	 * 			| result = radius > 10
 	 */
 	public boolean isValidRadius(double radius){
-		if (radius < 10 || radius == Double.NaN){
-			return false;
-		}
+		if (Double.isNaN(radius)){
+			if (this instanceof Ship && this.getMinimumShipRadius() > radius){
+					return false;
+			}
+			else{
+				return true;
+			}
+		}	
 		else{
 			return true;
 		}
 	}
 	
+	public double getMinimumShipRadius(){
+		return this.minimumShipRadius;
+	}
+	private double minimumShipRadius = 10;
+
 	/**
 	 * 
 	 * @return Returns the current radius of the ship.
@@ -157,6 +167,11 @@ public class Entity {
 	
 	private double radius;
 
+	
+	
+	
+	
+	
 	public void move(double time) throws IllegalArgumentException{
 		System.out.println("time = " + time);
 		if (time < 0){
