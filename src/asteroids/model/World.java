@@ -27,8 +27,14 @@ public class World extends Entity {
 	 */
 	
 	public void setDimension(double width, double height){
-		this.width = width;
-		this.height = height;
+		if (this.isValidDimension(width, height)){
+			this.width = width;
+			this.height = height;
+		}
+		else{
+			this.width = Double.MAX_VALUE;
+			this.height = Double.MAX_VALUE;
+		}
 	}
 	
 	/**
@@ -48,7 +54,7 @@ public class World extends Entity {
 	 */
 
 	public boolean isValidDimension(double width, double height){
-		return true;
+		return (width > 0 && height > 0 && !Double.isNaN(width) && !Double.isNaN(height) && Double.isFinite(width) && Double.isFinite(height));
 	}
 	
 	/**
@@ -77,8 +83,10 @@ public class World extends Entity {
 	
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException{
 		try{
-		this.allShips.add(ship);
-		ship.setWorld(this);
+			if (ship.getWorld() == null){
+				this.allShips.add(ship);
+				ship.setWorld(this);
+			}
 		}
 		catch(NullPointerException exc){
 			throw new IllegalArgumentException();
@@ -133,7 +141,7 @@ public class World extends Entity {
 		this.allBulletsWorld.add(bullet);
 		bullet.setWorld(this);
 		}
-		catch(IllegalArgumentException exc){
+		catch(NullPointerException exc){
 			throw new IllegalArgumentException();
 		}
 		
@@ -221,8 +229,6 @@ public class World extends Entity {
 				}
 			}
 		}
-//		System.out.println("entity1 = " + collisionEntity1.toString());
-//		System.out.println("entity2 = " + collisionEntity2.toString());
 		Entity[] collisionEntities = {collisionEntity1,collisionEntity2};
 		return collisionEntities;
 	}
@@ -231,18 +237,15 @@ public class World extends Entity {
 	public void evolve(double dt,CollisionListener collisionListener){
 		Entity[] entitiesNextCollision = this.getEntitiesNextCollision();
 		double nextCollisionTime = Double.POSITIVE_INFINITY;
-		
+		if (dt < 0 || Double.isNaN(dt)){
+			throw new IllegalArgumentException();
+		}
 		if (entitiesNextCollision[1] != null){
 			nextCollisionTime = entitiesNextCollision[0].getTimeCollisionEntity(entitiesNextCollision[1]);
 		}
 		else{
 			nextCollisionTime = entitiesNextCollision[0].getTimeCollisionBoundary();
-		}
-		System.out.println("nextCollisionTime = " + nextCollisionTime);
-		System.out.println("dt = "+ dt);
-		if (dt < 0){
-			throw new IllegalArgumentException();
-		}
+		}	
 		if (nextCollisionTime > dt){
 			for(Entity entity : this.getAllEntities()){
 				entity.move(dt);
@@ -265,7 +268,9 @@ public class World extends Entity {
 		
 	}
 
-	private void collisionResolver(Entity entity1, Entity entity2){
+	public void collisionResolver(Entity entity1, Entity entity2){
+		System.out.println("Entity 1 = " + entity1.toString());
+		System.out.println("Entity 2 = " + entity2.toString());
 		if (entity1 instanceof Ship && entity2 instanceof Ship){
 			((Ship) entity1).shipCollision((Ship) entity2);
 		}
@@ -273,6 +278,7 @@ public class World extends Entity {
 			((Ship) entity1).shipBulletCollision((Bullet) entity2);
 		}
 		if (entity1 instanceof Bullet && entity2 instanceof Ship){
+			System.out.println("3");
 			((Ship) entity2).shipBulletCollision((Bullet) entity1);
 		}
 		if (entity1 instanceof Bullet && entity2 instanceof Bullet){
@@ -280,7 +286,7 @@ public class World extends Entity {
 		}	
 	}
 	
-	private void collisionResolver(Entity entity){
+	public void collisionResolver(Entity entity){
 		if (entity instanceof Bullet){
 			((Bullet) entity).boundaryCollision();
 		}
@@ -289,6 +295,23 @@ public class World extends Entity {
 		}
 	}
 	
+	public void terminate(){
+		while (!this.getAllBullets().isEmpty()){
+			Bullet bullet = this.getAllBullets().iterator().next();
+			bullet.terminate();
+		}
+		while (!this.getAllShips().isEmpty()){
+			Ship ship = this.getAllShips().iterator().next();
+			ship.terminate();
+		}
+		this.isTerminated = true;
+	}
+	
+	public boolean isTerminated(){
+		return this.isTerminated;
+	}
+	
+	private boolean isTerminated = false;
 	private double width;
 	private double height;
 	private Set<Ship> allShips = new HashSet<Ship>();

@@ -173,7 +173,6 @@ public class Entity {
 	
 	
 	public void move(double time) throws IllegalArgumentException{
-		System.out.println("time = " + time);
 		if (time < 0){
 			throw new IllegalArgumentException();
 			}
@@ -216,6 +215,7 @@ public class Entity {
 		return boundaryTime;
 	}
 
+	
 	public boolean overlap(Entity otherEntity){
 		if (this == otherEntity){
 			return true;
@@ -240,13 +240,17 @@ public class Entity {
 	}
 		
 	public double[] getPositionCollisionBoundary(){
-	
-		double[] boundaryColPos;
-		double xPosColBound = this.getVelocity()[0]*this.getTimeCollisionBoundary() + this.getPosition()[0];
-		double yPosColBound = this.getVelocity()[1]*this.getTimeCollisionBoundary() + this.getPosition()[1];
-		boundaryColPos = new double[] {xPosColBound,yPosColBound};
+		if (this.getWorld() != null && this.getTimeCollisionBoundary() != Double.POSITIVE_INFINITY){
+			double[] boundaryColPos;
+			double xPosColBound = this.getVelocity()[0]*this.getTimeCollisionBoundary() + this.getPosition()[0];
+			double yPosColBound = this.getVelocity()[1]*this.getTimeCollisionBoundary() + this.getPosition()[1];
+			boundaryColPos = new double[] {xPosColBound,yPosColBound};
 
-		return boundaryColPos;
+			return boundaryColPos;
+		}
+		else{
+			return null;
+		}
 		}
 
 
@@ -269,7 +273,7 @@ public class Entity {
 	}
 	
 	
-	public double[] getPositionCollisionEntity(Entity otherEntity) throws IllegalArgumentException{
+	public double[] getPositionCollisionEntity1(Entity otherEntity) throws IllegalArgumentException{
 	try{
 	if (this.getTimeCollisionEntity(otherEntity) == Double.POSITIVE_INFINITY){
 		return null;
@@ -292,6 +296,28 @@ public class Entity {
 	
 }
 
+	public double[] getPositionCollisionEntity(Entity otherEntity){
+		if (this.getTimeCollisionEntity(otherEntity) != Double.POSITIVE_INFINITY){
+			double timeToCollision = this.getTimeCollisionEntity(otherEntity);
+			double xPosThisCollision = this.getVelocity()[0] * timeToCollision + this.getPosition()[0];
+			double yPosThisCollision = this.getVelocity()[1] * timeToCollision + this.getPosition()[1];
+			double xPosOtherEntityCollision = otherEntity.getVelocity()[0] * timeToCollision + otherEntity.getPosition()[0];
+			double yPosOtherEntityCollision = otherEntity.getVelocity()[1] * timeToCollision + otherEntity.getPosition()[1];
+			
+			double alpha = Math.atan((yPosOtherEntityCollision - yPosThisCollision) / (xPosOtherEntityCollision - xPosThisCollision));
+			
+			double xCoordinate = this.getRadius() * Math.cos(alpha);
+			double yCoordinate = this.getRadius() * Math.sin(alpha);
+			
+			double[] collisionPosition = {xCoordinate, yCoordinate};
+			
+			return collisionPosition;
+		}
+		else{
+			return null;
+		}
+	}
+	
 	public void setWorld(World world){
 		this.world = world;
 	}

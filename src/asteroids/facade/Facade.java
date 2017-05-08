@@ -157,7 +157,7 @@ public class Facade implements asteroids.part2.facade.IFacade{
 
 	
 	public Ship getBulletSource(Bullet bullet) throws ModelException {
-		return bullet.firedFrom();
+		return bullet.getBulletScource();
 	}
 
 	
@@ -168,14 +168,13 @@ public class Facade implements asteroids.part2.facade.IFacade{
 
 	@Override
 	public void terminateWorld(World world) throws ModelException {
-		// TODO Auto-generated method stub
+		world.terminate();
 		
 	}
 
 	@Override
 	public boolean isTerminatedWorld(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return false;
+		return world.isTerminated();
 	}
 
 	public double[] getWorldSize(World world) throws ModelException {
@@ -233,10 +232,13 @@ public class Facade implements asteroids.part2.facade.IFacade{
 	}
 
 	public void loadBulletsOnShip(Ship ship, Collection<Bullet> bullets) throws ModelException {
-		for (Bullet bullet : bullets){
-			ship.loadBulletOnShip(bullet);
+		try{
+			ship.loadBulletsOnShip(bullets);
+		}catch(IllegalArgumentException exc){
+			throw new ModelException("IllegalArgumentExeption");
 		}
 	}
+	
 
 
 	public void removeBulletFromShip(Ship ship, Bullet bullet) throws ModelException {

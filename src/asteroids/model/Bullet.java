@@ -16,6 +16,7 @@ public class Bullet extends Entity {
 		this.setPosition(x, y);
 		this.setVelocity(xVelocity, yVelocity);
 		this.setRadius(radius);
+		this.setMass();
 	}
 
 
@@ -66,71 +67,23 @@ public class Bullet extends Entity {
 
 	
 	
-	public void setMass(double mass){
-		if (this.isValidMass(mass)){
-			this.mass = mass;
-		}
-		else{
-			this.mass = (4/3) * Math.PI * Math.pow(this.getRadius(),3) * this.density;
-		}
+	public void setMass(){
+		this.mass = 4.0 * this.density * Math.PI * Math.pow(this.getRadius(),3) / 3.0;
 	}
 	
 	public double getMass(){
 		return this.mass;
 	}
 	
-	public boolean isValidMass(double mass){
-		return (mass != Double.NaN);
-	}
+//	public boolean isValidMass(double mass){
+//		return (mass != Double.NaN && mass >= (4/3) * Math.PI * Math.pow(this.getRadius(),3) * this.density);
+//	}
 	
 	private double mass;
-	public final double density = 7.8 * Math.pow(10,12);
+	public final double density = 7.8E12;
 	
 	/**
-	 * 
-	 * @param world
-	 * @post Sets the world of the current bullet to the given parameter world.\
-	 * 			| new.getWorld = world
-	 */
-	public void setWorld(World world){
-		this.isPartOfWorld = world;
-	}
-	
-	/**
-	 * @return Returns the world the current bullet is located in.
-	 */
-	public World getWorld(){
-		return this.isPartOfWorld;
-	}
-	
-	/**
-	 * @return Returns true if the world is equal to the world of the ship if the bullet is loaded on one.
-	 * 			| if (this.isPartOfAShip())
-	 * 			|		return (this.getShip().getWorld() == world)
-	 * 			| return !(world == null)
-	 */
-	public boolean isValidWorld(World world){
-		if (this.getShip() != null){
-			return this.getShip().getWorld() == world;
-		}
-		else{
-			return !(world == null);
-		}
-	}
-	
-	/**
-	 * @return Returns true if the bullet is part of a world.
-	 * @return Returns false if the bullet is not part of a world.
-	 * 			|return this.getWorld() == null
-	 */
-	public boolean isPartOfAWorld(){
-		return !(this.getWorld() == null);
-	}
-	
-	private World isPartOfWorld;
-	
-	/**
-	 * @return Returns true if the current bullet is loaded onz a ship.
+	 * @return Returns true if the current bullet is loaded on a ship.
 	 * @return Returns false if the current bullet is not loaded on a ship.
 	 */
 	public boolean isPartOfAShip(){
@@ -144,8 +97,7 @@ public class Bullet extends Entity {
 	 */
 	public void setShip(Ship ship){
 		this.isPartOfShip = ship;
-		this.firedFrom = null;
-	}
+		}
 	
 	/**
 	 * @return Returns true if the current bullet is loaded on a ship.
@@ -164,13 +116,8 @@ public class Bullet extends Entity {
 		return ship.getWorld() == this.getWorld() && ship != null;
 		}
 	
-	/**
-	 * @post The bullet is not a part of the ship it was loaded on anymore.
-	 * 			| new.getShip == null;
-	 */
-	public void setFiredState(){
-		this.firedFrom = this.getShip();
-		this.setShip(null);
+	public void setBulletScource(Ship ship){
+		this.bulletScource = ship;
 	}
 	
 	/**
@@ -178,23 +125,22 @@ public class Bullet extends Entity {
 	 * @return Returns null if the bullet is loaded on a ship.
 	 * 			| return this.firedFrom
 	 */
-	public Ship firedFrom(){
-		return this.firedFrom;
+	public Ship getBulletScource(){
+		return this.bulletScource;
 	}
 	
 	private Ship isPartOfShip;
-	private Ship firedFrom = null;
+	private Ship bulletScource;
 	
 	/**
 	 * @post Terminates the current bullet. There are not references to the current bullet left.
 	 */
 	public void terminate(){
-		
 		if (this.getShip() != null){
-		this.getShip().removeBulletFromShip(this);
+			this.getShip().removeBulletFromShip(this);
 		}
 		if (this.getWorld() != null){
-		this.getWorld().removeBulletFromWorld(this);
+			this.getWorld().removeBulletFromWorld(this);
 		}
 		this.isTerminated = true;
 	}
@@ -251,7 +197,7 @@ public class Bullet extends Entity {
 				this.setVelocity(this.getVelocity()[0], -this.getVelocity()[1]);
 			}
 			else{
-				throw new IllegalStateException();
+				//throw new IllegalStateException();
 			}
 		}
 	}

@@ -917,7 +917,6 @@ public class Part2TestsFull {
     facade.addShipToWorld(world, ship4);
     double timeToCollision = facade.getTimeNextCollision(world);
     double[] positionCollision = facade.getPositionNextCollision(world);
-    System.out.println("timenextCollision = " + timeToCollision);
     assertEquals(0.5, timeToCollision, EPSILON);
     assertEquals(100, positionCollision[0], EPSILON);
     assertEquals(0, positionCollision[1], EPSILON);
