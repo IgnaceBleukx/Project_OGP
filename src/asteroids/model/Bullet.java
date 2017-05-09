@@ -135,6 +135,7 @@ public class Bullet extends Entity {
 	/**
 	 * @post Terminates the current bullet. There are not references to the current bullet left.
 	 */
+	@Override
 	public void terminate(){
 		if (this.getShip() != null){
 			this.getShip().removeBulletFromShip(this);
@@ -202,9 +203,15 @@ public class Bullet extends Entity {
 		}
 	}
 
-	public void bulletCollision(Bullet otherBullet){
-		otherBullet.terminate();
-		this.terminate();
+	public void collision(Entity otherEntity){
+		if (otherEntity instanceof Ship && this.getBulletScource().equals(otherEntity)){
+			((Ship) otherEntity).loadBulletOnShip(this);
+		}
+		else{
+			otherEntity.terminate();
+			this.terminate();
+		}
+		
 	}
 
 

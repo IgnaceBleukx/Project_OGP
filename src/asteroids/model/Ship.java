@@ -53,48 +53,42 @@ public class Ship extends Entity {
 		this.setRadius(10);
 	}
 	
-	/**
-	 * Sets the mass of the current ship to the given mass if it is valid.
-	 * @param mass
-	 * 		if (isValidMass(mass)
-	 * 			this.mass = mass
-	 */
-	public void setMass(double mass){
-		if (this.isValidMass(mass)){
-			this.mass = mass;
-		}
-		else{
-			this.mass = 4.0 * this.density * Math.PI * Math.pow(this.getRadius(),3) / 3.0;
-			for(Bullet bullet: this.getAllBulletsShip()){
-				this.mass += bullet.getMass();
-			}
-		}
-	}
-	
-	/**
-	 * 
-	 * @return Returns the mass of the current ship.
-	 * result = this.mass;
- 	 */
-	public double getMass(){
-		return this.mass;
-	}
 	
 	/**
 	 * Checks if the given double is a valid mass for the current ship.
 	 * @param mass
 	 * @return Returns true if the mass is valid
-	 * 			if(mass >= this.radius **3 * 4/3 * pi)
+	 * 			| if(mass >= this.radius **3 * 4/3 * pi)
 	 * 				result = true
 	 * @return Returns false if the mass is invalid.
-	 * 			if(mass < this.radius **3 * 4/3 * pi)
+	 * 			| if(mass < this.radius **3 * 4/3 * pi)
 	 *				result = false
+	 * @return Returns false if the mass is not a number
+	 * 			| if (Double.isNaN(mass))
+	 * 				result = false
 	 */
+	
+	public void setMass(double mass){
+		if (this.isValidMass(mass)){
+			this.mass = mass;
+		}
+		else{
+			this.mass = 4.0 * Math.PI * Math.pow(this.getRadius(),3) * this.density / 3.0;
+		}
+	}
+	
+	public double getMass(){
+		return this.mass;
+	}
+	
+	
+	private double mass;
+	
+	
 	public boolean isValidMass(double mass){
 		return (!Double.isNaN(mass) && mass > 4.0 * this.density * Math.PI * Math.pow(this.getRadius(),3) / 3.0);
 	}
 	
-	private double mass;
 	private double density = 1.42E12;
 	
 	
@@ -295,6 +289,7 @@ public class Ship extends Entity {
 	 * @post The current ship is removed from the world it is currently in.
 	 * 			| this.getWorld.removeShip(this)
 	 */
+	@Override
 	public void terminate(){
 		while(!this.getAllBulletsShip().isEmpty()){
 			Bullet bullet = this.getAllBulletsShip().iterator().next();
@@ -322,24 +317,6 @@ public class Ship extends Entity {
 
 	private boolean isTerminated = false;
 	
-	public void boundaryCollision(){
-		if (this.getPosition()[0] >= this.getRadius() * 0.99 && this.getPosition()[0] <= this.getRadius() *1.01){
-			this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
-		}
-		if (this.getPosition()[1] >= this.getRadius() * 0.99 && this.getPosition()[1] <= this.getRadius() *1.01){
-			this.setVelocity(this.getVelocity()[0],-this.getVelocity()[1]);
-		}
-		if (this.getPosition()[0] >= (this.getWorld().getDimension()[0] - this.getRadius())*0.99 && this.getPosition()[0] <= (this.getWorld().getDimension()[0] - this.getRadius())*1.01){
-			this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
-		}
-		if (this.getPosition()[1] >= (this.getWorld().getDimension()[1] - this.getRadius())*0.99 && this.getPosition()[1] <= (this.getWorld().getDimension()[1] - this.getRadius())*1.01){
-			this.setVelocity(this.getVelocity()[0], -this.getVelocity()[1]);
-		}
-		else{
-			//throw new IllegalStateException();
-		}
-	}
-
 
 	public void shipCollision(Ship otherShip){
 		double deltaX = otherShip.getPosition()[0] - this.getPosition()[0];
@@ -356,15 +333,7 @@ public class Ship extends Entity {
 		otherShip.setVelocity(otherShip.getVelocity()[0] - xJ/otherShip.getMass(), otherShip.getVelocity()[1] - yJ/otherShip.getMass());
 	}
 	
-	public void shipBulletCollision(Bullet bullet){
-		if (bullet.getBulletScource().equals(this)){
-			this.loadBulletOnShip(bullet);
-		}
-		else{
-			bullet.terminate();
-			this.terminate();
-		}
-	}
+	
 	
 
 }

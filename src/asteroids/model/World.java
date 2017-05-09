@@ -174,6 +174,12 @@ public class World extends Entity {
 		for (Ship ship : this.getAllShips()){
 			allEntities.add(ship);
 		}
+		for (Asteroid asteroid : this.getAllAsteroids()){
+			allEntities.add(asteroid);
+		}
+		for (Planetoid planetoid : this.getAllPlanetoids()){
+			allEntities.add(planetoid);
+		}
 		return allEntities;
 	}
 	
@@ -185,6 +191,49 @@ public class World extends Entity {
 			}
 		return null;
 		}
+	
+	public void addAsteroid(Asteroid asteroid){
+		allAsteroids.add(asteroid);
+		asteroid.setWorld(this);
+	}
+	
+	public void removeAsteroid(Asteroid asteroid) throws IllegalArgumentException {
+		if (this.allAsteroids.contains(asteroid)){
+			allAsteroids.remove(asteroid);
+		}
+		else{
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	public Set<Asteroid> getAllAsteroids(){
+		return this.allAsteroids;
+	}
+	
+	
+	private Set<Asteroid> allAsteroids = new HashSet<Asteroid>();
+
+	public void addPlanetoid(Planetoid planetoid){
+		this.allPlanetoids.add(planetoid);
+		planetoid.setWorld(this);
+	}
+	
+	public void removePlanetoid(Planetoid planetoid) throws IllegalArgumentException {
+		if (this.allPlanetoids.contains(planetoid)){
+			allPlanetoids.remove(planetoid);
+		}
+		else{
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	public Set<Planetoid> getAllPlanetoids(){
+		return this.allPlanetoids;
+	}
+	
+	private Set<Planetoid> allPlanetoids = new HashSet<Planetoid>();
+	
+	
 	
 //	public double getTimeNextCollision(){
 //		double nextCollisionTime = Double.POSITIVE_INFINITY;
@@ -275,15 +324,29 @@ public class World extends Entity {
 			((Ship) entity1).shipCollision((Ship) entity2);
 		}
 		if (entity1 instanceof Ship && entity2 instanceof Bullet){
-			((Ship) entity1).shipBulletCollision((Bullet) entity2);
+			((Bullet)entity2).collision(entity1);
 		}
 		if (entity1 instanceof Bullet && entity2 instanceof Ship){
-			System.out.println("3");
-			((Ship) entity2).shipBulletCollision((Bullet) entity1);
+			((Bullet)entity1).collision(entity2);
 		}
 		if (entity1 instanceof Bullet && entity2 instanceof Bullet){
-			((Bullet) entity1).bulletCollision((Bullet) entity2);
-		}	
+			((Bullet) entity1).collision((Bullet) entity2);
+		}
+		if (entity1 instanceof Bullet && entity2 instanceof MinorPlanet){
+			((Bullet)entity1).collision(entity2);
+		}
+		if (entity1 instanceof MinorPlanet && entity2 instanceof Bullet){
+			((Bullet)entity2).collision(entity1);
+		}
+		if (entity1 instanceof MinorPlanet && entity2 instanceof Ship){
+			((MinorPlanet)entity1).shipCollision((Ship)entity2);
+		}
+		if (entity1 instanceof Ship && entity2 instanceof MinorPlanet){
+			((MinorPlanet)entity2).shipCollision((Ship)entity1);
+		}
+		if (entity1 instanceof MinorPlanet && entity2 instanceof MinorPlanet){
+			((MinorPlanet)entity1).minorPlanetCollision((MinorPlanet)entity2);
+		}
 	}
 	
 	public void collisionResolver(Entity entity){
@@ -291,7 +354,7 @@ public class World extends Entity {
 			((Bullet) entity).boundaryCollision();
 		}
 		else if(entity instanceof Ship) {
-			((Ship) entity).boundaryCollision();
+			entity.boundaryCollision();
 		}
 	}
 	

@@ -185,6 +185,7 @@ public class Part2TestsFull {
     Ship ship = facade.createShip(100, 120, 10, 5, 50, 0, -4);
     double minimalMass = Math.PI * 4 / 3. * Math.pow(50, 3) * 1.42E12;
     assertTrue(Double.isFinite(facade.getShipMass(ship)));
+    System.out.println(ship.getMass());
     assertTrue(minimalMass - BIG_EPSILON <= facade.getShipMass(ship));
     score += 1;
   }

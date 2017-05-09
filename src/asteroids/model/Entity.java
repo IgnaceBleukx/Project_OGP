@@ -138,7 +138,7 @@ public class Entity {
 	 * 			| result = radius > 10
 	 */
 	public boolean isValidRadius(double radius){
-		if (Double.isNaN(radius)){
+		if (!Double.isNaN(radius)){
 			if (this instanceof Ship && this.getMinimumShipRadius() > radius){
 					return false;
 			}
@@ -150,7 +150,7 @@ public class Entity {
 			return true;
 		}
 	}
-	
+
 	public double getMinimumShipRadius(){
 		return this.minimumShipRadius;
 	}
@@ -164,13 +164,7 @@ public class Entity {
 	public double getRadius(){
 		return this.radius;
 	}
-	
 	private double radius;
-
-	
-	
-	
-	
 	
 	public void move(double time) throws IllegalArgumentException{
 		if (time < 0){
@@ -253,7 +247,6 @@ public class Entity {
 		}
 		}
 
-
 	public double getTimeCollisionEntity(Entity otherEntity){
 		double deltaRX = otherEntity.getPosition()[0] - this.getPosition()[0];
 		double deltaRY = otherEntity.getPosition()[1] - this.getPosition()[1];
@@ -272,7 +265,7 @@ public class Entity {
 		}
 	}
 	
-	
+	@Deprecated
 	public double[] getPositionCollisionEntity1(Entity otherEntity) throws IllegalArgumentException{
 	try{
 	if (this.getTimeCollisionEntity(otherEntity) == Double.POSITIVE_INFINITY){
@@ -318,6 +311,24 @@ public class Entity {
 		}
 	}
 	
+	public void boundaryCollision(){
+		if (this.getPosition()[0] >= this.getRadius() * 0.99 && this.getPosition()[0] <= this.getRadius() *1.01){
+			this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
+		}
+		if (this.getPosition()[1] >= this.getRadius() * 0.99 && this.getPosition()[1] <= this.getRadius() *1.01){
+			this.setVelocity(this.getVelocity()[0],-this.getVelocity()[1]);
+		}
+		if (this.getPosition()[0] >= (this.getWorld().getDimension()[0] - this.getRadius())*0.99 && this.getPosition()[0] <= (this.getWorld().getDimension()[0] - this.getRadius())*1.01){
+			this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
+		}
+		if (this.getPosition()[1] >= (this.getWorld().getDimension()[1] - this.getRadius())*0.99 && this.getPosition()[1] <= (this.getWorld().getDimension()[1] - this.getRadius())*1.01){
+			this.setVelocity(this.getVelocity()[0], -this.getVelocity()[1]);
+		}
+		else{
+			//throw new IllegalStateException();
+		}
+	}
+	
 	public void setWorld(World world){
 		this.world = world;
 	}
@@ -326,6 +337,10 @@ public class Entity {
 	}
 	public boolean isValidWorld(World world){
 		return world != null;
+	}
+	
+	public void terminate(){
+		//This method is overrided by all subclasses of Entity.
 	}
 
 	private World world;
