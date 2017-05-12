@@ -22,9 +22,7 @@ public class Ship extends Entity {
 		try{
 			this.setVelocity(xVelocity, yVelocity);
 			this.setPosition(xPosition, yPosition);
-			if (orientation <= Math.PI && orientation >= 0){
-				this.setOrientation(orientation);
-			}
+			this.setOrientation(orientation);
 			this.setRadius(radius);
 			this.setMass(mass);
 		}catch(IllegalArgumentException exc){
@@ -67,7 +65,6 @@ public class Ship extends Entity {
 	 * 			| if (Double.isNaN(mass))
 	 * 				result = false
 	 */
-	
 	public void setMass(double mass){
 		if (this.isValidMass(mass)){
 			this.mass = mass;
@@ -91,6 +88,15 @@ public class Ship extends Entity {
 	
 	private double density = 1.42E12;
 	
+	
+	/**
+	 * 
+	 * @return Returns the minimum radius of the ship.
+	 */
+	public double getMinimumShipRadius(){
+		return this.minimumShipRadius;
+	}
+	private double minimumShipRadius = 10;
 	
 	/**
   	 * Enables the thruster of the current ship if not enabled yet.
@@ -159,14 +165,8 @@ public class Ship extends Entity {
 		if (a <= 0){
 			a = 0;
 		}
-		if (isValidVelocity(this.getVelocity()[0] + a * Math.cos(this.getOrientation()), this.getVelocity()[1] + a * Math.sin(this.getOrientation()))){
-			this.setVelocity(this.getVelocity()[1] + a * Math.cos(this.getOrientation()),this.getVelocity()[1] + a * Math.sin(this.getOrientation()));
-		}	
-		else{
-			this.setVelocity(this.getMaxVelocity()*Math.cos(this.getOrientation()), 
-								 this.getMaxVelocity()*Math.sin(this.getOrientation()));
-							
-		}
+		
+		this.setVelocity(this.getVelocity()[0] + a * Math.cos(this.getOrientation()), this.getVelocity()[1] + Math.sin(this.getOrientation()));
 	}
 	
 	/**
@@ -215,6 +215,7 @@ public class Ship extends Entity {
 	public int getNbBulletsOnShip() {
 		return this.allBulletsShip.size();
 	}
+	
 	/**
 	 * @throws IllegalArgumentException Throws a new IllegalArgumentException if the given bullet is not loaded on the ship.
 	 * 			| if (! allBulletsShip.contains(bullet)
@@ -254,12 +255,18 @@ public class Ship extends Entity {
 		
 			double bulletPosX = meetingpointX + bulletToBeFired.getRadius() * Math.cos(this.getOrientation());
 			double bulletPosY = meetingpointY + bulletToBeFired.getRadius() * Math.sin(this.getOrientation());
+			System.out.println("bulletPosY in func = " +bulletPosY);
 			bulletToBeFired.setPosition(bulletPosX, bulletPosY);
 		
 			double xVelocityBullet = this.getVelocity()[0] + Math.cos(this.getOrientation()) * 250;
 			double yVelocityBullet = this.getVelocity()[1] + Math.sin(this.getOrientation()) * 250;
 			bulletToBeFired.setVelocity(xVelocityBullet, yVelocityBullet);
 		
+			if (bulletToBeFired.isOutOfBounds()){
+				bulletToBeFired.terminate();
+				return;
+			}
+			
 			for (Entity entity : this.getWorld().getAllEntities()){
 				if (bulletToBeFired.overlap(entity) && !bulletToBeFired.equals(entity)){
 					this.getWorld().collisionResolver(bulletToBeFired,entity);
@@ -268,11 +275,10 @@ public class Ship extends Entity {
 					break;
 				}
 			}
-			if (bulletToBeFired.getTimeCollisionBoundary() <= 0){
-				this.getWorld().collisionResolver(bulletToBeFired);
-			}
-		}
+			
+			
 		
+		}
 
 	}
 
@@ -332,6 +338,14 @@ public class Ship extends Entity {
 		this.setVelocity(this.getVelocity()[0] + xJ/this.getMass(), this.getVelocity()[1] + yJ/this.getMass());
 		otherShip.setVelocity(otherShip.getVelocity()[0] - xJ/otherShip.getMass(), otherShip.getVelocity()[1] - yJ/otherShip.getMass());
 	}
+	
+	public void loadProgram(Program program){
+		this.program = program;
+	}
+	public Program getShipProgram(){
+		return this.program;
+	}
+	private Program program;
 	
 	
 	

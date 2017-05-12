@@ -27,8 +27,7 @@ public class Asteroid extends MinorPlanet {
 	
 	private boolean isTerminated;
 
-	public void shipAsteroidCollision(Ship otherEntity) {
-		// TODO Auto-generated method stub
-		
+	public void shipAsteroidCollision(Ship ship) {
+		ship.terminate();
 	}
 }

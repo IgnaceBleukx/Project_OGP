@@ -233,29 +233,8 @@ public class World extends Entity {
 	
 	private Set<Planetoid> allPlanetoids = new HashSet<Planetoid>();
 	
-	
-	
-//	public double getTimeNextCollision(){
-//		double nextCollisionTime = Double.POSITIVE_INFINITY;
-//		for(Entity entity1:this.getAllEntities()){
-//			if (entity1.getTimeCollisionBoundary() < nextCollisionTime && entity1.getTimeCollisionBoundary() >= 0){
-//				nextCollisionTime = entity1.getTimeCollisionBoundary();
-//			}
-//			for(Entity entity2:this.getAllEntities()){
-//				if (entity1 == entity2){
-//					continue;
-//				}
-//				else{
-//					if (entity1.getTimeCollisionEntity(entity2) < nextCollisionTime){
-//						nextCollisionTime = entity1.getTimeCollisionEntity(entity2);
-//					}
-//				}
-//			}
-//		}
-//		return nextCollisionTime;
-//	}
-
-	public Entity[] getEntitiesNextCollision(){
+	@Deprecated
+	public Entity[] getEntitiesNextCollision1(){
 		Entity collisionEntity1 = null;
 		Entity collisionEntity2 = null;
 		double nextCollisionTime = Double.POSITIVE_INFINITY;
@@ -282,6 +261,31 @@ public class World extends Entity {
 		return collisionEntities;
 	}
 	
+	public Entity[] getEntitiesNextCollision(){
+		double nextCollisionTime = Double.POSITIVE_INFINITY;
+		Entity collisionEntity1 = null;
+		Entity collisionEntity2 = null;
+		boolean boundary = false;
+		for (Entity entity1 : this.getAllEntities()){
+			for (Entity entity2 : this.getAllEntities()){
+				if (!entity1.equals(entity2)){
+					if (entity1.getTimeCollisionEntity(entity2) < nextCollisionTime){
+						nextCollisionTime = entity1.getTimeCollisionEntity(entity2);
+						boundary = false;
+						collisionEntity1 = entity1;
+						collisionEntity2 = entity2;
+					}
+					if (entity1.getTimeCollisionBoundary() < nextCollisionTime){
+						boundary = true;
+						collisionEntity1 = entity1;
+						collisionEntity2 = null;
+					}
+				}
+			}
+		}
+		Entity[] collisionEntities = new Entity[]{collisionEntity1, collisionEntity2};
+		return collisionEntities;
+	}
 	
 	public void evolve(double dt,CollisionListener collisionListener){
 		Entity[] entitiesNextCollision = this.getEntitiesNextCollision();

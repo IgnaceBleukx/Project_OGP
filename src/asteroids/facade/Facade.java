@@ -106,7 +106,12 @@ public class Facade implements asteroids.part3.facade.IFacade{
 	}
 
 	public void setThrusterActive(Ship ship, boolean active) throws ModelException {
-		ship.thrustOn();
+		if (active == true){
+			ship.thrustOn();
+		}
+		else{
+			ship.thrustOff();
+		}
 	}
 
 	public double getShipAcceleration(Ship ship) throws ModelException {
@@ -459,8 +464,7 @@ public class Facade implements asteroids.part3.facade.IFacade{
 
 	@Override
 	public void loadProgramOnShip(Ship ship, Program program) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		ship.loadProgram(program);		
 	}
 
 	@Override

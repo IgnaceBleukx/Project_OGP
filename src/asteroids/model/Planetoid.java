@@ -1,5 +1,7 @@
 package asteroids.model;
 
+import java.util.Random;
+
 public class Planetoid extends MinorPlanet {
 
 	
@@ -7,6 +9,9 @@ public class Planetoid extends MinorPlanet {
 		this.setPosition(xPosition, yPosition);
 		this.setVelocity(xVelocity, yVelocity);
 		this.setRadius(radius - 0.0001 * totalTravelDistance);
+		if (this.getRadius() < 5){
+			this.terminate();
+		}
 		this.setMass();
 	}
 	
@@ -21,6 +26,9 @@ public class Planetoid extends MinorPlanet {
 			this.setPosition(this.getPosition()[0] + this.getVelocity()[0] * dt, this.getPosition()[1] + this.getVelocity()[1] *dt);
 			this.setRadius(this.getRadius() - 0.0001 * calculatedDistance);
 			this.totalTraveledDistance += calculatedDistance;
+			if (this.getRadius() < 5){
+				this.terminate();
+			}
 		}
 	}
 	
@@ -48,9 +56,14 @@ public class Planetoid extends MinorPlanet {
 	
 	private double totalTraveledDistance;
 
-	public void shipPlanetoidCollision(Ship otherEntity) {
-		// TODO Auto-generated method stub
-		
+	public void shipPlanetoidCollision(Ship ship) {
+		Random randomGen = new Random();
+		ship.setPosition(randomGen.nextDouble()*this.getWorld().getDimension()[0],randomGen.nextDouble()*this.getWorld().getDimension()[1]);
+		for (Entity entity : this.getWorld().getAllEntities()){
+			if (ship.overlap(entity) && !entity.equals(ship)){
+				ship.terminate();
+			}
+		}
 	}
 	
 }

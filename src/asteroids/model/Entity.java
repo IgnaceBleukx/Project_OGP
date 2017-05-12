@@ -2,6 +2,13 @@ package asteroids.model;
 
 public class Entity {
 	
+	/**
+	 * Sets the velocity of the current entity to the parameters xVelocity and yVelocity.
+	 * @param xVelocity
+	 * @param yVelocity
+	 * @post The velocity of the entity is updated to the parameters xVelocity and yVelocity.
+	 * 			| new.getVelocity() = [xVelocity, yVelocity]
+	 */
 	public void setVelocity(double xVelocity, double yVelocity){
 		if (this.isValidVelocity(xVelocity, yVelocity)){
 			this.xVelocity = xVelocity;
@@ -15,14 +22,11 @@ public class Entity {
 	 * 			| result = sqrt(xVelocity**2 + yVelocity **2) < maxVelocity
 	 */
 	public boolean isValidVelocity(double xVelocity, double yVelocity){
-		if (xVelocity == Double.NaN || yVelocity == Double.NaN){
+		if (Double.isNaN(xVelocity) || Double.isNaN(yVelocity) || Math.sqrt(Math.pow(xVelocity,2) + Math.pow(yVelocity, 2)) > maxVelocity ){
 			return false;
-		}
-		if (Math.sqrt(Math.pow(this.xVelocity + xVelocity,2) + Math.pow(this.yVelocity + yVelocity, 2))<= maxVelocity){
-			return true;
 		}
 		else {
-			return false;
+			return true;
 			}
 	}
 	
@@ -36,6 +40,10 @@ public class Entity {
 		return velocity;		
 	}
 	
+	/**
+	 * 
+	 * @return Returns the maximum velocity of the current Entity.
+	 */
 	public double getMaxVelocity(){
 		return this.maxVelocity;
 	}
@@ -79,13 +87,17 @@ public class Entity {
 		return position;		
 	}
 	
+	/**
+	 * 
+	 * @param xPosition
+	 * @param yPosition
+	 * @return returns true if both xVelocity and yVelocity are real numbers.
+	 * @return returns false if xVelocity or yVelocity is not a real number.
+	 * 			| return (xPosition != NaN && yPosition != yPosition)
+	 * 
+	 */
 	public boolean isValidPosition(double xPosition, double yPosition){
-		if (xPosition == Double.NaN || yPosition == Double.NaN){
-			return false;
-		}
-		else{
-			return true;
-		}
+		return (!Double.isNaN(xPosition) && !Double.isNaN(yPosition));
 	}
 	
 	/**
@@ -139,7 +151,7 @@ public class Entity {
 	 */
 	public boolean isValidRadius(double radius){
 		if (!Double.isNaN(radius)){
-			if (this instanceof Ship && this.getMinimumShipRadius() > radius){
+			if (this instanceof Ship && ((Ship)this).getMinimumShipRadius() > radius){
 					return false;
 			}
 			else{
@@ -151,10 +163,6 @@ public class Entity {
 		}
 	}
 
-	public double getMinimumShipRadius(){
-		return this.minimumShipRadius;
-	}
-	private double minimumShipRadius = 10;
 
 	/**
 	 * 
@@ -166,6 +174,14 @@ public class Entity {
 	}
 	private double radius;
 	
+	/**
+	 * 
+	 * @param time
+	 * @throws IllegalArgumentException throws a new exception of the type IllegalArgumentException if the give time is negative.
+	 * @post Updates the position of the current entity according to the given time and its velocity.
+	 * 			new.getVelocity()[0] = this.getVelocity()[0] * time
+	 * 			new.getVelocity()[1] = this.getVelocity()[1] * time
+	 */
 	public void move(double time) throws IllegalArgumentException{
 		if (time < 0){
 			throw new IllegalArgumentException();
@@ -176,8 +192,11 @@ public class Entity {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return Returns the time in seconds until the current entity collides for the first time with a boundary.
+	 */
 	public double getTimeCollisionBoundary(){
-	
 		double boundaryTime = Double.POSITIVE_INFINITY;
 		if(this.getWorld() == null){
 			return boundaryTime;
@@ -209,7 +228,12 @@ public class Entity {
 		return boundaryTime;
 	}
 
-	
+	 /**
+	  * 
+	  * @param otherEntity
+	  * @return returns true if the current entity overlaps with the other entity or the current entity equals the other entity.
+	  * 			| return (this.equals(otherEntity) || this.getDistanceBetween(otherEntity) < 0
+	  */
 	public boolean overlap(Entity otherEntity){
 		if (this == otherEntity){
 			return true;
@@ -224,6 +248,11 @@ public class Entity {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param otherEntity
+	 * @return Returns the distance between the 2 outer borders of the current entity and the other entity.
+	 */
 	public double getDistanceBetween(Entity otherEntity){
 		if (this == otherEntity){
 			return 0;
@@ -232,14 +261,32 @@ public class Entity {
 		return  (Math.sqrt(Math.pow(this.getPosition()[0] - otherEntity.getPosition()[0],2)+Math.pow(this.getPosition()[1] - otherEntity.getPosition()[1],2))	- this.getRadius() - otherEntity.getRadius());
 		}
 	}
-		
+	
+	/**
+	 * 
+	 * @return Returns the position of the next boundary collision of the current entity in
+	 * 			an array of 2 doubles with the xPosition on index 0 and the yPosition on index 1.
+	 */
 	public double[] getPositionCollisionBoundary(){
 		if (this.getWorld() != null && this.getTimeCollisionBoundary() != Double.POSITIVE_INFINITY){
 			double[] boundaryColPos;
 			double xPosColBound = this.getVelocity()[0]*this.getTimeCollisionBoundary() + this.getPosition()[0];
 			double yPosColBound = this.getVelocity()[1]*this.getTimeCollisionBoundary() + this.getPosition()[1];
+			
+			if (xPosColBound == this.getWorld().getDimension()[0]-this.getRadius()){
+				xPosColBound += this.getRadius();
+			}
+			if (yPosColBound == this.getWorld().getDimension()[1]-this.getRadius()){
+				yPosColBound += this.getRadius();
+			}
+			if (xPosColBound == this.getRadius()){
+				xPosColBound = 0;
+			}
+			if (yPosColBound == this.getRadius()){
+				yPosColBound = 0;
+			}
+			
 			boundaryColPos = new double[] {xPosColBound,yPosColBound};
-
 			return boundaryColPos;
 		}
 		else{
@@ -247,6 +294,11 @@ public class Entity {
 		}
 		}
 
+	/**
+	 * 
+	 * @param otherEntity
+	 * @return Returns the time in seconds until the current entity collides with the other entity.
+	 */
 	public double getTimeCollisionEntity(Entity otherEntity){
 		double deltaRX = otherEntity.getPosition()[0] - this.getPosition()[0];
 		double deltaRY = otherEntity.getPosition()[1] - this.getPosition()[1];
@@ -261,7 +313,7 @@ public class Entity {
 			return Double.POSITIVE_INFINITY;
 		}
 		else{
-			return ((-deltaVDeltaR + Math.sqrt(d)) / Math.pow(deltaVTotal, 2));
+			return ((Math.sqrt(d)) / Math.pow(deltaVTotal, 2));
 		}
 	}
 	
@@ -288,6 +340,18 @@ public class Entity {
 	}
 	
 }
+	
+	public boolean isOutOfBounds(){
+		if (this.getPosition()[0] - this.getRadius() < 0 || this.getPosition()[1] - this.getRadius() < 0){
+			return true;
+		}
+		if (this.getPosition()[0] + this.getRadius() > this.getWorld().getDimension()[0] || this.getPosition()[1] + this.getRadius() > this.getWorld().getDimension()[1]){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 
 	public double[] getPositionCollisionEntity(Entity otherEntity){
 		if (this.getTimeCollisionEntity(otherEntity) != Double.POSITIVE_INFINITY){
@@ -298,9 +362,8 @@ public class Entity {
 			double yPosOtherEntityCollision = otherEntity.getVelocity()[1] * timeToCollision + otherEntity.getPosition()[1];
 			
 			double alpha = Math.atan((yPosOtherEntityCollision - yPosThisCollision) / (xPosOtherEntityCollision - xPosThisCollision));
-			
-			double xCoordinate = this.getRadius() * Math.cos(alpha);
-			double yCoordinate = this.getRadius() * Math.sin(alpha);
+			double xCoordinate = xPosThisCollision  + this.getRadius() * Math.cos(alpha);
+			double yCoordinate = yPosThisCollision  + this.getRadius() * Math.sin(alpha);
 			
 			double[] collisionPosition = {xCoordinate, yCoordinate};
 			

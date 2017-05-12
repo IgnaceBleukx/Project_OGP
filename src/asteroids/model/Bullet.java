@@ -158,10 +158,20 @@ public class Bullet extends Entity {
 
 	private boolean isTerminated = false;
 
+	/**
+	 * Sets the collision state to the parameter state. If the collisionState of a bullet is false,
+	 * 		it means it is loaded on a ship and thus can not collide with any other entities.
+	 * @param state
+	 * @post new.getCollisionState() = state
+	 */
 	public void setCollisionState(boolean state){
 		this.canCollide = state;
 	}
 	
+	/**
+	 * Returns the collisionstate of the current bullet.
+	 * @return Returns the collisionstate
+	 */
 	public boolean getCollisionState(){
 		return this.canCollide;
 	}
@@ -183,6 +193,19 @@ public class Bullet extends Entity {
 	}
 	private int maxBoundaryCollisions = 2;
 
+	/**
+	 * Sets the velocity of the current bullet to reflect the effect of a boundarycollision if the maximum amount of boundarycollisions
+	 * of the current bullet is not exceeded. If the maximum is exceeded, the bullet is terminated.
+	 * @post If the bullet has exceeded its maximum amount of boundary collisions, the bullet is terminated.
+	 * 			| if (this.getBoundaryCollisions > this.getMaxBoundaryCollisions)
+	 * 						this.terminate()
+	 * @post If the bullet collides with a horizontal boundary, its Y-velocity is set tot the negative of its previous Y-velocity.
+	 * 			| if (yPosition == world.yDimension - this.radius || yPosition == this.radius)
+	 *  					new.getVelocity()[1] = -this.getVelocity()[0]
+	 * @post If the bullet	 collides with a vertical boundary, its X-Velocity is set to the negative of its previous X-velocity.
+	 * 			| if (xPosition == world.xDimension - this.radius || xPosition == this.radius)
+	 *  					new.getVelocity()[0] = -this.getVelocity()[0]
+	 */
 	public void boundaryCollision() {
 		if (this.getBoundaryCollisions() < this.getMaxBoundaryCollisions()){
 			if (this.getPosition()[0] >= this.getRadius() * 0.99 && this.getPosition()[0] <= this.getRadius() *1.01){
@@ -201,10 +224,24 @@ public class Bullet extends Entity {
 				//throw new IllegalStateException();
 			}
 		}
+		else{
+			this.terminate();
+		}
 	}
 
+	/**
+	 * Reflects the effect of a collision with another entity.
+	 * @param otherEntity
+	 * @post If the other entity is the ship the bullet is fired from, the bullet is reloaded on the ship.
+	 * 			| if  (this.getBulletScource.equals(otherEntity)
+	 * 					this.getBulletScource().getAllBulletsOnShip().contains(new)
+	 * @post If the other entity is not the ship the bullet is fired from, both this bullet and the other entity are terminated.
+	 * 			| if (!this.getBulletScource().equals(otherEntity)
+	 * 					this.terminate()
+	 * 					otherEntity.terminate()
+	 */
 	public void collision(Entity otherEntity){
-		if (otherEntity instanceof Ship && this.getBulletScource().equals(otherEntity)){
+		if (this.getBulletScource().equals(otherEntity)){
 			((Ship) otherEntity).loadBulletOnShip(this);
 		}
 		else{
