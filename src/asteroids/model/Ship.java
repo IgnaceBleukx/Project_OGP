@@ -138,7 +138,7 @@ public class Ship extends Entity {
 	}
 	
 	private boolean thrusterState;
-	private double thrusterForce = 1.1E18;
+	private double thrusterForce = 1.1E20;
 	
 	/**
 	 * 
@@ -325,18 +325,21 @@ public class Ship extends Entity {
 	
 
 	public void shipCollision(Ship otherShip){
-		double deltaX = otherShip.getPosition()[0] - this.getPosition()[0];
-		double deltaY = otherShip.getPosition()[1] - this.getPosition()[1];
-		double deltaR = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) );
-		double deltaV = Math.sqrt(Math.pow(otherShip.getVelocity()[0] - this.getVelocity()[0],2 ) + Math.pow(otherShip.getVelocity()[1] - this.getVelocity()[1], 2));
-		double sigma = this.getDistanceBetween(otherShip);
+
+		double deltaRX = otherShip.getPosition()[0] - this.getPosition()[0];
+		double deltaRY = otherShip.getPosition()[1] - this.getPosition()[1];
+		double deltaVX = otherShip.getVelocity()[0] - this.getVelocity()[0];
+		double deltaVY = otherShip.getVelocity()[1] - this.getVelocity()[1];
+		double deltaRV = deltaVX*deltaRX + deltaVY*deltaRY;
+		double sigma = this.getRadius() + otherShip.getRadius();
 		
-		double j = (2 * this.getMass()*otherShip.getMass() * (deltaV * deltaR)) / (sigma * (this.getMass() + otherShip.getMass()));
-		double xJ = (j * deltaX) / sigma;
-		double yJ = (j * deltaY) / sigma;
-		
-		this.setVelocity(this.getVelocity()[0] + xJ/this.getMass(), this.getVelocity()[1] + yJ/this.getMass());
+		double j = (2 * this.getMass()*otherShip.getMass() * deltaRV) / (sigma * (this.getMass() + otherShip.getMass()));
+
+		double xJ = (j * deltaRX) / sigma;
+		double yJ = (j * deltaRY) / sigma;
+		this.setVelocity((this.getVelocity()[0] + xJ/this.getMass()), (this.getVelocity()[1] + yJ/this.getMass()));
 		otherShip.setVelocity(otherShip.getVelocity()[0] - xJ/otherShip.getMass(), otherShip.getVelocity()[1] - yJ/otherShip.getMass());
+
 	}
 	
 	public void loadProgram(Program program){

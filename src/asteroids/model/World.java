@@ -267,15 +267,29 @@ public class World extends Entity {
 		Entity collisionEntity2 = null;
 		boolean boundary = false;
 		for (Entity entity1 : this.getAllEntities()){
+			System.out.println("This is entity1=" + entity1);
 			for (Entity entity2 : this.getAllEntities()){
+				System.out.println("This is entity2=" + entity2);
+				
+				if (entity1 == entity2) {
+					if (entity1.getTimeCollisionBoundary() < nextCollisionTime && entity1.getTimeCollisionBoundary() >= 0){
+						System.out.println("This is getTimeCollisionBoundary =" +entity1.getTimeCollisionBoundary());
+						boundary = true;
+						collisionEntity1 = entity1;
+						collisionEntity2 = null;
+					}
+				}
+				
 				if (!entity1.equals(entity2)){
-					if (entity1.getTimeCollisionEntity(entity2) < nextCollisionTime){
+					if (entity1.getTimeCollisionEntity(entity2) < nextCollisionTime && entity1.getTimeCollisionEntity(entity2) >= 0){
+						
 						nextCollisionTime = entity1.getTimeCollisionEntity(entity2);
+						System.out.println("Nextcollisiontime =" + nextCollisionTime);
 						boundary = false;
 						collisionEntity1 = entity1;
 						collisionEntity2 = entity2;
 					}
-					if (entity1.getTimeCollisionBoundary() < nextCollisionTime){
+					if (entity1.getTimeCollisionBoundary() < nextCollisionTime && entity1.getTimeCollisionBoundary() >= 0){
 						boundary = true;
 						collisionEntity1 = entity1;
 						collisionEntity2 = null;
@@ -284,6 +298,8 @@ public class World extends Entity {
 			}
 		}
 		Entity[] collisionEntities = new Entity[]{collisionEntity1, collisionEntity2};
+		System.out.println("collisionEntities =" + collisionEntities);
+		System.out.println("collisionEntities[0] =" + collisionEntities[0]);
 		return collisionEntities;
 	}
 	
@@ -293,7 +309,9 @@ public class World extends Entity {
 		if (dt < 0 || Double.isNaN(dt)){
 			throw new IllegalArgumentException();
 		}
-		if (entitiesNextCollision[1] != null){
+		if (entitiesNextCollision[0] == null){
+		}
+		else if (entitiesNextCollision[1] != null){
 			nextCollisionTime = entitiesNextCollision[0].getTimeCollisionEntity(entitiesNextCollision[1]);
 		}
 		else{
@@ -305,15 +323,18 @@ public class World extends Entity {
 			}
 		}
 		else{
+			
 			for (Entity entity: this.getAllEntities()){
 				entity.move(nextCollisionTime);
 			}
 			if (entitiesNextCollision[1] == null){
-				this.collisionResolver(this.getEntitiesNextCollision()[0]);
+				this.collisionResolver(entitiesNextCollision[0]);
 			}
 			else{
-				this.collisionResolver(this.getEntitiesNextCollision()[0],this.getEntitiesNextCollision()[1]);
+				this.collisionResolver(entitiesNextCollision[0],entitiesNextCollision[1]);
 			}
+			System.out.println("dt=" + dt);
+			System.out.println("nextCollisionTime=" + nextCollisionTime);
 			this.evolve(dt - nextCollisionTime, collisionListener);
 			
 			
@@ -323,11 +344,12 @@ public class World extends Entity {
 
 	public void collisionResolver(Entity entity1, Entity entity2){
 		System.out.println("Entity 1 = " + entity1.toString());
-		System.out.println("Entity 2 = " + entity2.toString());
+		 // System.out.println("Entity 2 = " + entity2.toString()); deze gaf ook een nullpointer als entity2 null is
 		if (entity1 instanceof Ship && entity2 instanceof Ship){
 			((Ship) entity1).shipCollision((Ship) entity2);
 		}
 		if (entity1 instanceof Ship && entity2 instanceof Bullet){
+			System.out.println("bulletentity2=" + (Bullet)entity2);
 			((Bullet)entity2).collision(entity1);
 		}
 		if (entity1 instanceof Bullet && entity2 instanceof Ship){
@@ -354,6 +376,7 @@ public class World extends Entity {
 	}
 	
 	public void collisionResolver(Entity entity){
+		System.out.println("collisionresolver entity = " + entity);
 		if (entity instanceof Bullet){
 			((Bullet) entity).boundaryCollision();
 		}

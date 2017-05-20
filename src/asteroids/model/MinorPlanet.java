@@ -25,15 +25,16 @@ public class MinorPlanet extends Entity {
 	}
 
 	public void minorPlanetCollision(MinorPlanet otherMinorPlanet) {
-		double deltaX = otherMinorPlanet.getPosition()[0] - this.getPosition()[0];
-		double deltaY = otherMinorPlanet.getPosition()[1] - this.getPosition()[1];
-		double deltaR = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) );
-		double deltaV = Math.sqrt(Math.pow(otherMinorPlanet.getVelocity()[0] - this.getVelocity()[0],2 ) + Math.pow(otherMinorPlanet.getVelocity()[1] - this.getVelocity()[1], 2));
-		double sigma = this.getDistanceBetween(otherMinorPlanet);
+		double deltaRX = otherMinorPlanet.getPosition()[0] - this.getPosition()[0];
+		double deltaRY = otherMinorPlanet.getPosition()[1] - this.getPosition()[1];
+		double deltaVX = otherMinorPlanet.getVelocity()[0] - this.getVelocity()[0];
+		double deltaVY = otherMinorPlanet.getVelocity()[1] - this.getVelocity()[1];
+		double deltaRV = deltaVX*deltaRX + deltaVY*deltaRY;
+		double sigma = this.getRadius() + otherMinorPlanet.getRadius();
 		
-		double j = (2 * this.getMass()*otherMinorPlanet.getMass() * (deltaV * deltaR)) / (sigma * (this.getMass() + otherMinorPlanet.getMass()));
-		double xJ = (j * deltaX) / sigma;
-		double yJ = (j * deltaY) / sigma;
+		double j = (2 * this.getMass()*otherMinorPlanet.getMass() *deltaRV) / (sigma * (this.getMass() + otherMinorPlanet.getMass()));
+		double xJ = (j * deltaRX) / sigma;
+		double yJ = (j * deltaRY) / sigma;
 		
 		this.setVelocity(this.getVelocity()[0] + xJ/this.getMass(), this.getVelocity()[1] + yJ/this.getMass());
 		otherMinorPlanet.setVelocity(otherMinorPlanet.getVelocity()[0] - xJ/otherMinorPlanet.getMass(), otherMinorPlanet.getVelocity()[1] - yJ/otherMinorPlanet.getMass());

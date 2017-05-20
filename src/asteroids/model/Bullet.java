@@ -180,6 +180,11 @@ public class Bullet extends Entity {
 	public void setBoundaryCollisions(int boundaryCollisions){
 		this.boundaryCollisions = boundaryCollisions;
 	}
+	
+	public void addBoundaryCollision(){
+		this.boundaryCollisions += 1;
+	}
+	
 	public int getBoundaryCollisions(){
 		return this.boundaryCollisions;
 	}
@@ -208,16 +213,19 @@ public class Bullet extends Entity {
 	 */
 	public void boundaryCollision() {
 		if (this.getBoundaryCollisions() < this.getMaxBoundaryCollisions()){
+			
+			this.addBoundaryCollision();
+			
 			if (this.getPosition()[0] >= this.getRadius() * 0.99 && this.getPosition()[0] <= this.getRadius() *1.01){
 				this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
 			}
 			if (this.getPosition()[1] >= this.getRadius() * 0.99 && this.getPosition()[1] <= this.getRadius() *1.01){
 				this.setVelocity(this.getVelocity()[0],-this.getVelocity()[1]);
 			}
-			if (this.getPosition()[0] >= (this.getWorld().getDimension()[0] - this.getRadius())*0.99 && this.getPosition()[0] >= (this.getWorld().getDimension()[0] - this.getRadius())*1.01){
+			if (this.getPosition()[0] >= (this.getWorld().getDimension()[0] - this.getRadius())*0.99 && this.getPosition()[0] <= (this.getWorld().getDimension()[0] - this.getRadius())*1.01){
 				this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
 			}
-			if (this.getPosition()[1] >= (this.getWorld().getDimension()[1] - this.getRadius())*0.99 && this.getPosition()[1] >= (this.getWorld().getDimension()[1] - this.getRadius())*1.01){
+			if (this.getPosition()[1] >= (this.getWorld().getDimension()[1] - this.getRadius())*0.99 && this.getPosition()[1] <= (this.getWorld().getDimension()[1] - this.getRadius())*1.01){
 				this.setVelocity(this.getVelocity()[0], -this.getVelocity()[1]);
 			}
 			else{
@@ -241,8 +249,20 @@ public class Bullet extends Entity {
 	 * 					otherEntity.terminate()
 	 */
 	public void collision(Entity otherEntity){
-		if (this.getBulletScource().equals(otherEntity)){
+		System.out.println("this=" + this);
+		System.out.println("otherEntity=" + otherEntity);
+		System.out.println("getbulletsource=" + this.getBulletScource());
+		
+		if (this.getBulletScource() == null){
+			otherEntity.terminate();
+			this.terminate();
+			
+		}
+	
+		else if (this.getBulletScource().equals(otherEntity)){
+			System.out.println("shipotherentity=" + (Ship) otherEntity);
 			((Ship) otherEntity).loadBulletOnShip(this);
+			this.getWorld().removeBulletFromWorld(this);
 		}
 		else{
 			otherEntity.terminate();

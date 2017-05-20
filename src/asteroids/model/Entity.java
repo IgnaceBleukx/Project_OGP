@@ -304,16 +304,17 @@ public class Entity {
 		double deltaRY = otherEntity.getPosition()[1] - this.getPosition()[1];
 		double deltaVX = otherEntity.getVelocity()[0] - this.getVelocity()[0];
 		double deltaVY = otherEntity.getVelocity()[1] - this.getVelocity()[1];
-		double deltaRTotal = Math.sqrt(Math.pow(deltaRX, 2) + Math.pow(deltaRY, 2));
-		double deltaVTotal = Math.sqrt(Math.pow(deltaVX, 2) + Math.pow(deltaVY, 2));
+		double deltaRTotal = Math.pow(deltaRX, 2) + Math.pow(deltaRY, 2);
+		double deltaVTotal = Math.pow(deltaVX, 2) + Math.pow(deltaVY, 2);
 		double deltaVDeltaR = deltaVX * deltaRX + deltaVY * deltaRY;
 		double sigma = this.getRadius() + otherEntity.getRadius();
-		double d = Math.pow(deltaVDeltaR, 2) - Math.pow(deltaVTotal, 2)*(Math.pow(deltaRTotal, 2)-Math.pow(sigma, 2));
+		double d = Math.pow(deltaVDeltaR, 2) - deltaVTotal*(deltaRTotal-Math.pow(sigma, 2));
+		
 		if (deltaVDeltaR >= 0 || d<=0 || !this.getWorld().equals(otherEntity.getWorld())){
 			return Double.POSITIVE_INFINITY;
 		}
 		else{
-			return ((Math.sqrt(d)) / Math.pow(deltaVTotal, 2));
+			return -((deltaVDeltaR + Math.sqrt(d))/(deltaVTotal));
 		}
 	}
 	
@@ -375,6 +376,7 @@ public class Entity {
 	}
 	
 	public void boundaryCollision(){
+		System.out.println("xvelocity = " + this.getVelocity()[0]);
 		if (this.getPosition()[0] >= this.getRadius() * 0.99 && this.getPosition()[0] <= this.getRadius() *1.01){
 			this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
 		}

@@ -290,12 +290,17 @@ public class Facade implements asteroids.part3.facade.IFacade{
 	
 	
 	public double getTimeNextCollision(World world) throws ModelException {
+		
+		double timeNextCollision = Double.POSITIVE_INFINITY;
+				
 		if (world.getEntitiesNextCollision()[1] != null){
-			return world.getEntitiesNextCollision()[0].getTimeCollisionEntity(world.getEntitiesNextCollision()[1]);
+			timeNextCollision = world.getEntitiesNextCollision()[0].getTimeCollisionEntity(world.getEntitiesNextCollision()[1]);
 		}
-		else{
-			return world.getEntitiesNextCollision()[0].getTimeCollisionBoundary();
+		if (world.getEntitiesNextCollision()[0].getTimeCollisionBoundary() < timeNextCollision){
+			timeNextCollision = world.getEntitiesNextCollision()[0].getTimeCollisionBoundary();
 		}
+	return timeNextCollision;
+		
 	}
 
 	public double[] getPositionNextCollision(World world) throws ModelException {	
@@ -311,11 +316,11 @@ public class Facade implements asteroids.part3.facade.IFacade{
 
 
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
-		try{
+	try{
 		world.evolve(dt, collisionListener);
-		}catch (IllegalArgumentException exc){
-			throw new ModelException("Negative time");
-		}
+	}catch (IllegalArgumentException exc){
+		throw new ModelException("Negative time");
+	}
 	}
 
 
