@@ -148,6 +148,13 @@ public class Ship extends Entity {
 		this.setOrientation(this.getOrientation() + angle);
 	}
 	
+	public void thrust(double a){
+		if (a < 0){
+			a = 0;
+		}
+		
+	}
+	
 	/**
 	 * 
 	 * @param a
@@ -159,12 +166,14 @@ public class Ship extends Entity {
 		if (a <= 0){
 			a = 0;
 		}
+		this.setVelocity(this.getVelocity()[0] + a * Math.cos(this.getOrientation()), this.getVelocity()[1] + a * Math.sin(this.getOrientation()));
+		
 		
 		double newXVelocity = this.getVelocity()[0] + a * Math.cos(this.getOrientation())*dt; 
 		double newYVelocity = this.getVelocity()[1] + a * Math.sin(this.getOrientation())*dt;
 		double tempVelocity = Math.sqrt(Math.pow(newXVelocity, 2) + Math.pow(newYVelocity, 2));
 		
-		if (this.isValidVelocity(newXVelocity, newYVelocity) == true) {
+		if (this.isValidVelocity(newXVelocity, newYVelocity)) {
 			System.out.println(this.isValidVelocity(newXVelocity, newYVelocity));
 			this.setVelocity(newXVelocity, newYVelocity);
 		}

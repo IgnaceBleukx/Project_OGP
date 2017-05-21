@@ -12,8 +12,8 @@ public class AsteroidExpression extends EntityExpression {
 	}
 	@Override
 	public Asteroid evaluate(){
-		Set<Asteroid> asteroids = this.getProgram().getShip().getWorld().getAllAsteroids();
-		Ship ship = this.getProgram().getShip();
+		Set<Asteroid> asteroids = this.getFunction().getProgram().getShip().getWorld().getAllAsteroids();
+		Ship ship = this.getFunction().getProgram().getShip();
 		double distTo = Double.POSITIVE_INFINITY;
 		Asteroid closestTo = null;
 		for (Asteroid asteroid : asteroids){

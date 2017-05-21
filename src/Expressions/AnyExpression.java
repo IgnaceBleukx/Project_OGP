@@ -9,6 +9,6 @@ public class AnyExpression extends EntityExpression {
 	
 	@Override
 	public Entity evaluate(){
-		return this.getProgram().getShip().getWorld().getAllEntities().iterator().next();
+		return this.getFunction().getProgram().getShip().getWorld().getAllEntities().iterator().next();
 	}
 }

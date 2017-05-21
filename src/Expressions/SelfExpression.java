@@ -9,6 +9,6 @@ public class SelfExpression extends EntityExpression {
 	
 	@Override
 	public Ship evaluate(){
-		return this.getProgram().getShip();
+		return this.getFunction().getProgram().getShip();
 	}
 }

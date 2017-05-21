@@ -7,6 +7,6 @@ public class GetDirectionExpression extends ValueExpression {
 	
 	@Override
 	public double evaluate(){
-		return this.getProgram().getShip().getOrientation();
+		return this.getFunction().getProgram().getShip().getOrientation();
 	}
 }

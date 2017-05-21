@@ -11,8 +11,8 @@ public class BulletExpression extends EntityExpression {
 	}
 	
 	public Bullet evaluate(){
-		Set<Bullet> bullets = this.getProgram().getShip().getWorld().getAllBullets();
-		Ship ship = this.getProgram().getShip();
+		Set<Bullet> bullets = this.getFunction().getProgram().getShip().getWorld().getAllBullets();
+		Ship ship = this.getFunction().getProgram().getShip();
 		Bullet bulletFiredByShip = null;
 		for (Bullet bullet : bullets){
 			if(bullet.getBulletScource().equals(ship) && !ship.getAllBulletsShip().contains(bullet)){

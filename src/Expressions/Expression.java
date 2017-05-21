@@ -1,17 +1,18 @@
 package Expressions;
 
 import asteroids.model.Program;
+import asteroids.model.programs.Function;
 
 public class Expression {
 
-	private Program program;
+	private Function function;
 
-	public Program getProgram() {
-		return program;
+	public Function getFunction() {
+		return function;
 	}
 
-	public void setProgram(Program program) {
-		this.program = program;
+	public void setProgram(Function function) {
+		this.function = function;
 	}
 
 	
