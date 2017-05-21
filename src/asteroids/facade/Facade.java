@@ -59,6 +59,7 @@ public class Facade implements asteroids.part3.facade.IFacade{
 		ship.move(dt);
 	}
 	
+	@Deprecated
 	public void thrust(Ship ship, double amount) throws ModelException{
 		ship.thrust(amount);
 	}

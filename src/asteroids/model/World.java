@@ -320,12 +320,20 @@ public class World extends Entity {
 		if (nextCollisionTime > dt){
 			for(Entity entity : this.getAllEntities()){
 				entity.move(dt);
+				if (entity instanceof Ship && ((Ship) entity).inspectThruster() == true){
+					((Ship) entity).thrust(((Ship) entity).getShipAcceleration(),dt);
+					
+				}
 			}
 		}
 		else{
 			
 			for (Entity entity: this.getAllEntities()){
 				entity.move(nextCollisionTime);
+				if (entity instanceof Ship && ((Ship) entity).inspectThruster() == true){
+					((Ship) entity).thrust(((Ship) entity).getShipAcceleration(),nextCollisionTime);
+					
+				}
 			}
 			if (entitiesNextCollision[1] == null){
 				this.collisionResolver(entitiesNextCollision[0]);

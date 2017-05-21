@@ -1,17 +1,28 @@
 package asteroids.tests;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
 import asteroids.facade.Facade;
-import asteroids.model.Ship;
 import asteroids.model.Bullet;
+import asteroids.model.Ship;
 import asteroids.model.World;
 import asteroids.part2.facade.IFacade;
+import asteroids.part3.programs.IProgramFactory;
+import asteroids.part3.programs.internal.ProgramParser;
 import asteroids.util.ModelException;
 
 public class ShipTest2 {
@@ -23,6 +34,19 @@ public class ShipTest2 {
 	public void setUp() {
 		facade = new Facade();
 	}	
+	
+	@Test
+	public void testMaxVelocityShip() throws ModelException {
+		Ship ship = facade.createShip(50, 100, 500, 500*Math.sqrt(359999), 50, 0, 1.1E18);
+		World world = facade.createWorld(1000000000, 1000000000);
+		facade.addShipToWorld(world, ship);
+		assertEquals(300000, Math.sqrt(Math.pow(ship.getVelocity()[0],2)+Math.pow(ship.getVelocity()[1], 2)), EPSILON);
+		ship.thrustOn();
+		ship.thrust(ship.getShipAcceleration(), 10);
+		assertEquals(300000, Math.sqrt(Math.pow(ship.getVelocity()[0],2)+Math.pow(ship.getVelocity()[1], 2)), EPSILON);
+		
+
+	}
 	
 	
 	@Test

@@ -22,7 +22,7 @@ public class Entity {
 	 * 			| result = sqrt(xVelocity**2 + yVelocity **2) < maxVelocity
 	 */
 	public boolean isValidVelocity(double xVelocity, double yVelocity){
-		if (Double.isNaN(xVelocity) || Double.isNaN(yVelocity) || Math.sqrt(Math.pow(xVelocity,2) + Math.pow(yVelocity, 2)) > maxVelocity ){
+		if (Double.isNaN(xVelocity) || Double.isNaN(yVelocity) || Math.sqrt(Math.pow(xVelocity,2) + Math.pow(yVelocity, 2)) > maxVelocity*1.00001 ){
 			return false;
 		}
 		else {

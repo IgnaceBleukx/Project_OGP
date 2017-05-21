@@ -100,19 +100,14 @@ public class Ship extends Entity {
 	
 	/**
   	 * Enables the thruster of the current ship if not enabled yet.
-  	 * 			| if (thrusterstate == false)
- 	 * 			|		thrusterstate = true
- 	 * 			|		thrust(thrusterforce / mass)
  	 * 
  	 */
  	public void thrustOn(){
-		this.thrusterState = true;
-		this.thrust(thrusterForce/this.getMass());  		
+		this.thrusterState = true;  		
 		}
 			
 	/**
 	 * Disables the thruster of the ship.
-	 * 			|		thrust(0)
 	 */
 	 public void thrustOff(){
 		this.thrusterState = false;
@@ -138,7 +133,7 @@ public class Ship extends Entity {
 	}
 	
 	private boolean thrusterState;
-	private double thrusterForce = 1.1E20;
+	private double thrusterForce = 1.1E18;
 	
 	/**
 	 * 
@@ -156,17 +151,37 @@ public class Ship extends Entity {
 	/**
 	 * 
 	 * @param a
+	 * 			The ship's acceleration, which equals the thrusterforce divided by the ship's total mass.
 	 * @post	The velocity to be added to the current velocity.
-	 * 			If the total orientation exceeds the maximum velocity. The total will be limited to the maximum velocity.
-	 * 			| new.xVelocity = this.xVelocity + a * cos(orientation)
-	 * 			| new.yVelocity = this.yVelocity + a * sin(orientation)
+	 * 	
 	 */
-	public void thrust(double a){
+	public void thrust(double a, double dt){
 		if (a <= 0){
 			a = 0;
 		}
 		
-		this.setVelocity(this.getVelocity()[0] + a * Math.cos(this.getOrientation()), this.getVelocity()[1] + Math.sin(this.getOrientation()));
+		double newXVelocity = this.getVelocity()[0] + a * Math.cos(this.getOrientation())*dt; 
+		double newYVelocity = this.getVelocity()[1] + a * Math.sin(this.getOrientation())*dt;
+		double tempVelocity = Math.sqrt(Math.pow(newXVelocity, 2) + Math.pow(newYVelocity, 2));
+		
+		if (this.isValidVelocity(newXVelocity, newYVelocity) == true) {
+			System.out.println(this.isValidVelocity(newXVelocity, newYVelocity));
+			this.setVelocity(newXVelocity, newYVelocity);
+		}
+		
+		else {
+			
+			// De xvelocity gained (verliest) wat yvelocity verliest (gained), vandaar sin en cos omgewisseld
+			
+			double newMaxXVelocity = newXVelocity - (tempVelocity - this.getMaxVelocity())*Math.sin(this.getOrientation());
+			double newMaxYVelocity = newYVelocity - (tempVelocity - this.getMaxVelocity())*Math.cos(this.getOrientation());
+			
+			
+			this.setVelocity(newMaxXVelocity, newMaxYVelocity);
+			
+			
+		}
+		
 	}
 	
 	/**
