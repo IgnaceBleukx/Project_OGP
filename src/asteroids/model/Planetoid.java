@@ -24,9 +24,13 @@ public class Planetoid extends MinorPlanet {
 		else{
 			double calculatedDistance = Math.sqrt(Math.pow(this.getVelocity()[0] * dt - this.getPosition()[1],2) +Math.pow(this.getVelocity()[0] * dt - this.getPosition()[1],2)); 
 			this.setPosition(this.getPosition()[0] + this.getVelocity()[0] * dt, this.getPosition()[1] + this.getVelocity()[1] *dt);
+			
+			if (this.isValidRadius(this.getRadius() - 0.0001*calculatedDistance)){
 			this.setRadius(this.getRadius() - 0.0001 * calculatedDistance);
 			this.totalTraveledDistance += calculatedDistance;
-			if (this.getRadius() < 5){
+			}
+			
+			else{ 
 				this.terminate();
 			}
 		}

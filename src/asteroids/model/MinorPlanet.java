@@ -14,6 +14,12 @@ public class MinorPlanet extends Entity {
 	
 	private double mass;
 	
+	public double getMinimumRadius(){
+		return this.minimumRadius;
+	}
+	
+	private double minimumRadius = 5;
+	
 	@Deprecated
 	public double getDensity(){
 		return Double.POSITIVE_INFINITY;

@@ -362,7 +362,7 @@ public class Ship extends Entity {
 		double xJ = (j * deltaRX) / sigma;
 		double yJ = (j * deltaRY) / sigma;
 		this.setVelocity((this.getVelocity()[0] + xJ/this.getMass()), (this.getVelocity()[1] + yJ/this.getMass()));
-		otherShip.setVelocity(otherShip.getVelocity()[0] - xJ/otherShip.getMass(), otherShip.getVelocity()[1] - yJ/otherShip.getMass());
+		otherShip.setVelocity((otherShip.getVelocity()[0] - xJ/otherShip.getMass()), (otherShip.getVelocity()[1] - yJ/otherShip.getMass()));
 
 	}
 	

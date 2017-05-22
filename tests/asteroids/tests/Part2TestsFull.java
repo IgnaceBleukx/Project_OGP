@@ -1053,11 +1053,11 @@ public class Part2TestsFull {
     World world = facade.createWorld(1000, 1000);
     Ship ship1 = facade.createShip(100, 100, -10, -10, 50, 0, 1.0E20);
     facade.addShipToWorld(world, ship1);
-    // collision after 15 seconds
+    // collision after 5 seconds
     facade.evolve(world, 15, null);
     assertEquals(1, facade.getWorldShips(world).size());
     assertEquals(150, facade.getShipPosition(ship1)[0], EPSILON);
-    assertEquals(150, facade.getShipPosition(ship1)[1], EPSILON);
+
     assertEquals(10, facade.getShipVelocity(ship1)[0], EPSILON);
     assertEquals(10, facade.getShipVelocity(ship1)[1], EPSILON);
     score += 8;
@@ -1177,6 +1177,16 @@ public class Part2TestsFull {
 
   // Assignment Statement
 
+  @Test
+  public void testUPPERBOUND() throws ModelException {
+    World world = facade.createWorld(1000, 1000);
+    Ship ship1 = facade.createShip(100, 200, 10, 10, 50, 0, 1.0E20);
+    facade.addShipToWorld(world, ship1);
+    // collision after 5 seconds
+    facade.evolve(world, 80, null);
+    System.out.println("upperboundtestVEL= " + ship1.getVelocity()[1]);
+    System.out.println("upperboundtestPOS= " + ship1.getPosition()[1]);
+  }
   
 
 }

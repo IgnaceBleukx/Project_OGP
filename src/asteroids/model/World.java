@@ -304,22 +304,30 @@ public class World extends Entity {
 	}
 	
 	public void evolve(double dt,CollisionListener collisionListener){
+		System.out.println("this is dt= " + dt);
 		Entity[] entitiesNextCollision = this.getEntitiesNextCollision();
 		double nextCollisionTime = Double.POSITIVE_INFINITY;
 		if (dt < 0 || Double.isNaN(dt)){
 			throw new IllegalArgumentException();
 		}
-		if (entitiesNextCollision[0] == null){
+		
+		else if (entitiesNextCollision[0] == null){
 		}
+		
 		else if (entitiesNextCollision[1] != null){
 			nextCollisionTime = entitiesNextCollision[0].getTimeCollisionEntity(entitiesNextCollision[1]);
 		}
+		
 		else{
 			nextCollisionTime = entitiesNextCollision[0].getTimeCollisionBoundary();
-		}	
+		}
+		
+		
 		if (nextCollisionTime > dt){
 			for(Entity entity : this.getAllEntities()){
 				entity.move(dt);
+				System.out.println("xposentity= " + entity.getPosition()[0]);
+				System.out.println("yposentity= " + entity.getPosition()[1]);
 				if (entity instanceof Ship && ((Ship) entity).inspectThruster() == true){
 					((Ship) entity).thrust(((Ship) entity).getShipAcceleration(),dt);
 					
@@ -356,30 +364,34 @@ public class World extends Entity {
 		if (entity1 instanceof Ship && entity2 instanceof Ship){
 			((Ship) entity1).shipCollision((Ship) entity2);
 		}
-		if (entity1 instanceof Ship && entity2 instanceof Bullet){
+		else if (entity1 instanceof Ship && entity2 instanceof Bullet){
 			System.out.println("bulletentity2=" + (Bullet)entity2);
 			((Bullet)entity2).collision(entity1);
 		}
-		if (entity1 instanceof Bullet && entity2 instanceof Ship){
+		else if (entity1 instanceof Bullet && entity2 instanceof Ship){
 			((Bullet)entity1).collision(entity2);
 		}
-		if (entity1 instanceof Bullet && entity2 instanceof Bullet){
+		else if (entity1 instanceof Bullet && entity2 instanceof Bullet){
 			((Bullet) entity1).collision((Bullet) entity2);
 		}
-		if (entity1 instanceof Bullet && entity2 instanceof MinorPlanet){
+		else if (entity1 instanceof Bullet && entity2 instanceof MinorPlanet){
 			((Bullet)entity1).collision(entity2);
 		}
-		if (entity1 instanceof MinorPlanet && entity2 instanceof Bullet){
+		else if (entity1 instanceof MinorPlanet && entity2 instanceof Bullet){
 			((Bullet)entity2).collision(entity1);
 		}
-		if (entity1 instanceof MinorPlanet && entity2 instanceof Ship){
+		else if (entity1 instanceof MinorPlanet && entity2 instanceof Ship){
 			((MinorPlanet)entity1).shipCollision((Ship)entity2);
 		}
-		if (entity1 instanceof Ship && entity2 instanceof MinorPlanet){
+		else if (entity1 instanceof Ship && entity2 instanceof MinorPlanet){
 			((MinorPlanet)entity2).shipCollision((Ship)entity1);
 		}
-		if (entity1 instanceof MinorPlanet && entity2 instanceof MinorPlanet){
+		else if (entity1 instanceof MinorPlanet && entity2 instanceof MinorPlanet){
 			((MinorPlanet)entity1).minorPlanetCollision((MinorPlanet)entity2);
+		}
+		else {
+			System.out.println("instanceof none");
+			throw new IllegalStateException();
 		}
 	}
 	
