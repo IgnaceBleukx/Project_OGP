@@ -1,10 +1,14 @@
 package Expressions;
 
+import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
+
 public class EqualityExpression extends BooleanExpression {
 
-	public EqualityExpression(Expression ex1, Expression ex2){
+	public EqualityExpression(Expression ex1, Expression ex2, SourceLocation location){
 		setEx1(ex1);
 		setEx2(ex2);
+		setSourceLocation(location);
 	}
 	
 	public Expression getEx1() {
@@ -22,14 +26,35 @@ public class EqualityExpression extends BooleanExpression {
 	
 	private Expression ex1;
 	private Expression ex2;
+	private SourceLocation sourceLocation;
 	
 	@Override
-	public boolean evaluate(){
+	public boolean evaluate() throws ModelException{
+		getEx1().setProgram(getProgram());
+		getEx2().setProgram(getProgram());
 		if (ex1 instanceof EntityExpression && ex2 instanceof EntityExpression){
-			return ((EntityExpression) ex1).evaluate().equals(((EntityExpression) ex2).evaluate());
+			return ((EntityExpression) getEx1()).evaluate().equals(((EntityExpression) getEx2()).evaluate());
+		}
+		if (ex1 instanceof ValueExpression && getEx2() instanceof ValueExpression){
+			try{
+				return ((ValueExpression) getEx1()).evaluate() == (((ValueExpression) getEx2()).evaluate());
+			}catch (ModelException e){
+				throw new ModelException("ModelException in EqualityExpression");
+			}
+		}
+		if (getEx1() instanceof BooleanExpression && getEx2() instanceof BooleanExpression){
+			return ((BooleanExpression) getEx1()).evaluate() == ((BooleanExpression) getEx2()).evaluate();
 		}
 		else{
-			throw new IllegalArgumentException("One of the given expressions does not evaluate to an entity");
+			return false;
 		}
+	}
+
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
 	}
 }

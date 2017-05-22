@@ -1,10 +1,14 @@
 package Expressions;
 
+import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
+
 public class AdditionExpression extends ValueExpression {
 
-	public AdditionExpression(Expression ex1, Expression ex2){
+	public AdditionExpression(Expression ex1, Expression ex2, SourceLocation location){
 		setEx1(ex1);
 		setEx2(ex2);
+		setSourceLocation(location);
 	}
 	
 	public Expression getEx1() {
@@ -22,14 +26,27 @@ public class AdditionExpression extends ValueExpression {
 	
 	private Expression ex1;
 	private Expression ex2;
+	private SourceLocation sourceLocation;
 	
 	@Override
-	public double evaluate(){
+	public double evaluate() throws ModelException{
 		if (getEx1() instanceof ValueExpression && getEx2() instanceof ValueExpression){
-			return ((ValueExpression)getEx1()).evaluate() + ((ValueExpression)getEx2()).evaluate();
+			try {
+				return ((ValueExpression)getEx1()).evaluate() + ((ValueExpression)getEx2()).evaluate();
+			} catch (ModelException e) {
+				throw new ModelException("ModelException in AdditionExpression");
+			}
 		}
 		else{
 			throw new IllegalArgumentException();
 		}
+	}
+
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
 	}
 }

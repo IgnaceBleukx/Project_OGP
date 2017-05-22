@@ -1,8 +1,9 @@
 package Expressions;
 
 import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 
-public class ChangeSignExpression extends BooleanExpression {
+public class ChangeSignExpression extends ValueExpression {
 
 	public ChangeSignExpression(Expression expression, SourceLocation sourceLocation){
 		setExpression(expression);
@@ -21,12 +22,16 @@ public class ChangeSignExpression extends BooleanExpression {
 	}
 	
 	@Override
-	public boolean evaluate(){
-		if (getExpression() instanceof BooleanExpression){
-			return !((BooleanExpression) getExpression()).evaluate();
+	public double evaluate() throws ModelException{
+		if (getExpression() instanceof ValueExpression){
+			try {
+				return -((ValueExpression) getExpression()).evaluate();
+			} catch (ModelException e) {
+				throw new ModelException("ModelException in ChangeSignExpression");
+			}
 		}
 		else{
-			throw new IllegalArgumentException("The expression is not of the type 'BooleanExpression'");
+			throw new ModelException("The expression is not of the type 'ValueExpression'");
 		}
 	}
 

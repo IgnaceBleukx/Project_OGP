@@ -9,6 +9,7 @@ public class Function {
 	public Function(String functionName, Statement body, SourceLocation sourceLocation){
 		setFunctionName(functionName);
 		setBody(body);
+		getBody().setFunction(this);
 		setSourceLocation(sourceLocation);
 	}
 	

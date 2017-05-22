@@ -10,9 +10,10 @@ public class SelfExpression extends EntityExpression {
 	}
 	
 	private SourceLocation sourceLocation;
+	
 	@Override
 	public Ship evaluate(){
-		return this.getFunction().getProgram().getShip();
+		return getProgram().getShip();
 	}
 	public SourceLocation getSourceLocation() {
 		return sourceLocation;

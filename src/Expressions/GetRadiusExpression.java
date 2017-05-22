@@ -1,12 +1,17 @@
 package Expressions;
 
-public class GetRadiusExpression extends ValueExpression {
+import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 
+public class GetRadiusExpression extends ValueExpression {
 	
-	
-	public GetRadiusExpression(Expression expression) {
+	public GetRadiusExpression(Expression expression, SourceLocation location) {
 		setExpression(expression);
+		setSourceLocation(sourceLocation);
+		
 	}
+	
+	private SourceLocation sourceLocation;
 
 	private Expression expression;
 
@@ -19,12 +24,25 @@ public class GetRadiusExpression extends ValueExpression {
 	}
 	
 	@Override
-	public double evaluate(){
-		if (expression instanceof EntityExpression){
-			return ((EntityExpression)getExpression()).evaluate().getRadius();
+	public double evaluate() throws ModelException{
+		getExpression().setProgram(getProgram());
+		try{
+			if (getExpression() instanceof EntityExpression){
+					return ((EntityExpression)getExpression()).evaluate().getRadius();
+			}	
+			else{
+				throw new ModelException("The expression does not evaluate to an entity");
+			}
+		}catch(NullPointerException e){
+			throw new ModelException("The expression evaluates to null");
 		}
-		else{
-			throw new IllegalArgumentException("The expression does not evaluate to an entity");
-		}
+	}
+
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
 	}
 }

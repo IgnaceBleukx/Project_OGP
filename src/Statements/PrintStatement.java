@@ -1,14 +1,17 @@
 package Statements;
 
+import Expressions.BooleanExpression;
 import Expressions.EntityExpression;
 import Expressions.Expression;
 import Expressions.ValueExpression;
 import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 
 public class PrintStatement extends VoidStatement {
 
 	public PrintStatement(Expression value, SourceLocation sourceLocation){
 		setValue(value);
+		setSourceLocation(sourceLocation);
 	}
 	
 	private Expression value;
@@ -30,18 +33,27 @@ public class PrintStatement extends VoidStatement {
 		this.sourceLocation = sourceLocation;
 	}
 	
-	public void execute(){
+	@Override
+	public void execute() throws ModelException{
+		getValue().setProgram(getProgram());
 		if (getValue() instanceof ValueExpression){
-			System.out.println(((ValueExpression) getValue()).evaluate());
-			this.getFunction().getProgram().addPrintedObject(((ValueExpression) getValue()).evaluate());
+			try{
+				System.out.println(((ValueExpression) getValue()).evaluate());
+				this.getProgram().addPrintedObject(((ValueExpression) getValue()).evaluate());
+			}catch (ModelException e){
+				throw new ModelException("ModelException in PrintStatement");
+			}
 		}
 		else if (getValue() instanceof EntityExpression){
-			System.out.println(((EntityExpression) getValue()).evaluate().toString());
-			this.getFunction().getProgram().addPrintedObject(((EntityExpression) getValue()).evaluate());
+			if(((EntityExpression) getValue()).evaluate() != null){
+				System.out.println(((EntityExpression) getValue()).evaluate().toString());
+			}	
+			this.getProgram().addPrintedObject(((EntityExpression) getValue()).evaluate());
 		}
-		else{
-			throw new IllegalArgumentException("The expression does not evaluate to a value");
+		else if (getValue() instanceof BooleanExpression){
+			this.getProgram().addPrintedObject(((BooleanExpression) getValue()).evaluate());
+			System.out.println(((BooleanExpression) getValue()).evaluate());
 		}
-		
+				
 	}
 }

@@ -1,6 +1,7 @@
 package Expressions;
 
 import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 
 public class GetYExpression extends ValueExpression {
 
@@ -22,12 +23,13 @@ public class GetYExpression extends ValueExpression {
 	private Expression expression;
 	
 	@Override
-	public double evaluate(){
+	public double evaluate() throws ModelException{
+		getExpression().setProgram(getProgram());
 		if (getExpression() instanceof EntityExpression){
 			return ((EntityExpression) getExpression()).evaluate().getPosition()[1];
 		}
 		else{
-			throw new IllegalArgumentException("The expression does not evaluate to an entity");
+			throw new ModelException("The expression does not evaluate to an entity");
 		}
 	}
 

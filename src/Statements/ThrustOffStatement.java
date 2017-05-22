@@ -2,9 +2,9 @@ package Statements;
 
 import asteroids.part3.programs.SourceLocation;
 
-public class SkipStatement extends VoidStatement {
-
-	public SkipStatement(SourceLocation location){
+public class ThrustOffStatement extends VoidStatement{
+	
+	public ThrustOffStatement(SourceLocation location){
 		setSourceLocation(location);
 	}
 	
@@ -19,6 +19,10 @@ public class SkipStatement extends VoidStatement {
 
 
 	private SourceLocation sourceLocation;
+
+	@Override
 	public void execute(){
+		this.getProgram().getShip().thrustOn();
 	}
+
 }

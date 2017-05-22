@@ -3,18 +3,31 @@ package Statements;
 import Expressions.BooleanExpression;
 import Expressions.Expression;
 import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 
 public class WhileStatement extends VoidStatement {
 	
-	public WhileStatement(Expression condition, Statement Body, SourceLocation scourceLocation){
-		
+	public WhileStatement(Expression condition, Statement Body, SourceLocation sourceLocation){
+		setCondition(condition);
+		setBody(body);
+		setSourceLocation(sourceLocation);
 	}
 	
 	
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
+	}
+
+
 	public Expression getCondition() {
 		return condition;
 	}
-	public void setCodition(Expression codition) {
+	public void setCondition(Expression codition) {
 		this.condition = codition;
 	}
 	public Statement getBody() {
@@ -26,21 +39,26 @@ public class WhileStatement extends VoidStatement {
 	
 	private Expression condition;
 	private Statement body;
+	private SourceLocation sourceLocation;
 	
 	@Override
-	public void execute(){
+	public void execute() throws ModelException{
 		if (getCondition() instanceof BooleanExpression){
-			while (((BooleanExpression) getCondition()).evaluate()){
-				if (getBody() instanceof ValueStatement){
-					((ValueStatement) getBody()).execute();	
+			try {
+				while (((BooleanExpression) getCondition()).evaluate()){
+					if (getBody() instanceof ValueStatement){
+						((ValueStatement) getBody()).execute();	
+					}
+					if (getBody() instanceof VoidStatement){
+						((VoidStatement) getBody()).execute();
+					}
 				}
-				if (getBody() instanceof VoidStatement){
-					((VoidStatement) getBody()).execute();
-				}
+			} catch (ModelException e) {
+				throw new ModelException("ModelException in WhileStatement");
 			}
 		}
 		else{
-			throw new IllegalArgumentException("The expression does not evaluate to a boolean");
+			throw new ModelException("The expression does not evaluate to a boolean");
 		}
 	}
 }
