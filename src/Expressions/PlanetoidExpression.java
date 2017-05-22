@@ -4,12 +4,23 @@ import java.util.Set;
 
 import asteroids.model.Planetoid;
 import asteroids.model.Ship;
+import asteroids.part3.programs.SourceLocation;
 
 public class PlanetoidExpression extends EntityExpression {
 
-	public PlanetoidExpression(){
-		
+	public PlanetoidExpression(SourceLocation sourceLocation){
+		setSourceLocation(sourceLocation);
 	}
+	
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
+	}
+
+	private SourceLocation sourceLocation;
 	
 	@Override
 	public Planetoid evaluate(){

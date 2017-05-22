@@ -2,11 +2,14 @@ package Expressions;
 
 import java.util.List;
 
-public class FunctionCallExpression {
+import asteroids.part3.programs.SourceLocation;
 
-	public FunctionCallExpression(String functionName, List<Expression> actualArgs){
+public class FunctionCallExpression extends ValueExpression {
+
+	public FunctionCallExpression(String functionName, List<Expression> actualArs, SourceLocation sourceLocation){
 		setFunctionName(functionName);
 		setActualArgs(actualArgs);
+		setSourceLocation(sourceLocation);
 	}
 	
 	public String getFunctionName() {
@@ -21,6 +24,14 @@ public class FunctionCallExpression {
 	public void setActualArgs(List<Expression> actualArgs) {
 		this.actualArgs = actualArgs;
 	}
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
+	}
 	private String functionName;
 	private List<Expression> actualArgs;
+	private SourceLocation sourceLocation;
 }

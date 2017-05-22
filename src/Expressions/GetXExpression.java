@@ -1,10 +1,15 @@
 package Expressions;
 
+import asteroids.part3.programs.SourceLocation;
+
 public class GetXExpression extends ValueExpression {
 
-	public GetXExpression(Expression expression){
+	public GetXExpression(Expression expression, SourceLocation sourceLocation){
 		setExpression(expression);
+		setSourceLocation(sourceLocation);
 	}
+	
+	private SourceLocation sourceLocation;
 	
 	public Expression getExpression() {
 		return expression;
@@ -24,6 +29,14 @@ public class GetXExpression extends ValueExpression {
 		else{
 			throw new IllegalArgumentException("The expression does not evaluate to an entity");
 		}
+	}
+
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
 	}
 }
 

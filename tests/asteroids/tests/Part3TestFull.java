@@ -1,7 +1,6 @@
 package asteroids.tests;
 
 import static org.junit.Assert.assertArrayEquals;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -23,11 +22,10 @@ import asteroids.model.Planetoid;
 import asteroids.model.Ship;
 import asteroids.model.World;
 import asteroids.part3.facade.IFacade;
+import asteroids.model.Program;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.internal.ProgramParser;
 import asteroids.util.ModelException;
-import asteroids.model.programs.Program;
-
 
 public class Part3TestFull {
 

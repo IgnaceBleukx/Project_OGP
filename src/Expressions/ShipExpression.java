@@ -3,12 +3,15 @@ package Expressions;
 import java.util.Set;
 
 import asteroids.model.Ship;
+import asteroids.part3.programs.SourceLocation;
 
 public class ShipExpression extends EntityExpression {
 
-	public ShipExpression(){
-		
+	public ShipExpression(SourceLocation sourceLocation){
+		setSourceLocation(sourceLocation);
 	}
+	
+	private SourceLocation sourceLocation;
 	
 	@Override
 	public Ship evaluate(){
@@ -23,5 +26,13 @@ public class ShipExpression extends EntityExpression {
 			}
 		}
 		return closestTo;
+	}
+
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
 	}
 }

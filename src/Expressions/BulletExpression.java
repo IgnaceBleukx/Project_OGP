@@ -4,11 +4,15 @@ import java.util.Set;
 
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
+import asteroids.part3.programs.SourceLocation;
 
 public class BulletExpression extends EntityExpression {
 
-	public BulletExpression(){
+	public BulletExpression(SourceLocation location){
+		setSourceLocation(location);
 	}
+	
+	private SourceLocation sourceLocation;
 	
 	public Bullet evaluate(){
 		Set<Bullet> bullets = this.getFunction().getProgram().getShip().getWorld().getAllBullets();
@@ -21,5 +25,13 @@ public class BulletExpression extends EntityExpression {
 			}
 		}
 		return bulletFiredByShip;
+	}
+
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
 	}
 }

@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import asteroids.model.programs.Program;
-
 
 public class Ship extends Entity {
 	/**
@@ -368,6 +366,7 @@ public class Ship extends Entity {
 	
 	public void loadProgram(Program program){
 		this.program = program;
+		this.getShipProgram().setShip(this);
 	}
 	public Program getShipProgram(){
 		return this.program;

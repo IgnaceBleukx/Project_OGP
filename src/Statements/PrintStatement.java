@@ -1,5 +1,6 @@
 package Statements;
 
+import Expressions.EntityExpression;
 import Expressions.Expression;
 import Expressions.ValueExpression;
 import asteroids.part3.programs.SourceLocation;
@@ -33,6 +34,10 @@ public class PrintStatement extends VoidStatement {
 		if (getValue() instanceof ValueExpression){
 			System.out.println(((ValueExpression) getValue()).evaluate());
 			this.getFunction().getProgram().addPrintedObject(((ValueExpression) getValue()).evaluate());
+		}
+		else if (getValue() instanceof EntityExpression){
+			System.out.println(((EntityExpression) getValue()).evaluate().toString());
+			this.getFunction().getProgram().addPrintedObject(((EntityExpression) getValue()).evaluate());
 		}
 		else{
 			throw new IllegalArgumentException("The expression does not evaluate to a value");

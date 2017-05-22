@@ -1,6 +1,7 @@
 package asteroids.model.programs;
 
 import Statements.Statement;
+import asteroids.model.Program;
 import asteroids.part3.programs.SourceLocation;
 
 public class Function {

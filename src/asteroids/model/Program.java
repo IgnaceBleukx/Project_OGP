@@ -1,11 +1,11 @@
-package asteroids.model.programs;
+package asteroids.model;
 
 import java.util.List;
 
 import Statements.Statement;
 import Statements.ValueStatement;
 import Statements.VoidStatement;
-import asteroids.model.Ship;
+import asteroids.model.programs.Function;
 
 public class Program {
 

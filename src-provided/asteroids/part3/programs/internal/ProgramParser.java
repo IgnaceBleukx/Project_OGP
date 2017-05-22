@@ -1,6 +1,4 @@
 package asteroids.part3.programs.internal;
-import asteroids.model.programs.Program;
-
 
 import java.io.IOException;
 import java.net.URL;
@@ -15,6 +13,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 
+import asteroids.model.Program;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.internal.generated.AsteroidsProgramLexer;
 import asteroids.part3.programs.internal.generated.AsteroidsProgramParser;

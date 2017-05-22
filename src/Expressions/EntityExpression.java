@@ -1,7 +1,7 @@
 package Expressions;
 
 import asteroids.model.Entity;
-import asteroids.model.programs.Program;
+import asteroids.model.Program;
 
 public class EntityExpression extends Expression {
 

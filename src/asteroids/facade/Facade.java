@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Set;
 
 import asteroids.model.Planetoid;
+import asteroids.model.Program;
 import asteroids.model.Asteroid;
 import asteroids.model.Bullet;
 import asteroids.model.Entity;
 import asteroids.model.Ship;
 import asteroids.model.World;
-import asteroids.model.programs.Program;
 import asteroids.model.programs.ProgramFactory;
 import asteroids.part2.facade.IFacade;
 import asteroids.part3.programs.IProgramFactory;
@@ -465,8 +465,7 @@ public class Facade implements asteroids.part3.facade.IFacade{
 
 	@Override
 	public Program getShipProgram(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return ship.getShipProgram();
 	}
 
 	@Override
@@ -481,7 +480,7 @@ public class Facade implements asteroids.part3.facade.IFacade{
 
 	@Override
 	public IProgramFactory<?, ?, ?, ? extends Program> createProgramFactory() throws ModelException {
-		return new IProgramFactory();
+		return new ProgramFactory();
 	}
 
 	
