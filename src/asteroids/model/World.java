@@ -271,6 +271,7 @@ public class World extends Entity {
 				
 				if (entity1 == entity2) {
 					if (entity1.getTimeCollisionBoundary() < nextCollisionTime && entity1.getTimeCollisionBoundary() >= 0){
+						nextCollisionTime = entity1.getTimeCollisionBoundary();
 						System.out.println("This is getTimeCollisionBoundary =" +entity1.getTimeCollisionBoundary());
 						boundary = true;
 						collisionEntity1 = entity1;
@@ -288,6 +289,7 @@ public class World extends Entity {
 						collisionEntity2 = entity2;
 					}
 					if (entity1.getTimeCollisionBoundary() < nextCollisionTime && entity1.getTimeCollisionBoundary() >= 0){
+						nextCollisionTime = entity1.getTimeCollisionBoundary();
 						boundary = true;
 						collisionEntity1 = entity1;
 						collisionEntity2 = null;
@@ -296,7 +298,6 @@ public class World extends Entity {
 			}
 		}
 		Entity[] collisionEntities = new Entity[]{collisionEntity1, collisionEntity2};
-		System.out.println("collisionEntities =" + collisionEntities);
 		System.out.println("collisionEntities[0] =" + collisionEntities[0]);
 		return collisionEntities;
 	}
@@ -413,11 +414,12 @@ public class World extends Entity {
 		System.out.println("collisionresolver entity = " + entity);
 		if (entity instanceof Bullet){
 			System.out.println("I resolved bullet boundary collision");
+			((Bullet)entity).boundaryCollision();
+		}
+		else if(entity instanceof Ship || entity instanceof Asteroid) {
 			entity.boundaryCollision();
 		}
-		else if(entity instanceof Ship) {
-			entity.boundaryCollision();
-		}
+			
 	}
 	
 	public void terminate(){

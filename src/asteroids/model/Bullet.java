@@ -213,23 +213,17 @@ public class Bullet extends Entity {
 	 */
 	public void boundaryCollision() {
 		if (this.getBoundaryCollisions() < this.getMaxBoundaryCollisions()){
-			
 			this.addBoundaryCollision();
+			double xPosColBound = this.getPositionCollisionBoundary()[0];
+			double yPosColBound = this.getPositionCollisionBoundary()[1];
 			
-			if (this.getPosition()[0] >= this.getRadius() * 0.99 && this.getPosition()[0] <= this.getRadius() *1.01){
+			if (xPosColBound == 0 || xPosColBound == this.getWorld().getDimension()[0]){
+				System.out.println("negative x velocity");
 				this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
 			}
-			if (this.getPosition()[1] >= this.getRadius() * 0.99 && this.getPosition()[1] <= this.getRadius() *1.01){
-				this.setVelocity(this.getVelocity()[0],-this.getVelocity()[1]);
-			}
-			if (this.getPosition()[0] >= (this.getWorld().getDimension()[0] - this.getRadius())*0.99 && this.getPosition()[0] <= (this.getWorld().getDimension()[0] - this.getRadius())*1.01){
-				this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
-			}
-			if (this.getPosition()[1] >= (this.getWorld().getDimension()[1] - this.getRadius())*0.99 && this.getPosition()[1] <= (this.getWorld().getDimension()[1] - this.getRadius())*1.01){
+			if (yPosColBound == 0 || yPosColBound == this.getWorld().getDimension()[1]){
+				System.out.println("negative y velocity");
 				this.setVelocity(this.getVelocity()[0], -this.getVelocity()[1]);
-			}
-			else{
-				//throw new IllegalStateException();
 			}
 		}
 		else{

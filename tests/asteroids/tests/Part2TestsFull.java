@@ -1199,5 +1199,23 @@ public class Part2TestsFull {
     System.out.println("rightboundtestPOS= " + ship1.getPosition()[1]);
   }
   
+  @Test
+  public void testBOUNDARYCOLLISIONS() throws ModelException {
+    World world = facade.createWorld(1000, 1000);
+    Ship ship1 = facade.createShip(900, 200, 10, 10, 50, 0, 1.0E20);
+    Ship ship2 = facade.createShip(750, 200, 10, 10, 50, 0, 1.0E20);
+    facade.addShipToWorld(world, ship1);
+    facade.addShipToWorld(world, ship2);
+    facade.evolve(world, 30, null);
+    System.out.println("SHIP1XVEL= " + ship1.getVelocity()[0]);
+    System.out.println("SHIP1YVEL= " + ship1.getVelocity()[1]);
+    System.out.println("SHIP1XPOS= " + ship1.getPosition()[0]);
+    System.out.println("SHIP1YPOS= " + ship1.getPosition()[1]);
+    System.out.println("SHIP2XVEL= " + ship2.getVelocity()[0]);
+    System.out.println("SHIP2YVEL= " + ship2.getVelocity()[1]);
+    System.out.println("SHIP2XPOS= " + ship2.getPosition()[0]);
+    System.out.println("SHIP2YPOS= " + ship2.getPosition()[1]);
+  }
+  
 
 }
