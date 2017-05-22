@@ -4,7 +4,6 @@ import java.util.List;
 
 import Expressions.Expression;
 import Statements.*;
-import asteroids.model.Program;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.SourceLocation;
 import Expressions.*;

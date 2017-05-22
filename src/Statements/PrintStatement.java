@@ -1,9 +1,10 @@
 package Statements;
 
 import Expressions.Expression;
+import Expressions.ValueExpression;
 import asteroids.part3.programs.SourceLocation;
 
-public class PrintStatement extends Statement {
+public class PrintStatement extends VoidStatement {
 
 	public PrintStatement(Expression value, SourceLocation sourceLocation){
 		setValue(value);
@@ -26,5 +27,16 @@ public class PrintStatement extends Statement {
 
 	public void setSourceLocation(SourceLocation sourceLocation) {
 		this.sourceLocation = sourceLocation;
+	}
+	
+	public void execute(){
+		if (getValue() instanceof ValueExpression){
+			System.out.println(((ValueExpression) getValue()).evaluate());
+			this.getFunction().getProgram().addPrintedObject(((ValueExpression) getValue()).evaluate());
+		}
+		else{
+			throw new IllegalArgumentException("The expression does not evaluate to a value");
+		}
+		
 	}
 }

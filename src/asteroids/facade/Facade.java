@@ -10,7 +10,9 @@ import asteroids.model.Bullet;
 import asteroids.model.Entity;
 import asteroids.model.Ship;
 import asteroids.model.World;
-import asteroids.model.Program;
+import asteroids.model.programs.Program;
+import asteroids.model.programs.ProgramFactory;
+import asteroids.part2.facade.IFacade;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part2.CollisionListener;
 import asteroids.util.ModelException;
@@ -474,14 +476,12 @@ public class Facade implements asteroids.part3.facade.IFacade{
 
 	@Override
 	public List<Object> executeProgram(Ship ship, double dt) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return ship.getShipProgram().execute(dt);
 	}
 
 	@Override
 	public IProgramFactory<?, ?, ?, ? extends Program> createProgramFactory() throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return new IProgramFactory();
 	}
 
 	
