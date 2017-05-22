@@ -1136,6 +1136,7 @@ public class Part2TestsFull {
     assertEquals(9, facade.getShipVelocity(ship)[0], EPSILON);
     assertEquals(0, facade.getShipVelocity(ship)[1], EPSILON);
     score += 10;
+    
   }
 
   @Test
@@ -1186,6 +1187,16 @@ public class Part2TestsFull {
     facade.evolve(world, 80, null);
     System.out.println("upperboundtestVEL= " + ship1.getVelocity()[1]);
     System.out.println("upperboundtestPOS= " + ship1.getPosition()[1]);
+  }
+  
+  @Test
+  public void testRIGHTBOUND() throws ModelException {
+    World world = facade.createWorld(1000, 1000);
+    Ship ship1 = facade.createShip(900, 200, 10, 10, 50, 0, 1.0E20);
+    facade.addShipToWorld(world, ship1);
+    facade.evolve(world, 10, null);
+    System.out.println("rightboundtestVEL= " + ship1.getVelocity()[1]);
+    System.out.println("rightboundtestPOS= " + ship1.getPosition()[1]);
   }
   
 

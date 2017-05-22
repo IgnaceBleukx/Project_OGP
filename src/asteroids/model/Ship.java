@@ -166,9 +166,7 @@ public class Ship extends Entity {
 		if (a <= 0){
 			a = 0;
 		}
-		this.setVelocity(this.getVelocity()[0] + a * Math.cos(this.getOrientation()), this.getVelocity()[1] + a * Math.sin(this.getOrientation()));
-		
-		
+
 		double newXVelocity = this.getVelocity()[0] + a * Math.cos(this.getOrientation())*dt; 
 		double newYVelocity = this.getVelocity()[1] + a * Math.sin(this.getOrientation())*dt;
 		double tempVelocity = Math.sqrt(Math.pow(newXVelocity, 2) + Math.pow(newYVelocity, 2));

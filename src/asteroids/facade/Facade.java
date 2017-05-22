@@ -10,7 +10,6 @@ import asteroids.model.Bullet;
 import asteroids.model.Entity;
 import asteroids.model.Ship;
 import asteroids.model.World;
-import asteroids.part2.facade.IFacade;
 import asteroids.model.Program;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part2.CollisionListener;

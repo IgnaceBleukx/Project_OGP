@@ -210,10 +210,6 @@ public class Entity {
 		double yMaxBound = ((this.getWorld().getDimension()[1]-this.getRadius())-this.getPosition()[1])/(this.getVelocity()[1]);
 		double xMinBound = (this.getRadius()-this.getPosition()[0])/(this.getVelocity()[0]);
 		double yMinBound = (this.getRadius()-this.getPosition()[1])/(this.getVelocity()[1]);
-		System.out.println("xmaxbound =" + xMaxBound);
-		System.out.println("yaxbound =" + yMaxBound);
-		System.out.println("xminbound =" + xMinBound);
-		System.out.println("yminbound =" + yMinBound);
 		
 		
 		if(this.getVelocity()[0] > 0) {
@@ -282,16 +278,16 @@ public class Entity {
 			double[] boundaryColPos;
 			double xPosColBound = this.getVelocity()[0]*this.getTimeCollisionBoundary() + this.getPosition()[0];
 			double yPosColBound = this.getVelocity()[1]*this.getTimeCollisionBoundary() + this.getPosition()[1];
-			if (xPosColBound == this.getWorld().getDimension()[0]-this.getRadius()){
-				xPosColBound += this.getRadius();
+			if (xPosColBound >= (this.getWorld().getDimension()[0]-this.getRadius())*0.99 && xPosColBound <= (this.getWorld().getDimension()[0]-this.getRadius())*1.01){
+				xPosColBound = this.getWorld().getDimension()[0];
 			}
-			if (yPosColBound == this.getWorld().getDimension()[1]-this.getRadius()){
-				yPosColBound += this.getRadius();
+			if (yPosColBound >= (this.getWorld().getDimension()[1]-this.getRadius())*0.99 && yPosColBound <= (this.getWorld().getDimension()[1]-this.getRadius())*1.01){
+				yPosColBound = this.getWorld().getDimension()[1];
 			}
-			if (xPosColBound == this.getRadius()){
+			if (xPosColBound >= this.getRadius()*0.99 && xPosColBound <= this.getRadius()*1.01){
 				xPosColBound = 0;
 			}
-			if (yPosColBound == this.getRadius()){
+			if (yPosColBound >= this.getRadius()*0.99 && yPosColBound <= this.getRadius()*1.01){
 				yPosColBound = 0;
 			}
 			
@@ -392,11 +388,16 @@ public class Entity {
 		System.out.println("this.getworlddimensionY = " + this.getWorld().getDimension()[1]);
 		System.out.println("this.getradius*0.99=  " + this.getRadius()*0.99);
 		System.out.println("test = " + this.getPositionCollisionBoundary()[0]);
+		System.out.println("test = " + this.getPositionCollisionBoundary()[1]);
+		double xPosColBound = this.getPositionCollisionBoundary()[0];
+		double yPosColBound = this.getPositionCollisionBoundary()[1];
 		
-		if (this.getPositionCollisionBoundary()[0] == 0 || this.getPositionCollisionBoundary()[0] == this.getWorld().getDimension()[0]){
+		if (xPosColBound == 0 || xPosColBound == this.getWorld().getDimension()[0]){
+			System.out.println("negative x velocity");
 			this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
 		}
-		if (this.getPositionCollisionBoundary()[1] == 0 || this.getPositionCollisionBoundary()[1] == this.getWorld().getDimension()[1]){
+		if (yPosColBound == 0 || yPosColBound == this.getWorld().getDimension()[1]){
+			System.out.println("negative y velocity");
 			this.setVelocity(this.getVelocity()[0], -this.getVelocity()[1]);
 		}
 		

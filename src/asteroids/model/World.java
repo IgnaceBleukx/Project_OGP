@@ -267,9 +267,7 @@ public class World extends Entity {
 		Entity collisionEntity2 = null;
 		boolean boundary = false;
 		for (Entity entity1 : this.getAllEntities()){
-			System.out.println("This is entity1=" + entity1);
 			for (Entity entity2 : this.getAllEntities()){
-				System.out.println("This is entity2=" + entity2);
 				
 				if (entity1 == entity2) {
 					if (entity1.getTimeCollisionBoundary() < nextCollisionTime && entity1.getTimeCollisionBoundary() >= 0){
@@ -326,10 +324,9 @@ public class World extends Entity {
 		if (nextCollisionTime > dt){
 			for(Entity entity : this.getAllEntities()){
 				entity.move(dt);
-				System.out.println("xposentity= " + entity.getPosition()[0]);
-				System.out.println("yposentity= " + entity.getPosition()[1]);
 				if (entity instanceof Ship && ((Ship) entity).inspectThruster() == true){
 					((Ship) entity).thrust(((Ship) entity).getShipAcceleration(),dt);
+
 					
 				}
 			}
@@ -338,21 +335,38 @@ public class World extends Entity {
 			
 			for (Entity entity: this.getAllEntities()){
 				entity.move(nextCollisionTime);
+				System.out.println("xposentity= " + entity.getPosition()[0]);
+				System.out.println("yposentity= " + entity.getPosition()[1]);
 				if (entity instanceof Ship && ((Ship) entity).inspectThruster() == true){
 					((Ship) entity).thrust(((Ship) entity).getShipAcceleration(),nextCollisionTime);
 					
 				}
 			}
 			if (entitiesNextCollision[1] == null){
+				
+				if (collisionListener != null) {
+					double x = entitiesNextCollision[0].getPositionCollisionBoundary()[0];
+					double y = entitiesNextCollision[0].getPositionCollisionBoundary()[1];
+					collisionListener.boundaryCollision(entitiesNextCollision[0], x, y);
+				}
 				this.collisionResolver(entitiesNextCollision[0]);
 			}
 			else{
+
+				
+				if (collisionListener != null) {
+					double x = entitiesNextCollision[0].getPositionCollisionEntity(entitiesNextCollision[1])[0];
+					double y = entitiesNextCollision[0].getPositionCollisionEntity(entitiesNextCollision[1])[1];
+				collisionListener.objectCollision(entitiesNextCollision[0], entitiesNextCollision[1], x, y);
+				}
+				
 				this.collisionResolver(entitiesNextCollision[0],entitiesNextCollision[1]);
 			}
+			
+
 			System.out.println("dt=" + dt);
 			System.out.println("nextCollisionTime=" + nextCollisionTime);
-			this.evolve(dt - nextCollisionTime, collisionListener);
-			
+			this.evolve(dt - nextCollisionTime, collisionListener);	
 			
 		}
 		
@@ -360,7 +374,7 @@ public class World extends Entity {
 
 	public void collisionResolver(Entity entity1, Entity entity2){
 		System.out.println("Entity 1 = " + entity1.toString());
-		 // System.out.println("Entity 2 = " + entity2.toString()); deze gaf ook een nullpointer als entity2 null is
+		System.out.println("Entity 2 = " + entity2.toString());
 		if (entity1 instanceof Ship && entity2 instanceof Ship){
 			((Ship) entity1).shipCollision((Ship) entity2);
 		}
@@ -398,7 +412,8 @@ public class World extends Entity {
 	public void collisionResolver(Entity entity){
 		System.out.println("collisionresolver entity = " + entity);
 		if (entity instanceof Bullet){
-			((Bullet) entity).boundaryCollision();
+			System.out.println("I resolved bullet boundary collision");
+			entity.boundaryCollision();
 		}
 		else if(entity instanceof Ship) {
 			entity.boundaryCollision();
