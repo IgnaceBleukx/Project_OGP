@@ -1,7 +1,7 @@
 package Expressions;
 
-import asteroids.model.Program;
 import asteroids.model.programs.Function;
+import asteroids.model.programs.Program;
 
 public class Expression {
 
