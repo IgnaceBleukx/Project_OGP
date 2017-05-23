@@ -22,10 +22,18 @@ public class GetRadiusExpression extends ValueExpression {
 	public void setExpression(Expression expression) {
 		this.expression = expression;
 	}
+
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
+	}
 	
 	@Override
 	public double evaluate() throws ModelException{
-		getExpression().setProgram(getProgram());
+		passInformation(getExpression());
 		try{
 			if (getExpression() instanceof EntityExpression){
 					return ((EntityExpression)getExpression()).evaluate().getRadius();
@@ -36,13 +44,5 @@ public class GetRadiusExpression extends ValueExpression {
 		}catch(NullPointerException e){
 			throw new ModelException("The expression evaluates to null");
 		}
-	}
-
-	public SourceLocation getSourceLocation() {
-		return sourceLocation;
-	}
-
-	public void setSourceLocation(SourceLocation sourceLocation) {
-		this.sourceLocation = sourceLocation;
 	}
 }

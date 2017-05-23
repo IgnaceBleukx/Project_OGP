@@ -29,8 +29,12 @@ public class TurnStatement extends VoidStatement {
 	private SourceLocation sourceLocation;
 	
 	public void execute() throws IllegalArgumentException, ModelException{
+		if (getFunction() != null){
+			throw new ModelException("Turn action in function body");
+		}
 		if(getAngle() instanceof ValueExpression){
 			try {
+				passInformation(getAngle());
 				this.getProgram().getShip().rotate(((ValueExpression) getAngle()).evaluate());
 			} catch (ModelException e) {
 				throw new ModelException("ModelException in TurnStatement");

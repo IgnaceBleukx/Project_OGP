@@ -29,21 +29,6 @@ public class LessExpression extends BooleanExpression {
 	private Expression ex2;
 	private SourceLocation sourceLocation;
 	
-	@Override
-	public boolean evaluate() throws ModelException{
-		if (getEx1() instanceof ValueExpression && getEx2() instanceof ValueExpression){
-			try{
-				return ((ValueExpression) getEx1()).evaluate() < ((ValueExpression) getEx2()).evaluate();
-			}catch (ModelException e){
-				throw new ModelException("ModelException in LessExpression");
-			}
-		}
-		else{
-			throw new IllegalArgumentException("The expression does not evaluate to a value");
-		}
-	}
-
-
 	public SourceLocation getSourceLocation() {
 		return sourceLocation;
 	}
@@ -51,5 +36,18 @@ public class LessExpression extends BooleanExpression {
 
 	public void setSourceLocation(SourceLocation sourceLocation) {
 		this.sourceLocation = sourceLocation;
+	}
+	
+
+	@Override
+	public boolean evaluate() throws ModelException{
+		if (getEx1() instanceof ValueExpression && getEx2() instanceof ValueExpression){
+			passInformation(getEx1());
+			passInformation(getEx2());
+			return ((ValueExpression) getEx1()).evaluate() < ((ValueExpression) getEx2()).evaluate();
+		}
+		else{
+			throw new ModelException("The expression does not evaluate to a value");
+		}
 	}
 }

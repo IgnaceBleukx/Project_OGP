@@ -33,11 +33,12 @@ public class ReturnStatement extends ValueStatement {
 	@Override
 	public double execute() throws ModelException{
 		if (getValue() instanceof ValueExpression){
-			try {
+//			try {
+				passInformation(getValue());
 				return ((ValueExpression) getValue()).evaluate();
-			} catch (ModelException e) {
-				throw new ModelException("ModelException in ReturnStatement");
-			}
+//			} catch (ModelException e) {
+//				throw new ModelException("ModelException in ReturnStatement");
+//			}
 		}
 		else{
 			throw new IllegalArgumentException("The expression does not evaluate to a value and thus cannot be returned");

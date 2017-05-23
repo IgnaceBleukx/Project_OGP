@@ -1,6 +1,7 @@
 package Statements;
 
 import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 
 public class FireStatement extends VoidStatement {
 
@@ -21,7 +22,12 @@ public class FireStatement extends VoidStatement {
 	private SourceLocation sourceLocation;
 	
 	@Override
-	public void execute(){
-		this.getFunction().getProgram().getShip().fire();
+	public void execute() throws ModelException{
+		if (this.getFunction() != null){
+			throw new ModelException("Fire action preformed in funtionbody");
+		}
+		else{
+			this.getProgram().getShip().fire();
+		}
 	}
 }

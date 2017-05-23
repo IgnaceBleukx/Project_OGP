@@ -12,7 +12,7 @@ public class GetDirectionExpression extends ValueExpression {
 	
 	@Override
 	public double evaluate(){
-		return this.getFunction().getProgram().getShip().getOrientation();
+		return this.getProgram().getShip().getOrientation();
 	}
 
 	public SourceLocation getSourceLocation() {

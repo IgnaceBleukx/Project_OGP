@@ -24,14 +24,11 @@ public class SqrtExpression extends ValueExpression {
 	@Override
 	public double evaluate() throws ModelException{
 		if (getExpression() instanceof ValueExpression){
-			try {
-				return Math.sqrt(((ValueExpression) getExpression()).evaluate());
-			} catch (ModelException e) {
-				throw new ModelException("ModelException in SqrtExpression");
-			}
+			passInformation(getExpression());
+			return Math.sqrt(((ValueExpression) getExpression()).evaluate());
 		}
 		else{
-			throw new IllegalArgumentException("The expression does not evaluate to a value");
+			throw new ModelException ("The expression does not evaluate to a value");
 		}
 	}
 

@@ -20,10 +20,19 @@ public class ChangeSignExpression extends ValueExpression {
 	public void setExpression(Expression expression) {
 		this.expression = expression;
 	}
+
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
+	}
 	
 	@Override
 	public double evaluate() throws ModelException{
 		if (getExpression() instanceof ValueExpression){
+			passInformation(getExpression());
 			try {
 				return -((ValueExpression) getExpression()).evaluate();
 			} catch (ModelException e) {
@@ -33,13 +42,5 @@ public class ChangeSignExpression extends ValueExpression {
 		else{
 			throw new ModelException("The expression is not of the type 'ValueExpression'");
 		}
-	}
-
-	public SourceLocation getSourceLocation() {
-		return sourceLocation;
-	}
-
-	public void setSourceLocation(SourceLocation sourceLocation) {
-		this.sourceLocation = sourceLocation;
 	}
 }

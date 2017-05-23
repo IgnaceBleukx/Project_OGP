@@ -2,11 +2,13 @@ package Expressions;
 
 import java.util.List;
 
+import asteroids.model.programs.Function;
 import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 
 public class FunctionCallExpression extends ValueExpression {
 
-	public FunctionCallExpression(String functionName, List<Expression> actualArs, SourceLocation sourceLocation){
+	public FunctionCallExpression(String functionName, List<Expression> actualArgs, SourceLocation sourceLocation){
 		setFunctionName(functionName);
 		setActualArgs(actualArgs);
 		setSourceLocation(sourceLocation);
@@ -34,4 +36,21 @@ public class FunctionCallExpression extends ValueExpression {
 	private String functionName;
 	private List<Expression> actualArgs;
 	private SourceLocation sourceLocation;
+	
+	@Override
+	public double evaluate() throws ModelException{
+		List<Function> functions = this.getProgram().getFunctions();
+		Function toExecute = null;
+		for (Function function : functions){
+			passInformation(function);
+			if (function.getFunctionName().equals(this.getFunctionName())){
+				toExecute = function;
+			}
+		}
+		if (toExecute == null){
+			throw new ModelException("The given functionname does not refer to a function in the program");
+		}
+		toExecute.setParameters(getActualArgs());
+		return toExecute.execute();
+	}
 }

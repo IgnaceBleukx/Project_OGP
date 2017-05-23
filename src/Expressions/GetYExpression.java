@@ -21,17 +21,6 @@ public class GetYExpression extends ValueExpression {
 	}
 
 	private Expression expression;
-	
-	@Override
-	public double evaluate() throws ModelException{
-		getExpression().setProgram(getProgram());
-		if (getExpression() instanceof EntityExpression){
-			return ((EntityExpression) getExpression()).evaluate().getPosition()[1];
-		}
-		else{
-			throw new ModelException("The expression does not evaluate to an entity");
-		}
-	}
 
 	public SourceLocation getSourceLocation() {
 		return sourceLocation;
@@ -39,5 +28,16 @@ public class GetYExpression extends ValueExpression {
 
 	public void setSourceLocation(SourceLocation sourceLocation) {
 		this.sourceLocation = sourceLocation;
+	}
+	
+	@Override
+	public double evaluate() throws ModelException{
+		if (getExpression() instanceof EntityExpression){
+			passInformation(getExpression());
+			return ((EntityExpression) getExpression()).evaluate().getPosition()[1];
+		}
+		else{
+			throw new ModelException("The expression does not evaluate to an entity");
+		}
 	}
 }

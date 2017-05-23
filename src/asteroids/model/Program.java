@@ -13,11 +13,6 @@ public class Program {
 
 	public Program(List<Function> functions, Statement main){
 		setFunctions(functions);
-		for (Function function : getFunctions()){
-			function.setProgram(this);
-			function.getBody().setFunction(function);
-			function.getBody().setProgram(this);
-		}
 		setMain(main);
 		getMain().setProgram(this); 
 	}
@@ -60,16 +55,25 @@ public class Program {
 		printedObjects.add(object);
 	}
 	
+	public List<Object> getVariables() {
+		return variables;
+	}
+	public void addVariable(Object variable) {
+		this.variables.add(variable);
+	}
+
+	private List<Object> variables = new ArrayList<Object>();
+	
 	public List<Object> execute(double dt) throws ModelException{
 		if (getMain() instanceof ValueStatement){
 			((ValueStatement) getMain()).execute();
 		}
 		if (getMain() instanceof VoidStatement){
-			try {
+	//		try {
 				((VoidStatement) getMain()).execute();
-			} catch (ModelException e) {
-				throw new ModelException("ModelException in program");
-			}
+//			}catch(ModelException e){
+//				throw new ModelException("ModelException in program");
+//			 }
 		}
 		return getPrintedObjects();
 	}

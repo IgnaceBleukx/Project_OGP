@@ -13,6 +13,14 @@ public class AsteroidExpression extends EntityExpression {
 	}
 	
 	private SourceLocation sourceLocation;
+
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
+	}
 	
 	@Override
 	public Asteroid evaluate(){
@@ -27,13 +35,5 @@ public class AsteroidExpression extends EntityExpression {
 			}
 		}
 		return closestTo;
-	}
-
-	public SourceLocation getSourceLocation() {
-		return sourceLocation;
-	}
-
-	public void setSourceLocation(SourceLocation sourceLocation) {
-		this.sourceLocation = sourceLocation;
 	}
 }

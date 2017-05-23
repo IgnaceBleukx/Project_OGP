@@ -22,10 +22,18 @@ public class GetVXExpression extends ValueExpression {
 	}
 
 	private Expression expression;
+
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
+	}
 	
 	@Override
 	public double evaluate() throws ModelException{
-		getExpression().setProgram(getProgram());
+		passInformation(getExpression());
 		try{
 			if (getExpression() instanceof EntityExpression){
 				return ((EntityExpression) getExpression()).evaluate().getVelocity()[0];
@@ -36,14 +44,6 @@ public class GetVXExpression extends ValueExpression {
 		}catch(NullPointerException e){
 			throw new ModelException("NullpointerException in GetVXExpression");
 		}
-	}
-
-	public SourceLocation getSourceLocation() {
-		return sourceLocation;
-	}
-
-	public void setSourceLocation(SourceLocation sourceLocation) {
-		this.sourceLocation = sourceLocation;
 	}
 	
 }

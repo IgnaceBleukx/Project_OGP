@@ -32,9 +32,9 @@ public class GetVYExpression extends ValueExpression {
 	
 	@Override
 	public double evaluate() throws ModelException{
-		getExpression().setProgram(getProgram());
-		if (expression instanceof EntityExpression){
-			return ((EntityExpression) expression).evaluate().getVelocity()[1];
+		passInformation(getExpression());
+		if (getExpression() instanceof EntityExpression){
+			return ((EntityExpression) getExpression()).evaluate().getVelocity()[1];
 		}
 		else{
 			throw new ModelException("The expression does not evaluate to an entity");

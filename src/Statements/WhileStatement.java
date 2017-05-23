@@ -7,7 +7,7 @@ import asteroids.util.ModelException;
 
 public class WhileStatement extends VoidStatement {
 	
-	public WhileStatement(Expression condition, Statement Body, SourceLocation sourceLocation){
+	public WhileStatement(Expression condition, Statement body, SourceLocation sourceLocation){
 		setCondition(condition);
 		setBody(body);
 		setSourceLocation(sourceLocation);
@@ -44,8 +44,10 @@ public class WhileStatement extends VoidStatement {
 	@Override
 	public void execute() throws ModelException{
 		if (getCondition() instanceof BooleanExpression){
+			passInformation(getCondition());
 			try {
 				while (((BooleanExpression) getCondition()).evaluate()){
+					passInformation(getBody());
 					if (getBody() instanceof ValueStatement){
 						((ValueStatement) getBody()).execute();	
 					}

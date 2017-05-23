@@ -32,6 +32,7 @@ public class NotExpression extends BooleanExpression {
 	public boolean evaluate() throws ModelException{
 		if (getExpression() instanceof BooleanExpression){
 			try {
+				passInformation(getExpression());
 				return !((BooleanExpression) getExpression()).evaluate();
 			} catch (ModelException e) {
 				throw new ModelException("ModelException in NotExpression");

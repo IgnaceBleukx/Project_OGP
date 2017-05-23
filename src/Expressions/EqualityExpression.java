@@ -28,10 +28,18 @@ public class EqualityExpression extends BooleanExpression {
 	private Expression ex2;
 	private SourceLocation sourceLocation;
 	
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
+	}
+	
 	@Override
 	public boolean evaluate() throws ModelException{
-		getEx1().setProgram(getProgram());
-		getEx2().setProgram(getProgram());
+		passInformation(getEx1());
+		passInformation(getEx2());
 		if (ex1 instanceof EntityExpression && ex2 instanceof EntityExpression){
 			return ((EntityExpression) getEx1()).evaluate().equals(((EntityExpression) getEx2()).evaluate());
 		}
@@ -48,13 +56,5 @@ public class EqualityExpression extends BooleanExpression {
 		else{
 			return false;
 		}
-	}
-
-	public SourceLocation getSourceLocation() {
-		return sourceLocation;
-	}
-
-	public void setSourceLocation(SourceLocation sourceLocation) {
-		this.sourceLocation = sourceLocation;
 	}
 }

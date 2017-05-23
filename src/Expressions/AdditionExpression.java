@@ -27,20 +27,6 @@ public class AdditionExpression extends ValueExpression {
 	private Expression ex1;
 	private Expression ex2;
 	private SourceLocation sourceLocation;
-	
-	@Override
-	public double evaluate() throws ModelException{
-		if (getEx1() instanceof ValueExpression && getEx2() instanceof ValueExpression){
-			try {
-				return ((ValueExpression)getEx1()).evaluate() + ((ValueExpression)getEx2()).evaluate();
-			} catch (ModelException e) {
-				throw new ModelException("ModelException in AdditionExpression");
-			}
-		}
-		else{
-			throw new IllegalArgumentException();
-		}
-	}
 
 	public SourceLocation getSourceLocation() {
 		return sourceLocation;
@@ -48,5 +34,17 @@ public class AdditionExpression extends ValueExpression {
 
 	public void setSourceLocation(SourceLocation sourceLocation) {
 		this.sourceLocation = sourceLocation;
+	}
+	
+	@Override
+	public double evaluate() throws ModelException{
+		if (getEx1() instanceof ValueExpression && getEx2() instanceof ValueExpression){
+			passInformation(getEx1());
+			passInformation(getEx2());
+			return ((ValueExpression)getEx1()).evaluate() + ((ValueExpression)getEx2()).evaluate();
+		}
+		else{
+			throw new ModelException("One of the arguments does not evaluate to a value");
+		}
 	}
 }

@@ -14,19 +14,6 @@ public class SequenceStatement extends VoidStatement {
 		setSourceLocation(sourceLocation);
 	}
 	
-	@Override
-	public void setProgram(Program program){
-		this.program = program;
-		for (Statement statement : statements){
-			statement.setProgram(getProgram());
-		}
-	}
-	
-	@Override
-	public Program getProgram(){
-		return this.program;
-	}
-	
 	public List<Statement> getStatements() {
 		return statements;
 	}
@@ -42,23 +29,23 @@ public class SequenceStatement extends VoidStatement {
 		this.sourceLocation = sourceLocation;
 	}
 
-	private Program program;
-	
+		
 	private List<Statement> statements;
 	private SourceLocation sourceLocation;
 	
 	@Override
 	public void execute() throws ModelException{
 		for (Statement statement : getStatements()){
+			passInformation(statement);
 			if (statement instanceof ValueStatement){
 				((ValueStatement) statement).execute();
 			}
 			if (statement instanceof VoidStatement){
-				try {
+//			try {
 					((VoidStatement) statement).execute();
-				} catch (ModelException e) {
-					throw new ModelException("ModelException in SequenceStatements");
-				}
+//			} catch (ModelException e) {
+//					throw new ModelException("ModelException in SequenceStatements");
+//				}
 			}
 		}
 	}

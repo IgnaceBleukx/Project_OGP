@@ -1,6 +1,7 @@
 package Statements;
 
 import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 
 public class ThrustOffStatement extends VoidStatement{
 	
@@ -20,9 +21,15 @@ public class ThrustOffStatement extends VoidStatement{
 
 	private SourceLocation sourceLocation;
 
+	
 	@Override
-	public void execute(){
-		this.getProgram().getShip().thrustOn();
+	public void execute() throws ModelException{
+		if (this.getFunction() != null){
+			throw new ModelException("ThrustOff action in functio body");
+		}
+		else{
+			this.getProgram().getShip().thrustOn();
+		}
 	}
 
 }

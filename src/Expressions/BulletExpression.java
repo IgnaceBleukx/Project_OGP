@@ -13,9 +13,18 @@ public class BulletExpression extends EntityExpression {
 	}
 	
 	private SourceLocation sourceLocation;
+
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
+	}
 	
+	@Override
 	public Bullet evaluate(){
-		Set<Bullet> bullets = this.getFunction().getProgram().getShip().getWorld().getAllBullets();
+		Set<Bullet> bullets = this.getProgram().getShip().getWorld().getAllBullets();
 		Ship ship = this.getFunction().getProgram().getShip();
 		Bullet bulletFiredByShip = null;
 		for (Bullet bullet : bullets){
@@ -25,13 +34,5 @@ public class BulletExpression extends EntityExpression {
 			}
 		}
 		return bulletFiredByShip;
-	}
-
-	public SourceLocation getSourceLocation() {
-		return sourceLocation;
-	}
-
-	public void setSourceLocation(SourceLocation sourceLocation) {
-		this.sourceLocation = sourceLocation;
 	}
 }

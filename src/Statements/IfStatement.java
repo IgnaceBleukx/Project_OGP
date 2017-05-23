@@ -51,32 +51,37 @@ public class IfStatement extends ValueStatement{
 	private Statement IfBody;
 	private Statement elseBody;
 	private SourceLocation sourceLocation;
+
+	
 	@Override
 	public double execute() throws ModelException{
 		if(getCondition() instanceof BooleanExpression){
-			try{
-				if (((BooleanExpression) getCondition()).evaluate()){
-					getIfBody().setProgram(getProgram());
-					if (getIfBody() instanceof ValueStatement){
-						return ((ValueStatement) getIfBody()).execute();
-					}
-					else{
-						((VoidStatement) getIfBody()).execute();
-						return (Double) null;
-					}
+			passInformation(getCondition());
+			if (((BooleanExpression) getCondition()).evaluate()){
+				passInformation(getIfBody());
+				if (getIfBody() instanceof ValueStatement){
+					return ((ValueStatement) getIfBody()).execute();
 				}
 				else{
-					getElseBody().setProgram(getProgram());
+					((VoidStatement) getIfBody()).execute();
+					return Double.NaN;
+				}
+			}
+			else{
+				if (getElseBody() != null){
 					if (getElseBody() != null && getElseBody() instanceof ValueStatement){
+						passInformation(getElseBody());
 						return ((ValueStatement) getElseBody()).execute();
 					}
 					else{
+						passInformation(getElseBody());
 						((VoidStatement) getElseBody()).execute();
-						return (Double) null;
+						return Double.NaN;
 					}
 				}
-			}catch (ModelException e){
-				throw new ModelException("ModelException in IfStatement");
+				else{
+					return Double.NaN;
+				}
 			}
 		}
 		else{

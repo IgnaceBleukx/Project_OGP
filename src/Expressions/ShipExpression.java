@@ -15,8 +15,8 @@ public class ShipExpression extends EntityExpression {
 	
 	@Override
 	public Ship evaluate(){
-		Set<Ship> ships = this.getFunction().getProgram().getShip().getWorld().getAllShips();
-		Ship thisShip = this.getFunction().getProgram().getShip();
+		Set<Ship> ships = this.getProgram().getShip().getWorld().getAllShips();
+		Ship thisShip = this.getProgram().getShip();
 		Ship closestTo = null;
 		double distTo = Double.POSITIVE_INFINITY;
 		for (Ship ship : ships){

@@ -35,25 +35,29 @@ public class PrintStatement extends VoidStatement {
 	
 	@Override
 	public void execute() throws ModelException{
-		getValue().setProgram(getProgram());
-		if (getValue() instanceof ValueExpression){
-			try{
-				System.out.println(((ValueExpression) getValue()).evaluate());
-				this.getProgram().addPrintedObject(((ValueExpression) getValue()).evaluate());
-			}catch (ModelException e){
-				throw new ModelException("ModelException in PrintStatement");
+		if (getFunction() != null){
+			throw new ModelException("Printstament in function body");
+		}
+		else{
+			passInformation(getValue());
+			if (getValue() instanceof ValueExpression){
+//				try{
+					System.out.println(((ValueExpression) getValue()).evaluate());
+					this.getProgram().addPrintedObject(((ValueExpression) getValue()).evaluate());
+//				}catch (ModelException e){
+//					throw new ModelException("ModelException in PrintStatement");
+//				}
+			}
+			else if (getValue() instanceof EntityExpression){
+				if(((EntityExpression) getValue()).evaluate() != null){
+					System.out.println(((EntityExpression) getValue()).evaluate().toString());
+				}	
+				this.getProgram().addPrintedObject(((EntityExpression) getValue()).evaluate());
+			}
+			else if (getValue() instanceof BooleanExpression){
+				this.getProgram().addPrintedObject(((BooleanExpression) getValue()).evaluate());
+				System.out.println(((BooleanExpression) getValue()).evaluate());
 			}
 		}
-		else if (getValue() instanceof EntityExpression){
-			if(((EntityExpression) getValue()).evaluate() != null){
-				System.out.println(((EntityExpression) getValue()).evaluate().toString());
-			}	
-			this.getProgram().addPrintedObject(((EntityExpression) getValue()).evaluate());
-		}
-		else if (getValue() instanceof BooleanExpression){
-			this.getProgram().addPrintedObject(((BooleanExpression) getValue()).evaluate());
-			System.out.println(((BooleanExpression) getValue()).evaluate());
-		}
-				
 	}
 }
