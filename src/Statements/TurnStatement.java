@@ -28,7 +28,7 @@ public class TurnStatement extends VoidStatement {
 
 	private SourceLocation sourceLocation;
 	
-	public void execute() throws IllegalArgumentException, ModelException{
+	public void execute() throws ModelException{
 		if (getFunction() != null){
 			throw new ModelException("Turn action in function body");
 		}

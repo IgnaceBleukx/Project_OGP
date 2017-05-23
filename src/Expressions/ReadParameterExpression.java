@@ -32,14 +32,19 @@ public class ReadParameterExpression extends ValueExpression{
 	}
 	
 	@Override
-	public  double evaluate() throws NumberFormatException, ModelException{
+	public  double evaluate() throws ModelException{
 		if (getFunction() != null){
 			List<Expression> parameters = getFunction().getParameters();
-			if (parameters.get(Integer.parseInt(getParameterName().substring(1))-1) instanceof ValueExpression){
-				return ((ValueExpression) parameters.get(Integer.parseInt(getParameterName().substring(1))-1)).evaluate();
-			}
-			else{
-				throw new ModelException("The parameter given does not evaluate to a value");
+			try{
+				if (parameters.get(Integer.parseInt(getParameterName().substring(1))-1) instanceof ValueExpression){
+					passInformation(parameters.get(Integer.parseInt(getParameterName().substring(1))-1));
+					return ((ValueExpression) parameters.get(Integer.parseInt(getParameterName().substring(1))-1)).evaluate();
+				}
+				else{
+					throw new ModelException("The parameter given does not evaluate to a value");
+				}
+			}catch(IndexOutOfBoundsException e){
+				throw new ModelException("To little parameters given");
 			}
 		}
 		else{

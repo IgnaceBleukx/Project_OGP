@@ -82,14 +82,14 @@ public class World extends Entity {
 	 */
 	
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException{
-		try{
-			if (ship.getWorld() == null){
-				this.allShips.add(ship);
-				ship.setWorld(this);
-			}
+		if (ship != null && ship.getWorld() == null && ship.getPosition()[0] + ship.getRadius() <= this.getDimension()[0]
+									&& ship.getPosition()[1] + ship.getRadius() <= this.getDimension()[1])
+		{
+			this.getAllShips().add(ship);
+			ship.setWorld(this);
 		}
-		catch(NullPointerException exc){
-			throw new IllegalArgumentException();
+		else{
+			throw new IllegalArgumentException("The ship is null or out of bounds");
 		}
 	}
 	
@@ -101,12 +101,13 @@ public class World extends Entity {
 
 	
 	public void removeShipFromWorld(Ship ship) throws IllegalArgumentException{
-		try{
-		this.allShips.remove(ship);
-		ship.setWorld(null);
+		
+		if (ship != null && this.getAllShips().contains(ship)){
+			this.getAllShips().remove(ship);
+			ship.setWorld(null);
 		}
-		catch(NullPointerException exc){
-			throw new IllegalArgumentException();
+		else{
+			throw new IllegalArgumentException("The given ship is null or the world does not contain the given ship");
 		}
 		
 	}

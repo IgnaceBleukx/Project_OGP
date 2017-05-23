@@ -34,16 +34,15 @@ public class GetVXExpression extends ValueExpression {
 	@Override
 	public double evaluate() throws ModelException{
 		passInformation(getExpression());
-		try{
 			if (getExpression() instanceof EntityExpression){
+				if (((EntityExpression) getExpression()).evaluate() != null){
 				return ((EntityExpression) getExpression()).evaluate().getVelocity()[0];
+				}
+				else{
+					throw new ModelException("The expression evaluates to null");
+				}
 			}
-		else{
 			throw new ModelException("The expression does not evaluate to an entity");
-		}
-		}catch(NullPointerException e){
-			throw new ModelException("NullpointerException in GetVXExpression");
-		}
 	}
 	
 }

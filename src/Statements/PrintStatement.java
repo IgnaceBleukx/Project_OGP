@@ -41,12 +41,9 @@ public class PrintStatement extends VoidStatement {
 		else{
 			passInformation(getValue());
 			if (getValue() instanceof ValueExpression){
-//				try{
+	
 					System.out.println(((ValueExpression) getValue()).evaluate());
 					this.getProgram().addPrintedObject(((ValueExpression) getValue()).evaluate());
-//				}catch (ModelException e){
-//					throw new ModelException("ModelException in PrintStatement");
-//				}
 			}
 			else if (getValue() instanceof EntityExpression){
 				if(((EntityExpression) getValue()).evaluate() != null){

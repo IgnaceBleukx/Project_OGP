@@ -202,7 +202,7 @@ public class Facade implements asteroids.part3.facade.IFacade{
 		try{
 		world.addShipToWorld(ship);
 		}catch (IllegalArgumentException exc){
-			throw new ModelException("The ship is null");
+			throw new ModelException("The ship is null or out of bounds");
 		}
 	}
 
@@ -210,7 +210,7 @@ public class Facade implements asteroids.part3.facade.IFacade{
 		try{
 			world.removeShipFromWorld(ship);
 		}catch(IllegalArgumentException exc){
-			throw new ModelException("The given ship equals null");
+			throw new ModelException("The given ship equals null or is not part of the world");
 		}
 		
 	}
@@ -418,8 +418,12 @@ public class Facade implements asteroids.part3.facade.IFacade{
 	@Override
 	public Planetoid createPlanetoid(double x, double y, double xVelocity, double yVelocity, double radius,
 			double totalTraveledDistance) throws ModelException {
-		Planetoid planetoid = new Planetoid(x,y,xVelocity, yVelocity, radius, totalTraveledDistance);
-		return planetoid;
+		try{
+			Planetoid planetoid = new Planetoid(x,y,xVelocity, yVelocity, radius, totalTraveledDistance);
+			return planetoid;
+		}catch (IllegalArgumentException e){
+			throw new ModelException("IllegalArgumentException in createPlanetoid");
+		}
 	}
 
 	@Override

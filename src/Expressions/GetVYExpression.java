@@ -34,7 +34,12 @@ public class GetVYExpression extends ValueExpression {
 	public double evaluate() throws ModelException{
 		passInformation(getExpression());
 		if (getExpression() instanceof EntityExpression){
-			return ((EntityExpression) getExpression()).evaluate().getVelocity()[1];
+			if (((EntityExpression) getExpression()).evaluate() != null){
+				return ((EntityExpression) getExpression()).evaluate().getVelocity()[1];
+			}
+			else{
+				throw new ModelException("The expression evaluates to null");
+			}
 		}
 		else{
 			throw new ModelException("The expression does not evaluate to an entity");

@@ -34,7 +34,12 @@ public class GetYExpression extends ValueExpression {
 	public double evaluate() throws ModelException{
 		if (getExpression() instanceof EntityExpression){
 			passInformation(getExpression());
+			if (((EntityExpression) getExpression()).evaluate() != null){
 			return ((EntityExpression) getExpression()).evaluate().getPosition()[1];
+			}
+			else{
+				throw new ModelException("The expression evaluates nu null");
+			}
 		}
 		else{
 			throw new ModelException("The expression does not evaluate to an entity");

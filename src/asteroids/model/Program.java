@@ -69,13 +69,10 @@ public class Program {
 			((ValueStatement) getMain()).execute();
 		}
 		if (getMain() instanceof VoidStatement){
-	//		try {
-				((VoidStatement) getMain()).execute();
-//			}catch(ModelException e){
-//				throw new ModelException("ModelException in program");
-//			 }
+			((VoidStatement) getMain()).execute();
 		}
 		return getPrintedObjects();
+		
 	}
 
 	

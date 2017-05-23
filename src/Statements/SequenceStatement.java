@@ -41,11 +41,8 @@ public class SequenceStatement extends VoidStatement {
 				((ValueStatement) statement).execute();
 			}
 			if (statement instanceof VoidStatement){
-//			try {
-					((VoidStatement) statement).execute();
-//			} catch (ModelException e) {
-//					throw new ModelException("ModelException in SequenceStatements");
-//				}
+				((VoidStatement) statement).execute();
+
 			}
 		}
 	}

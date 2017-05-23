@@ -45,9 +45,13 @@ public class WhileStatement extends VoidStatement {
 	public void execute() throws ModelException{
 		if (getCondition() instanceof BooleanExpression){
 			passInformation(getCondition());
-			try {
+			try{
 				while (((BooleanExpression) getCondition()).evaluate()){
 					passInformation(getBody());
+					getBody().setWhileState(true);
+					if (getBody() instanceof BreakStatement){
+						return;
+					}
 					if (getBody() instanceof ValueStatement){
 						((ValueStatement) getBody()).execute();	
 					}
@@ -55,8 +59,11 @@ public class WhileStatement extends VoidStatement {
 						((VoidStatement) getBody()).execute();
 					}
 				}
-			} catch (ModelException e) {
-				throw new ModelException("ModelException in WhileStatement");
+			}catch (IllegalStateException e){
+				throw new ModelException("Break used outside while");
+			}	
+			catch (ModelException e){
+				return;
 			}
 		}
 		else{

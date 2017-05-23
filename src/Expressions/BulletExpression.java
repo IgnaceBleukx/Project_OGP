@@ -25,10 +25,10 @@ public class BulletExpression extends EntityExpression {
 	@Override
 	public Bullet evaluate(){
 		Set<Bullet> bullets = this.getProgram().getShip().getWorld().getAllBullets();
-		Ship ship = this.getFunction().getProgram().getShip();
+		Ship ship = this.getProgram().getShip();
 		Bullet bulletFiredByShip = null;
 		for (Bullet bullet : bullets){
-			if(bullet.getBulletScource().equals(ship) && !ship.getAllBulletsShip().contains(bullet)){
+			if(bullet.getBulletScource() != null && bullet.getBulletScource().equals(ship) && !ship.getAllBulletsShip().contains(bullet)){
 				bulletFiredByShip = bullet;
 				break;
 			}
