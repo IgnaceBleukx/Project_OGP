@@ -2,7 +2,7 @@ package Expressions;
 
 import java.util.List;
 
-
+import Statements.BreakException;
 import asteroids.model.programs.Function;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.util.ModelException;
@@ -39,7 +39,7 @@ public class FunctionCallExpression extends ValueExpression {
 	private SourceLocation sourceLocation;
 	
 	@Override
-	public double evaluate() throws ModelException{
+	public double evaluate() throws ModelException, BreakException{
 		List<Function> functions = this.getProgram().getFunctions();
 		Function functionToExecute = null;
 		for (Function function : functions){

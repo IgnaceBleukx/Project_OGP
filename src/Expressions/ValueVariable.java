@@ -1,5 +1,6 @@
 package Expressions;
 
+import Statements.BreakException;
 import asteroids.util.ModelException;
 
 public class ValueVariable extends ValueExpression {
@@ -27,7 +28,7 @@ public class ValueVariable extends ValueExpression {
 	private Expression expression;
 	private String Name;
 	
-	public double evaluate() throws ModelException{
+	public double evaluate() throws ModelException, BreakException{
 		if (getExpression() instanceof ValueExpression){
 			passInformation(getExpression());
 			return ((ValueExpression) getExpression()).evaluate();

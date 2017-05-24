@@ -54,7 +54,7 @@ public class IfStatement extends ValueStatement{
 
 	
 	@Override
-	public double execute() throws ModelException{
+	public double execute() throws ModelException, BreakException{
 		if(getCondition() instanceof BooleanExpression){
 			passInformation(getCondition());
 			if (((BooleanExpression) getCondition()).evaluate()){
@@ -64,7 +64,7 @@ public class IfStatement extends ValueStatement{
 				}
 				else{
 					((VoidStatement) getIfBody()).execute();
-					return (Double)null;
+					return Double.NaN;
 				}
 			}
 			else{
@@ -80,7 +80,7 @@ public class IfStatement extends ValueStatement{
 					}
 				}
 				else{
-					return (Double)null;
+					return Double.NaN;
 				}
 			}
 		}

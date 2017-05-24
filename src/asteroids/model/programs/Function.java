@@ -6,6 +6,7 @@ import java.util.List;
 import Expressions.Expression;
 import Expressions.ValueVariable;
 import Expressions.Variable;
+import Statements.BreakException;
 import Statements.Statement;
 import Statements.ValueStatement;
 import Statements.VoidStatement;
@@ -102,7 +103,7 @@ public class Function {
 		function.setWhileState(getWhileState());
 	}
 	
-	public double execute() throws ModelException{
+	public double execute() throws ModelException, BreakException{
 		passInformation(getBody());
 		getBody().setFunction(this);
 		if (getBody() instanceof VoidStatement){

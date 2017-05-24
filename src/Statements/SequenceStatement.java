@@ -35,16 +35,7 @@ public class SequenceStatement extends ValueStatement {
 	private SourceLocation sourceLocation;
 	
 	@Override
-	public double execute() throws ModelException{
-//		for (Statement statement : getStatements()){
-//			passInformation(statement);
-//			if (statement instanceof ValueStatement){
-//				((ValueStatement) statement).execute();
-//			}
-//			if (statement instanceof VoidStatement){
-//				((VoidStatement) statement).execute();
-//			}
-//		}
+	public double execute() throws ModelException, BreakException{
 		int index = 0;
 		Statement statementToHandle = null;
 		while (index < getStatements().size()-1){

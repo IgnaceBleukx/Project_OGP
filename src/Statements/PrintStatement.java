@@ -34,7 +34,7 @@ public class PrintStatement extends VoidStatement {
 	}
 	
 	@Override
-	public void execute() throws ModelException{
+	public void execute() throws ModelException, BreakException{
 		if (getFunction() != null){
 			throw new ModelException("Printstament in function body");
 		}

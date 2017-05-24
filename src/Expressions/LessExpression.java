@@ -1,5 +1,6 @@
 package Expressions;
 
+import Statements.BreakException;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.util.ModelException;
 
@@ -40,7 +41,7 @@ public class LessExpression extends BooleanExpression {
 	
 
 	@Override
-	public boolean evaluate() throws ModelException{
+	public boolean evaluate() throws ModelException, BreakException{
 		if (getEx1() instanceof ValueExpression && getEx2() instanceof ValueExpression){
 			passInformation(getEx1());
 			passInformation(getEx2());

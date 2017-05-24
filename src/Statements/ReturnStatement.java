@@ -31,7 +31,7 @@ public class ReturnStatement extends ValueStatement {
 	}
 	
 	@Override
-	public double execute() throws ModelException{
+	public double execute() throws ModelException, BreakException{
 		if (getFunction() == null){
 			throw new ModelException("The returnstatement does not occur in a functionbody");
 		}

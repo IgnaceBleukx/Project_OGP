@@ -53,8 +53,7 @@ public class ReadVariableExpression extends ValueExpression {
 			if(toReturn == null){
 				throw new ModelException("The variable is undefined");
 			}
-			passInformation(toReturn.getExpression());
-			return ((ValueExpression) toReturn.getExpression()).evaluate();
+			return toReturn.getValue();
 						
 	}
 

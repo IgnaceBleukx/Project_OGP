@@ -1,5 +1,6 @@
 package Expressions;
 
+import Statements.BreakException;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.util.ModelException;
 
@@ -37,7 +38,7 @@ public class EqualityExpression extends BooleanExpression {
 	}
 	
 	@Override
-	public boolean evaluate() throws ModelException{
+	public boolean evaluate() throws ModelException, BreakException{
 		passInformation(getEx1());
 		passInformation(getEx2());
 		if (ex1 instanceof EntityExpression && ex2 instanceof EntityExpression){

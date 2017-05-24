@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Expressions.Expression;
+import Expressions.ValueExpression;
 import Expressions.ValueVariable;
 import Expressions.Variable;
 import asteroids.model.programs.Function;
@@ -35,7 +36,7 @@ public class AssignementStatement extends VoidStatement {
 	private Expression value;
 	private String variableName;
 	
-	public void execute() throws ModelException{
+	public void execute() throws ModelException, BreakException{
 		if (getProgram() == null){
 			throw new ModelException("The variable is not part of a program");
 		}
@@ -43,11 +44,11 @@ public class AssignementStatement extends VoidStatement {
 		if (getFunction() != null){
 			for (Variable variable : getFunction().getVariables()){
 				if (variable.getName().equals(this.getVariableName())){
-					variable.setExpression(this.getValue());
+					variable.setValue(((ValueExpression) this.getValue()).evaluate());
 					return;
 				}
 			}
-			getFunction().addVariable(new Variable(getValue(),getVariableName()));
+			getFunction().addVariable(new Variable(((ValueExpression) getValue()).evaluate(),getVariableName()));
 			return;
 		}
 		else{
@@ -60,11 +61,11 @@ public class AssignementStatement extends VoidStatement {
 			}
 			for (Variable variable : getProgram().getVariables()){
 				if (variable.getName().equals(this.getVariableName())){
-					variable.setExpression(this.getValue());
+					variable.setValue(((ValueExpression) this.getValue()).evaluate());
 					return;
 				}
 			}
-			getProgram().addVariable(new Variable(this.getValue(),this.getVariableName()));
+			getProgram().addVariable(new Variable(((ValueExpression)this.getValue()).evaluate(),this.getVariableName()));
 			return;
 			
 		}

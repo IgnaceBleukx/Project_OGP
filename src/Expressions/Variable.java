@@ -2,16 +2,16 @@ package Expressions;
 
 public class Variable {
 
-	public Variable(Expression expression, String name){
-		this.setExpression(expression);
+	public Variable(double value, String name){
+		this.setValue(value);
 		this.setName(name);
 	}
 	
-	public Expression getExpression() {
-		return expression;
+	public double getValue() {
+		return value;
 	}
-	public void setExpression(Expression expression) {
-		this.expression = expression;
+	public void setValue(double value) {
+		this.value = value;
 	}
 
 	public String getName() {
@@ -22,7 +22,7 @@ public class Variable {
 		this.name = name;
 	}
 
-	private Expression expression;
+	private double value;
 	private String name;
 
 	

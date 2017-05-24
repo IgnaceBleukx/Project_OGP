@@ -5,7 +5,7 @@ import Expressions.ValueExpression;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.util.ModelException;
 
-public class TurnStatement extends VoidStatement {
+public class TurnStatement extends ActionStatement {
 
 	public TurnStatement(Expression angle, SourceLocation sourceLocation){
 		setAngle(angle);
@@ -28,7 +28,7 @@ public class TurnStatement extends VoidStatement {
 
 	private SourceLocation sourceLocation;
 	
-	public void execute() throws ModelException{
+	public void execute() throws ModelException, BreakException{
 		if (getFunction() != null){
 			throw new ModelException("Turn action in function body");
 		}
