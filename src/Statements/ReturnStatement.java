@@ -35,12 +35,7 @@ public class ReturnStatement extends ValueStatement {
 		if (getFunction() == null){
 			throw new ModelException("The returnstatement does not occur in a functionbody");
 		}
-		if (getValue() instanceof ValueExpression){
-				passInformation(getValue());
-				return ((ValueExpression) getValue()).evaluate();
-		}
-		else{
-			throw new ModelException("The expression does not evaluate to a value and thus cannot be returned");
-		}
+		passInformation(getValue());
+		return ((ValueExpression) getValue()).evaluate();
 	}
 }

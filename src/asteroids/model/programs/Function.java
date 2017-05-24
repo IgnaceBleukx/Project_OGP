@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Expressions.Expression;
+import Expressions.ValueVariable;
+import Expressions.Variable;
 import Statements.Statement;
 import Statements.ValueStatement;
 import Statements.VoidStatement;
@@ -52,10 +54,10 @@ public class Function {
 		this.sourceLocation = sourceLocation;
 	}
 	
-	public List<Object> getVariables() {
+	public List<Variable> getVariables() {
 		return variables;
 	}
-	public void addVariable	(Object variable) {
+	public void addVariable	(Variable variable) {
 		this.variables.add(variable);
 	}
 
@@ -66,7 +68,7 @@ public class Function {
 		this.function = function;
 	}
 
-	public boolean isWhileState() {
+	public boolean getWhileState() {
 		return whileState;
 	}
 	public void setWhileState(boolean whileState) {
@@ -78,11 +80,31 @@ public class Function {
 	public void setParameters(List<Expression> parameters) {
 		this.parameters = parameters;
 	}
-	private List<Object> variables = new ArrayList<Object>();
+	private List<Variable> variables = new ArrayList<Variable>();
+	
+	
+	
+	public void passInformation(Statement statement){
+		statement.setFunction(getFunction());
+		statement.setProgram(getProgram());
+		statement.setWhileState(getWhileState());
+	}
+	
+	public void passInformation(Expression expression){
+		expression.setFunction(getFunction());
+		expression.setProgram(getProgram());
+		expression.setWhileState(getWhileState());
+	}
+	
+	public void passInformation(Function function){
+		function.setFunction(getFunction());
+		function.setProgram(getProgram());
+		function.setWhileState(getWhileState());
+	}
 	
 	public double execute() throws ModelException{
+		passInformation(getBody());
 		getBody().setFunction(this);
-		getBody().setProgram(getProgram());
 		if (getBody() instanceof VoidStatement){
 			((VoidStatement) getBody()).execute();
 			return Double.NaN;
@@ -93,7 +115,6 @@ public class Function {
 	}
 	
 	
-	
-	
-	
+		
 }
+

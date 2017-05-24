@@ -41,17 +41,18 @@ public class FunctionCallExpression extends ValueExpression {
 	@Override
 	public double evaluate() throws ModelException{
 		List<Function> functions = this.getProgram().getFunctions();
-		Function toExecute = null;
+		Function functionToExecute = null;
 		for (Function function : functions){
 			passInformation(function);
 			if (function.getFunctionName().equals(this.getFunctionName())){
-				toExecute = function;
+				functionToExecute = function;
 			}
 		}
-		if (toExecute == null){
+		if (functionToExecute == null){
 			throw new ModelException("The given functionname does not refer to a function in the program");
 		}
-		toExecute.setParameters(getActualArgs());
-		return toExecute.execute();
+		passInformation(functionToExecute);
+		functionToExecute.setParameters(getActualArgs());
+		return (double) functionToExecute.execute();
 	}
 }

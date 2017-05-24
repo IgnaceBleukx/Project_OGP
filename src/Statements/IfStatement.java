@@ -64,7 +64,7 @@ public class IfStatement extends ValueStatement{
 				}
 				else{
 					((VoidStatement) getIfBody()).execute();
-					return Double.NaN;
+					return (Double)null;
 				}
 			}
 			else{
@@ -76,11 +76,11 @@ public class IfStatement extends ValueStatement{
 					else{
 						passInformation(getElseBody());
 						((VoidStatement) getElseBody()).execute();
-						return Double.NaN;
+						return (Double)null;
 					}
 				}
 				else{
-					return Double.NaN;
+					return (Double)null;
 				}
 			}
 		}

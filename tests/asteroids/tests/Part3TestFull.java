@@ -16,6 +16,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
+import Expressions.ReadVariableExpression;
+import Statements.ReturnStatement;
+import Statements.SequenceStatement;
 import asteroids.model.Asteroid;
 import asteroids.model.Bullet;
 import asteroids.model.Planetoid;
@@ -1379,6 +1382,7 @@ public class Part3TestFull {
         + "print f(); " + "print g(); ";
     Program program = ProgramParser.parseProgramFromString(code, programFactory);
     facade.loadProgramOnShip(ship1, program);
+    System.out.println("Here we are");
     List<Object> results = facade.executeProgram(ship1, 1.0);
     Object[] expecteds = { 10.0, 1.0 };
     assertArrayEquals(expecteds, results.toArray());

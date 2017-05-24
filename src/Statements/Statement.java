@@ -3,6 +3,7 @@ package Statements;
 import Expressions.Expression;
 import asteroids.model.Program;
 import asteroids.model.programs.Function;
+import asteroids.util.ModelException;
 
 public class Statement {
 
@@ -52,5 +53,6 @@ public class Statement {
 		function.setProgram(getProgram());
 		function.setWhileState(getWhileState());
 	}
+
 
 }

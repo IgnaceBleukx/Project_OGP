@@ -1,6 +1,12 @@
 package Statements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Expressions.Expression;
+import Expressions.ValueVariable;
+import Expressions.Variable;
+import asteroids.model.programs.Function;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.util.ModelException;
 
@@ -33,23 +39,34 @@ public class AssignementStatement extends VoidStatement {
 		if (getProgram() == null){
 			throw new ModelException("The variable is not part of a program");
 		}
+		passInformation(getValue());
 		if (getFunction() != null){
-			for (Object variable : getFunction().getVariables()){
-				if (((AssignementStatement) variable).getVariableName().equals(this.getVariableName())){
-					((AssignementStatement) variable).setValue(this.getValue());
+			for (Variable variable : getFunction().getVariables()){
+				if (variable.getName().equals(this.getVariableName())){
+					variable.setExpression(this.getValue());
 					return;
 				}
 			}
-			getFunction().addVariable(this);
+			getFunction().addVariable(new Variable(getValue(),getVariableName()));
+			return;
 		}
 		else{
-			for (Object variable : getProgram().getVariables()){
-				if (((AssignementStatement) variable).getVariableName().equals(this.getVariableName())){
-					((AssignementStatement) variable).setValue(this.getValue());
+			List<String> functionNames = new ArrayList<String>();
+			for (Function function : getProgram().getFunctions()){
+				functionNames.add(function.getFunctionName());
+			}
+			if (functionNames.contains(getVariableName())){
+				throw new ModelException("The variableName is the same as a functioName");
+			}
+			for (Variable variable : getProgram().getVariables()){
+				if (variable.getName().equals(this.getVariableName())){
+					variable.setExpression(this.getValue());
 					return;
 				}
 			}
-			getProgram().addVariable(this);
+			getProgram().addVariable(new Variable(this.getValue(),this.getVariableName()));
+			return;
+			
 		}
 	}
 	
