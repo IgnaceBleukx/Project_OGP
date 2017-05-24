@@ -1,7 +1,6 @@
 package Statements;
 
 import Expressions.Expression;
-import asteroids.model.programs.Function;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.util.ModelException;
 
@@ -33,11 +32,6 @@ public class AssignementStatement extends VoidStatement {
 	public void execute() throws ModelException{
 		if (getProgram() == null){
 			throw new ModelException("The variable is not part of a program");
-		}
-		for (Function function : getProgram().getFunctions()){
-			if (function.getFunctionName().equals(this.getVariableName())){
-				throw new ModelException("The name is already in use for a function");
-			}
 		}
 		if (getFunction() != null){
 			for (Object variable : getFunction().getVariables()){

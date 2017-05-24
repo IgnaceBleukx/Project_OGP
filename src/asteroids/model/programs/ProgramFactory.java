@@ -120,7 +120,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Fu
 
 	@Override
 	public Expression createPlanetExpression(SourceLocation location) {
-		return new PlanetExpression(location);
+		return new PlanetoidExpression(location);
 	}
 
 	@Override
