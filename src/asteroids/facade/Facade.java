@@ -202,7 +202,7 @@ public class Facade implements asteroids.part3.facade.IFacade{
 		try{
 		world.addShipToWorld(ship);
 		}catch (IllegalArgumentException exc){
-			throw new ModelException("The ship is null or out of bounds");
+			throw new ModelException("The ship is null or out of bounds or is already in a world");
 		}
 	}
 
@@ -221,7 +221,6 @@ public class Facade implements asteroids.part3.facade.IFacade{
 		}catch(IllegalArgumentException e){
 			throw new ModelException("The bullet is out of bounds or null");
 		}
-		
 	}
 
 	public void removeBulletFromWorld(World world, Bullet bullet) throws ModelException {
@@ -237,7 +236,11 @@ public class Facade implements asteroids.part3.facade.IFacade{
 	}
 
 	public void loadBulletOnShip(Ship ship, Bullet bullet) throws ModelException {
+		try{
 		ship.loadBulletOnShip(bullet);
+		}catch(IllegalArgumentException exc){
+			throw new ModelException("The bullet is null or the bullet is already in a World");
+		}
 	}
 
 	public void loadBulletsOnShip(Ship ship, Collection<Bullet> bullets) throws ModelException {

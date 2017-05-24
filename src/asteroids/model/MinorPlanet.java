@@ -2,10 +2,11 @@ package asteroids.model;
 
 public class MinorPlanet extends Entity {
 
-	public void setMass(){
-		if (this instanceof Asteroid){
-			this.mass = 4.0 * Math.pow(this.getRadius(), 3) * this.getDensity() / 4.0;
-		}
+	public void setMass(){	
+		this.mass = (4.0/3.0)*Math.PI*Math.pow(this.getRadius(),3)*this.getDensity();
+		System.out.println("this.Getdensity= " + this.getDensity());
+		System.out.println("this.mass=" + this.mass);
+		System.out.println("this.getradiuss=" + Math.pow(this.getRadius(),3));
 	}
 	
 	public double getMass(){

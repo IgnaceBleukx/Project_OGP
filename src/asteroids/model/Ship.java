@@ -12,7 +12,7 @@ import java.util.Set;
  * Subclass of class Entity
  * 
  * @invar The mass of a ship must be a valid mass.
- * 			| isValidMass(getMass())
+ * 		 | isValidMass(getMass())
  * 
  */
 
@@ -246,17 +246,16 @@ public class Ship extends Entity {
 	 * 			| bullet.getVelocity == this.getVelocity
 	 */
 	public void loadBulletOnShip(Bullet bullet) throws IllegalArgumentException{
-		if (this.getNbBulletsOnShip() < this.maxNbOfBullets){
-			if (bullet == null){
-				throw new IllegalArgumentException();
-			}
+		if (bullet == null || !(bullet.getWorld() == null)){
+			throw new IllegalArgumentException();
+		}
+		else if (this.getNbBulletsOnShip() < this.maxNbOfBullets){
 			this.allBulletsShip.add(bullet);
 			bullet.setShip(this);
 			bullet.setCollisionState(false);
 			bullet.setPosition(this.getPosition()[0], this.getPosition()[1]);
 			bullet.setVelocity(this.getVelocity()[0], this.getVelocity()[1]);
 		}
-		
 	}
 	
 	public void loadBulletsOnShip(Collection<Bullet> bullets) throws IllegalArgumentException{
@@ -308,7 +307,7 @@ public class Ship extends Entity {
 		if (this.getWorld() != null && this.getNbBulletsOnShip() > 0){
 			Bullet bulletToBeFired = allBulletsShip.iterator().next();
 			this.removeBulletFromShip(bulletToBeFired);
-			this.getWorld().addBulletToWorld(bulletToBeFired);
+
 			bulletToBeFired.setCollisionState(true);
 			bulletToBeFired.setBulletScource(this);
 			double meetingpointX = this.getPosition()[0] + this.getRadius() * Math.cos(this.getOrientation());
@@ -321,8 +320,10 @@ public class Ship extends Entity {
 			double xVelocityBullet = this.getVelocity()[0] + Math.cos(this.getOrientation()) * 250;
 			double yVelocityBullet = this.getVelocity()[1] + Math.sin(this.getOrientation()) * 250;
 			bulletToBeFired.setVelocity(xVelocityBullet, yVelocityBullet);
-		
-			if (bulletToBeFired.isOutOfBounds()){
+					
+			this.getWorld().addBulletToWorld(bulletToBeFired);
+			
+			if (bulletToBeFired.isOutOfBounds(bulletToBeFired.getWorld())){
 				bulletToBeFired.terminate();
 				return;
 			}

@@ -5,6 +5,12 @@ import java.util.Set;
 
 import asteroids.part2.CollisionListener;
 
+/**
+ * A class of Worlds with a width and a height.
+ * @invar The dimension of the world must be valid.
+ * 		 | isValidDimension(getDimension()[0],getDimension()[1])
+ */
+
 public class World {
 	
 	/**
@@ -82,14 +88,21 @@ public class World {
 	 */
 	
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException{
-		if (ship != null && ship.getWorld() == null && ship.getPosition()[0] + ship.getRadius() <= this.getDimension()[0]
-									&& ship.getPosition()[1] + ship.getRadius() <= this.getDimension()[1])
-		{
+		if (ship == null || !(ship.getWorld() == null) || ship.isOutOfBounds(this)){
+			throw new IllegalArgumentException("The ship is null or out of bounds or is already in a World");
+		}
+		boolean toAddToWorld = true;
+		for(Ship otherShip : this.getAllShips()){
+			if (ship.overlap(otherShip)){
+				toAddToWorld = false;
+			}
+		}
+		if(toAddToWorld){
 			this.getAllShips().add(ship);
 			ship.setWorld(this);
 		}
 		else{
-			throw new IllegalArgumentException("The ship is null or out of bounds");
+			throw new IllegalArgumentException("Ship would be overlapping another Ship in the world");
 		}
 	}
 	
@@ -138,21 +151,26 @@ public class World {
 	 */
 	
 	public void addBulletToWorld(Bullet bullet) throws IllegalArgumentException{
-		if (bullet.getPosition()[0] < this.getDimension()[0] - bullet.getRadius() && 
-				bullet.getPosition()[1] < this.getDimension()[1] - bullet.getRadius() && bullet != null){
-			for (Ship ship : getAllShips()){
-				if (bullet.getDistanceBetween(ship) < -1E-3){
-				//	throw new IllegalArgumentException();
+		try{
+			boolean toAddToWorld = true;
+			for(Ship otherShip : this.getAllShips()){
+				if (bullet.getBulletScource() == null){	
+					if (bullet.overlap(otherShip)){
+						toAddToWorld = false;
+					}
 				}
 			}
-			this.getAllBullets().add(bullet);
-			bullet.setWorld(this);
-		}else{
-			throw new IllegalArgumentException("The bullet is out of bounds or null");
-		}
-		
-		
-	}
+			if(toAddToWorld){
+				this.allBulletsWorld.add(bullet);
+				bullet.setWorld(this);
+			}
+			else{
+				throw new IllegalArgumentException();
+			}
+		}catch (NullPointerException exc){
+			throw new IllegalArgumentException();
+		}	}
+
 	
 	/**@param bullet
 	 * @throws IllegalArgumentException

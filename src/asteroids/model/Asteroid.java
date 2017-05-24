@@ -1,5 +1,11 @@
 package asteroids.model;
 
+/**
+ * A class of Asteroids with an X-Position, Y-Position, X-Velocity, Y-Velocity and radius.
+ * Subclass of class MinorPlanet
+ *
+ */
+
 public class Asteroid extends MinorPlanet {
 
 	public Asteroid(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius){
