@@ -316,7 +316,6 @@ public class Ship extends Entity {
 		
 			double bulletPosX = meetingpointX + bulletToBeFired.getRadius() * Math.cos(this.getOrientation());
 			double bulletPosY = meetingpointY + bulletToBeFired.getRadius() * Math.sin(this.getOrientation());
-			System.out.println("bulletPosY in func = " +bulletPosY);
 			bulletToBeFired.setPosition(bulletPosX, bulletPosY);
 		
 			double xVelocityBullet = this.getVelocity()[0] + Math.cos(this.getOrientation()) * 250;

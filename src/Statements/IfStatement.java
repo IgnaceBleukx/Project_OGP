@@ -76,7 +76,7 @@ public class IfStatement extends ValueStatement{
 					else{
 						passInformation(getElseBody());
 						((VoidStatement) getElseBody()).execute();
-						return (Double)null;
+						return Double.NaN;
 					}
 				}
 				else{

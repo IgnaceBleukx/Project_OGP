@@ -138,13 +138,19 @@ public class World {
 	 */
 	
 	public void addBulletToWorld(Bullet bullet) throws IllegalArgumentException{
-		try{
-		this.allBulletsWorld.add(bullet);
-		bullet.setWorld(this);
+		if (bullet.getPosition()[0] < this.getDimension()[0] - bullet.getRadius() && 
+				bullet.getPosition()[1] < this.getDimension()[1] - bullet.getRadius() && bullet != null){
+			for (Ship ship : getAllShips()){
+				if (bullet.getDistanceBetween(ship) < -1E-3){
+				//	throw new IllegalArgumentException();
+				}
+			}
+			this.getAllBullets().add(bullet);
+			bullet.setWorld(this);
+		}else{
+			throw new IllegalArgumentException("The bullet is out of bounds or null");
 		}
-		catch(NullPointerException exc){
-			throw new IllegalArgumentException();
-		}
+		
 		
 	}
 	
