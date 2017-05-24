@@ -147,8 +147,11 @@ public class World {
 		try{
 			boolean toAddToWorld = true;
 			for(Entity otherEntity : this.getAllShips()){
-				if (bullet.overlap(otherEntity)){
-					toAddToWorld = false;
+				if (bullet.getBulletScource() != otherEntity){
+					
+					if (bullet.overlap(otherEntity)){
+						toAddToWorld = false;
+					}
 				}
 			}
 			if(toAddToWorld){

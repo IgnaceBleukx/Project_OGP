@@ -308,7 +308,7 @@ public class Ship extends Entity {
 		if (this.getWorld() != null && this.getNbBulletsOnShip() > 0){
 			Bullet bulletToBeFired = allBulletsShip.iterator().next();
 			this.removeBulletFromShip(bulletToBeFired);
-			this.getWorld().addBulletToWorld(bulletToBeFired);
+
 			bulletToBeFired.setCollisionState(true);
 			bulletToBeFired.setBulletScource(this);
 			double meetingpointX = this.getPosition()[0] + this.getRadius() * Math.cos(this.getOrientation());
@@ -323,6 +323,8 @@ public class Ship extends Entity {
 			double yVelocityBullet = this.getVelocity()[1] + Math.sin(this.getOrientation()) * 250;
 			bulletToBeFired.setVelocity(xVelocityBullet, yVelocityBullet);
 		
+			this.getWorld().addBulletToWorld(bulletToBeFired);
+			
 			if (bulletToBeFired.isOutOfBounds()){
 				bulletToBeFired.terminate();
 				return;
