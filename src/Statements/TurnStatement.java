@@ -3,6 +3,7 @@ package Statements;
 import Expressions.Expression;
 import Expressions.ValueExpression;
 import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 
 public class TurnStatement extends VoidStatement {
 
@@ -27,9 +28,17 @@ public class TurnStatement extends VoidStatement {
 
 	private SourceLocation sourceLocation;
 	
-	public void execute() throws IllegalArgumentException{
+	public void execute() throws ModelException{
+		if (getFunction() != null){
+			throw new ModelException("Turn action in function body");
+		}
 		if(getAngle() instanceof ValueExpression){
-			this.getFunction().getProgram().getShip().rotate(((ValueExpression) getAngle()).evaluate());
+			try {
+				passInformation(getAngle());
+				this.getProgram().getShip().rotate(((ValueExpression) getAngle()).evaluate());
+			} catch (ModelException e) {
+				throw new ModelException("ModelException in TurnStatement");
+			}
 		}
 		else{
 			throw new IllegalArgumentException("The expression does not evaluate to a value");

@@ -2,7 +2,10 @@ package Statements;
 
 import java.util.List;
 
+import asteroids.model.Program;
+import asteroids.model.programs.Function;
 import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 
 public class SequenceStatement extends VoidStatement {
 
@@ -26,17 +29,20 @@ public class SequenceStatement extends VoidStatement {
 		this.sourceLocation = sourceLocation;
 	}
 
+		
 	private List<Statement> statements;
 	private SourceLocation sourceLocation;
 	
 	@Override
-	public void execute(){
+	public void execute() throws ModelException{
 		for (Statement statement : getStatements()){
+			passInformation(statement);
 			if (statement instanceof ValueStatement){
 				((ValueStatement) statement).execute();
 			}
 			if (statement instanceof VoidStatement){
 				((VoidStatement) statement).execute();
+
 			}
 		}
 	}

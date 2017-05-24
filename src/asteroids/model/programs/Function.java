@@ -1,8 +1,15 @@
 package asteroids.model.programs;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import Expressions.Expression;
 import Statements.Statement;
+import Statements.ValueStatement;
+import Statements.VoidStatement;
 import asteroids.model.Program;
 import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 
 public class Function {
 
@@ -16,6 +23,9 @@ public class Function {
 	private Statement body;
 	private String functionName;
 	private SourceLocation sourceLocation;
+	private Function function;
+	private boolean whileState = false;
+	private List<Expression> parameters = new ArrayList<Expression>();
 	
 	public Program getProgram() {
 		return program;
@@ -41,4 +51,49 @@ public class Function {
 	public void setSourceLocation(SourceLocation sourceLocation) {
 		this.sourceLocation = sourceLocation;
 	}
+	
+	public List<Object> getVariables() {
+		return variables;
+	}
+	public void addVariable	(Object variable) {
+		this.variables.add(variable);
+	}
+
+	public Function getFunction() {
+		return function;
+	}
+	public void setFunction(Function function) {
+		this.function = function;
+	}
+
+	public boolean isWhileState() {
+		return whileState;
+	}
+	public void setWhileState(boolean whileState) {
+		this.whileState = whileState;
+	}
+	public List<Expression> getParameters() {
+		return parameters;
+	}
+	public void setParameters(List<Expression> parameters) {
+		this.parameters = parameters;
+	}
+	private List<Object> variables = new ArrayList<Object>();
+	
+	public double execute() throws ModelException{
+		getBody().setFunction(this);
+		getBody().setProgram(getProgram());
+		if (getBody() instanceof VoidStatement){
+			((VoidStatement) getBody()).execute();
+			return Double.NaN;
+		}	
+		else{
+			return ((ValueStatement) getBody()).execute();
+		}
+	}
+	
+	
+	
+	
+	
 }

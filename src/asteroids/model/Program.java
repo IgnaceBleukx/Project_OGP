@@ -1,20 +1,20 @@
 package asteroids.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Statements.Statement;
 import Statements.ValueStatement;
 import Statements.VoidStatement;
 import asteroids.model.programs.Function;
+import asteroids.util.ModelException;
 
 public class Program {
 
 	public Program(List<Function> functions, Statement main){
 		setFunctions(functions);
-		for (Function function : getFunctions()){
-			function.setProgram(this);
-		}
 		setMain(main);
+		getMain().setProgram(this); 
 	}
 	
 	public List<Function> getFunctions() {
@@ -45,7 +45,7 @@ public class Program {
 		this.ship = ship;
 	}
 	
-	private List<Object> printedObjects;
+	private List<Object> printedObjects = new ArrayList<Object>();
 	
 	public List<Object> getPrintedObjects() {
 		return printedObjects;
@@ -55,7 +55,16 @@ public class Program {
 		printedObjects.add(object);
 	}
 	
-	public List<Object> execute(double dt){
+	public List<Object> getVariables() {
+		return variables;
+	}
+	public void addVariable(Object variable) {
+		this.variables.add(variable);
+	}
+
+	private List<Object> variables = new ArrayList<Object>();
+	
+	public List<Object> execute(double dt) throws ModelException{
 		if (getMain() instanceof ValueStatement){
 			((ValueStatement) getMain()).execute();
 		}
@@ -63,6 +72,7 @@ public class Program {
 			((VoidStatement) getMain()).execute();
 		}
 		return getPrintedObjects();
+		
 	}
 
 	

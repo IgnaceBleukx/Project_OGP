@@ -3,6 +3,7 @@ package Statements;
 import Expressions.Expression;
 import Expressions.ValueExpression;
 import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 
 public class ReturnStatement extends ValueStatement {
 
@@ -30,12 +31,16 @@ public class ReturnStatement extends ValueStatement {
 	}
 	
 	@Override
-	public double execute(){
+	public double execute() throws ModelException{
+		if (getFunction() == null){
+			throw new ModelException("The returnstatement does not occur in a functionbody");
+		}
 		if (getValue() instanceof ValueExpression){
-			return ((ValueExpression) getValue()).evaluate();
+				passInformation(getValue());
+				return ((ValueExpression) getValue()).evaluate();
 		}
 		else{
-			throw new IllegalArgumentException("The expression does not evaluate to a value and thus cannot be returned");
+			throw new ModelException("The expression does not evaluate to a value and thus cannot be returned");
 		}
 	}
 }

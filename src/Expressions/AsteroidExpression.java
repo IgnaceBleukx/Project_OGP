@@ -13,11 +13,19 @@ public class AsteroidExpression extends EntityExpression {
 	}
 	
 	private SourceLocation sourceLocation;
+
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+
+	public void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
+	}
 	
 	@Override
 	public Asteroid evaluate(){
-		Set<Asteroid> asteroids = this.getFunction().getProgram().getShip().getWorld().getAllAsteroids();
-		Ship ship = this.getFunction().getProgram().getShip();
+		Set<Asteroid> asteroids = this.getProgram().getShip().getWorld().getAllAsteroids();
+		Ship ship = this.getProgram().getShip();
 		double distTo = Double.POSITIVE_INFINITY;
 		Asteroid closestTo = null;
 		for (Asteroid asteroid : asteroids){
@@ -27,13 +35,5 @@ public class AsteroidExpression extends EntityExpression {
 			}
 		}
 		return closestTo;
-	}
-
-	public SourceLocation getSourceLocation() {
-		return sourceLocation;
-	}
-
-	public void setSourceLocation(SourceLocation sourceLocation) {
-		this.sourceLocation = sourceLocation;
 	}
 }

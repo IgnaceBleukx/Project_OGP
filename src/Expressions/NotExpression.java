@@ -1,6 +1,7 @@
 package Expressions;
 
 import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 
 public class NotExpression extends BooleanExpression {
 
@@ -28,12 +29,17 @@ public class NotExpression extends BooleanExpression {
 	}
 
 	@Override
-	public boolean evaluate(){
+	public boolean evaluate() throws ModelException{
 		if (getExpression() instanceof BooleanExpression){
-			return !((BooleanExpression) getExpression()).evaluate();
+			try {
+				passInformation(getExpression());
+				return !((BooleanExpression) getExpression()).evaluate();
+			} catch (ModelException e) {
+				throw new ModelException("ModelException in NotExpression");
+			}
 		}
 		else{
-			throw new IllegalArgumentException("The expression does not evaluate to a boolean");
+			throw new ModelException("The expression does not evaluate to a boolean");
 		}
 	}
 }

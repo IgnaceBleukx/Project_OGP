@@ -120,7 +120,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Fu
 
 	@Override
 	public Expression createPlanetExpression(SourceLocation location) {
-		return new PlanetoidExpression(location);
+		return new PlanetExpression(location);
 	}
 
 	@Override
@@ -140,85 +140,71 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Fu
 
 	@Override
 	public Expression createGetVXExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetVXExpression(e, location);
 	}
 
 	@Override
 	public Expression createGetVYExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetVYExpression(e, location);
 	}
 
 	@Override
 	public Expression createGetRadiusExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetRadiusExpression(e, location);
 	}
 
 	@Override
 	public Expression createLessThanExpression(Expression e1, Expression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new LessExpression(e1, e2, location);
 	}
 
 	@Override
 	public Expression createEqualityExpression(Expression e1, Expression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new EqualityExpression(e1, e2, location);
 	}
 
 	@Override
 	public Expression createAdditionExpression(Expression e1, Expression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new AdditionExpression(e1, e2, location);
 	}
 
 	@Override
 	public Expression createMultiplicationExpression(Expression e1, Expression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new MultiplicationExpression(e1, e2, location);
 	}
 
 	@Override
 	public Expression createSqrtExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SqrtExpression(e, location);
 	}
 
 	@Override
 	public Expression createGetDirectionExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetDirectionExpression(location);
 	}
 
 	@Override
 	public Statement createThrustOnStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ThrustOnStatement(location);
 	}
 
 	@Override
 	public Statement createThrustOffStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ThrustOffStatement(location);
 	}
 
 	@Override
 	public Statement createFireStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new FireStatement(location);
 	}
 
 	@Override
 	public Statement createTurnStatement(Expression angle, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new TurnStatement(angle, location);
 	}
 
 	@Override
 	public Statement createSkipStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SkipStatement(location);
 	}
 }

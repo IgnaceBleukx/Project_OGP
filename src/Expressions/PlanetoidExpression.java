@@ -24,8 +24,9 @@ public class PlanetoidExpression extends EntityExpression {
 	
 	@Override
 	public Planetoid evaluate(){
-		Set<Planetoid> planetoids = this.getFunction().getProgram().getShip().getWorld().getAllPlanetoids();
-		Ship ship = this.getFunction().getProgram().getShip();
+		System.out.println("Program =  " + this.getProgram());
+		Set<Planetoid> planetoids = this.getProgram().getShip().getWorld().getAllPlanetoids();
+		Ship ship = this.getProgram().getShip();
 		Planetoid closestTo = null;
 		double distTo = Double.POSITIVE_INFINITY;
 		for (Planetoid planetoid : planetoids){

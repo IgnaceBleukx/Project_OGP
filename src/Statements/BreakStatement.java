@@ -1,8 +1,9 @@
 package Statements;
 
 import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 
-public class BreakStatement extends Statement{
+public class BreakStatement extends VoidStatement{
 
 	
 	
@@ -19,4 +20,11 @@ public class BreakStatement extends Statement{
 	}
 
 	private SourceLocation sourceLocation; 
+	
+	@Override
+	public void execute() throws ModelException{
+		if (! getWhileState()){
+		throw new ModelException("Break used outside while");
+		}
+	}
 }

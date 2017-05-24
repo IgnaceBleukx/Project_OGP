@@ -3,9 +3,9 @@ package Statements;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.util.ModelException;
 
-public class FireStatement extends VoidStatement {
-
-	public FireStatement(SourceLocation location){
+public class ThrustOffStatement extends VoidStatement{
+	
+	public ThrustOffStatement(SourceLocation location){
 		setSourceLocation(location);
 	}
 	
@@ -20,14 +20,16 @@ public class FireStatement extends VoidStatement {
 
 
 	private SourceLocation sourceLocation;
+
 	
 	@Override
 	public void execute() throws ModelException{
 		if (this.getFunction() != null){
-			throw new ModelException("Fire action preformed in funtionbody");
+			throw new ModelException("ThrustOff action in functio body");
 		}
 		else{
-			this.getProgram().getShip().fire();
+			this.getProgram().getShip().thrustOn();
 		}
 	}
+
 }
