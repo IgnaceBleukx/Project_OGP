@@ -1,13 +1,16 @@
 package asteroids.model;
 
+import be.kuleuven.cs.som.taglet.*;
+import be.kuleuven.cs.som.annotate.*;
+
 /**
  * A class of Entities. Super class of classes Ship, Bullet and MinorPlanet.
  * 
- * @invar The velocity of an Entity must be valid.
+ * @Invar The velocity of an Entity must be valid.
  * 		 | isValidVelocity(getVelocity()[0],getVelocity()[1])
- * @invar The position of an Entity must be valid.
+ * @Invar The position of an Entity must be valid.
  * 		 | isValidPosition(getPosition()[0],getPosition()[1])
- * @invar The radius of an Entity must be valid.
+ * @Invar The radius of an Entity must be valid.
  * 		 | isValidRadius(getRadius())
  *
  */
@@ -335,30 +338,6 @@ public class Entity {
 		}
 	}
 	
-	@Deprecated
-	public double[] getPositionCollisionEntity1(Entity otherEntity) throws IllegalArgumentException{
-	try{
-	if (this.getTimeCollisionEntity(otherEntity) == Double.POSITIVE_INFINITY){
-		return null;
-	}
-	
-	else {
-		double[] PosCollapse;
-		double xPosCollapse = (((this.getPosition()[0]+this.getTimeCollisionEntity(otherEntity)*this.getVelocity()[0])*otherEntity.getRadius())+
-				((otherEntity.getPosition()[0]+this.getTimeCollisionEntity(otherEntity)*this.getVelocity()[0])*this.getRadius())) /
-				(this.getRadius()+otherEntity.getRadius());
-		double yPosCollapse = (((this.getPosition()[1]+this.getTimeCollisionEntity(otherEntity)*this.getVelocity()[1])*otherEntity.getRadius())+
-				((otherEntity.getPosition()[1]+this.getTimeCollisionEntity(otherEntity)*otherEntity.getVelocity()[1])*this.getRadius())) /
-				(this.getRadius()+otherEntity.getRadius());
-		PosCollapse = new double[] {xPosCollapse, yPosCollapse};
-		return PosCollapse;
-	}
-	}catch (IllegalArgumentException e){
-		throw new IllegalArgumentException();
-	}
-	
-}
-	
 	public boolean isOutOfBounds(World world){
 		if (this.getPosition()[0] - this.getRadius() < 0 || this.getPosition()[1] - this.getRadius() < 0){
 			return true;
@@ -393,14 +372,6 @@ public class Entity {
 	}
 	
 	public void boundaryCollision(){
-		System.out.println("this.getposition[0] = " + this.getPosition()[0]);
-		System.out.println("this.getposition[1] = " + this.getPosition()[1]);
-		System.out.println("this.getradius = " + this.getRadius());
-		System.out.println("this.getworlddimensionX = " + this.getWorld().getDimension()[0]);
-		System.out.println("this.getworlddimensionY = " + this.getWorld().getDimension()[1]);
-		System.out.println("this.getradius*0.99=  " + this.getRadius()*0.99);
-		System.out.println("test = " + this.getPositionCollisionBoundary()[0]);
-		System.out.println("test = " + this.getPositionCollisionBoundary()[1]);
 		double xPosColBound = this.getPositionCollisionBoundary()[0];
 		double yPosColBound = this.getPositionCollisionBoundary()[1];
 		
@@ -427,7 +398,7 @@ public class Entity {
 	}
 	
 	public void terminate(){
-		//This method is overrided by all subclasses of Entity.
+		throw new IllegalStateException("This method should be overwritten by all subclasses of Entity");
 	}
 
 	private World world;
