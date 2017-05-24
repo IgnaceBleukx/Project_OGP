@@ -157,15 +157,16 @@ public class Entity {
 	 * 
 	 * @param radius
 	 * 			The radius to check.
-	 * @return True if the radius is larger than 10. False if the radius smaller than 10 or the given radius is not a number.
-	 * 			| result = radius > 10
+	 * @return True if the radius is larger than or or equal to the minimum radius. 
+	 * @return False if the radius smaller or the given radius is not a number.
+	 * 	
 	 */
 	public boolean isValidRadius(double radius){
 		if (!Double.isNaN(radius)){
-			if (this instanceof Ship && ((Ship)this).getMinimumShipRadius() >= radius){
+			if (this instanceof Ship && ((Ship)this).getMinimumShipRadius() > radius){
 					return false;
 			}
-			else if (this instanceof MinorPlanet && ((MinorPlanet)this).getMinimumRadius() >= radius){
+			else if (this instanceof MinorPlanet && ((MinorPlanet)this).getMinimumRadius() > radius){
 					return false;
 			}
 			
@@ -358,11 +359,11 @@ public class Entity {
 	
 }
 	
-	public boolean isOutOfBounds(){
+	public boolean isOutOfBounds(World world){
 		if (this.getPosition()[0] - this.getRadius() < 0 || this.getPosition()[1] - this.getRadius() < 0){
 			return true;
 		}
-		if (this.getPosition()[0] + this.getRadius() > this.getWorld().getDimension()[0] || this.getPosition()[1] + this.getRadius() > this.getWorld().getDimension()[1]){
+		if (this.getPosition()[0] + this.getRadius() > world.getDimension()[0] || this.getPosition()[1] + this.getRadius() > world.getDimension()[1]){
 			return true;
 		}
 		else{

@@ -88,14 +88,21 @@ public class World {
 	 */
 	
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException{
-		if (ship != null && ship.getWorld() == null && ship.getPosition()[0] + ship.getRadius() <= this.getDimension()[0]
-									&& ship.getPosition()[1] + ship.getRadius() <= this.getDimension()[1])
-		{
+		if (ship == null || !(ship.getWorld() == null) || ship.isOutOfBounds(this)){
+			throw new IllegalArgumentException("The ship is null or out of bounds or is already in a World");
+		}
+		boolean toAddToWorld = true;
+		for(Ship otherShip : this.getAllShips()){
+			if (ship.overlap(otherShip)){
+				toAddToWorld = false;
+			}
+		}
+		if(toAddToWorld){
 			this.getAllShips().add(ship);
 			ship.setWorld(this);
 		}
 		else{
-			throw new IllegalArgumentException("The ship is null or out of bounds");
+			throw new IllegalArgumentException("Ship would be overlapping another Ship in the world");
 		}
 	}
 	
@@ -146,10 +153,9 @@ public class World {
 	public void addBulletToWorld(Bullet bullet) throws IllegalArgumentException{
 		try{
 			boolean toAddToWorld = true;
-			for(Entity otherEntity : this.getAllShips()){
-				if (bullet.getBulletScource() != otherEntity){
-					
-					if (bullet.overlap(otherEntity)){
+			for(Ship otherShip : this.getAllShips()){
+				if (bullet.getBulletScource() == null){	
+					if (bullet.overlap(otherShip)){
 						toAddToWorld = false;
 					}
 				}

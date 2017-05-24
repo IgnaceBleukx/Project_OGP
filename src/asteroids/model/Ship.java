@@ -246,17 +246,16 @@ public class Ship extends Entity {
 	 * 			| bullet.getVelocity == this.getVelocity
 	 */
 	public void loadBulletOnShip(Bullet bullet) throws IllegalArgumentException{
-		if (this.getNbBulletsOnShip() < this.maxNbOfBullets){
-			if (bullet == null){
-				throw new IllegalArgumentException();
-			}
+		if (bullet == null || !(bullet.getWorld() == null)){
+			throw new IllegalArgumentException();
+		}
+		else if (this.getNbBulletsOnShip() < this.maxNbOfBullets){
 			this.allBulletsShip.add(bullet);
 			bullet.setShip(this);
 			bullet.setCollisionState(false);
 			bullet.setPosition(this.getPosition()[0], this.getPosition()[1]);
 			bullet.setVelocity(this.getVelocity()[0], this.getVelocity()[1]);
 		}
-		
 	}
 	
 	public void loadBulletsOnShip(Collection<Bullet> bullets) throws IllegalArgumentException{
@@ -322,10 +321,10 @@ public class Ship extends Entity {
 			double xVelocityBullet = this.getVelocity()[0] + Math.cos(this.getOrientation()) * 250;
 			double yVelocityBullet = this.getVelocity()[1] + Math.sin(this.getOrientation()) * 250;
 			bulletToBeFired.setVelocity(xVelocityBullet, yVelocityBullet);
-		
+					
 			this.getWorld().addBulletToWorld(bulletToBeFired);
 			
-			if (bulletToBeFired.isOutOfBounds()){
+			if (bulletToBeFired.isOutOfBounds(bulletToBeFired.getWorld())){
 				bulletToBeFired.terminate();
 				return;
 			}

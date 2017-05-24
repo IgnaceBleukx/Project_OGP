@@ -255,8 +255,8 @@ public class Bullet extends Entity {
 	
 		else if (this.getBulletScource().equals(otherEntity)){
 			System.out.println("shipotherentity=" + (Ship) otherEntity);
-			((Ship) otherEntity).loadBulletOnShip(this);
 			this.getWorld().removeBulletFromWorld(this);
+			((Ship) otherEntity).loadBulletOnShip(this);
 		}
 		else{
 			otherEntity.terminate();

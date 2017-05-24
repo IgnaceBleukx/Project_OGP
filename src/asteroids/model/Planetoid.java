@@ -14,11 +14,14 @@ public class Planetoid extends MinorPlanet {
 	public Planetoid(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double totalTravelDistance){
 		this.setPosition(xPosition, yPosition);
 		this.setVelocity(xVelocity, yVelocity);
-		this.setRadius(radius - 0.0001 * totalTravelDistance);
-		if (this.getRadius() < 5){
+		this.setTotalTraveledDistance(totalTravelDistance);
+		if (radius - 0.000001 * totalTravelDistance < 5){
 			this.terminate();
 		}
-		this.setMass();
+		else{
+			this.setRadius(radius - 0.000001 * totalTravelDistance);
+			this.setMass();
+		}
 	}
 	
 	
@@ -28,11 +31,10 @@ public class Planetoid extends MinorPlanet {
 			throw new IllegalArgumentException();
 		}
 		else{
-			double calculatedDistance = Math.sqrt(Math.pow(this.getVelocity()[0] * dt - this.getPosition()[1],2) +Math.pow(this.getVelocity()[0] * dt - this.getPosition()[1],2)); 
+			double calculatedDistance = Math.sqrt(Math.pow(this.getVelocity()[0] * dt,2) +Math.pow(this.getVelocity()[1] * dt,2)); 
 			this.setPosition(this.getPosition()[0] + this.getVelocity()[0] * dt, this.getPosition()[1] + this.getVelocity()[1] *dt);
-			
-			if (this.isValidRadius(this.getRadius() - 0.0001*calculatedDistance)){
-			this.setRadius(this.getRadius() - 0.0001 * calculatedDistance);
+			if (this.isValidRadius(this.getRadius() - 0.000001*calculatedDistance)){
+			this.setRadius(this.getRadius() - 0.000001 * calculatedDistance);
 			this.totalTraveledDistance += calculatedDistance;
 			}
 			
@@ -44,7 +46,9 @@ public class Planetoid extends MinorPlanet {
 	
 	@Override
 	public void terminate(){
+		if (this.getWorld() != null){
 		this.getWorld().removePlanetoid(this);
+		}
 		this.isTerminated =true;
 	}
 	
@@ -62,6 +66,9 @@ public class Planetoid extends MinorPlanet {
 	
 	public double getTotalTraveledDistance(){
 		return this.totalTraveledDistance;
+	}
+	public void setTotalTraveledDistance(double totalTraveledDistance){
+		this.totalTraveledDistance = totalTraveledDistance;
 	}
 	
 	private double totalTraveledDistance;
