@@ -5,7 +5,7 @@ import java.util.Set;
 
 import asteroids.part2.CollisionListener;
 
-public class World extends Entity {
+public class World {
 	
 	/**
 	 * @param width
@@ -233,6 +233,17 @@ public class World extends Entity {
 	}
 	
 	private Set<Planetoid> allPlanetoids = new HashSet<Planetoid>();
+	
+	public Set<MinorPlanet> getAllMinorPlanets(){
+		HashSet<MinorPlanet> minorPlanets = new HashSet<MinorPlanet>();
+		for (Planetoid planetoid : this.getAllPlanetoids()){
+			minorPlanets.add(planetoid);
+		}
+		for (Asteroid asteroid : this.getAllAsteroids()){
+			minorPlanets.add(asteroid);
+		}
+		return minorPlanets;
+	}
 	
 	@Deprecated
 	public Entity[] getEntitiesNextCollision1(){
