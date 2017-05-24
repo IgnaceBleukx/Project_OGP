@@ -16,7 +16,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import Statements.PrintStatement;
 import asteroids.model.Asteroid;
 import asteroids.model.Bullet;
 import asteroids.model.Planetoid;
@@ -1744,7 +1743,6 @@ public class Part3TestFull {
         String code = "def f { " + "  thrust; " + "  return 5.0; " + "}" + "print f(); ";
         Program program = ProgramParser.parseProgramFromString(code, programFactory);
         facade.loadProgramOnShip(ship1, program);
-        System.out.println("Function = " + ((PrintStatement) program.getMain()).getValue());
         facade.executeProgram(ship1, 0.3);
         fail();
       } catch (ModelException exc) {
@@ -1999,7 +1997,6 @@ public class Part3TestFull {
       String code = "def f { " + "  return a; " + "}" + "a := 10; " + "print f(); ";
       Program program = ProgramParser.parseProgramFromString(code, programFactory);
       facade.loadProgramOnShip(ship1, program);
-      System.out.println("Functions = " + program.getFunctions().iterator().next().getFunctionName().toString());
       List<Object> results = facade.executeProgram(ship1, 1.0);
       Object[] expecteds = { 10.0 };
       assertArrayEquals(expecteds, results.toArray());
@@ -2465,7 +2462,6 @@ public class Part3TestFull {
     facade.loadProgramOnShip(ship1, program);
     List<Object> results = facade.executeProgram(ship1, 1.0);
     Object[] expecteds = { 10.0 };
-    System.out.println("Here we are");
     assertArrayEquals(expecteds, results.toArray());
     score += 10;
   }
