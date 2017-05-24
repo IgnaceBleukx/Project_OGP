@@ -4,9 +4,22 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import be.kuleuven.cs.som.annotate.Raw;
+
+
+/**
+ * A Class of Ships with an X-Velocity, Y-Velocity, X-Position, Y-Position, Orientation, Radius and Mass.
+ * Subclass of class Entity
+ * 
+ * @invar The mass of a ship must be a valid mass.
+ * 			| isValidMass(getMass())
+ * 
+ */
 
 public class Ship extends Entity {
 	/**
+	 * 
+	 * 
 	 * @param xVelocity
 	 * @param yVelocity
 	 * @param xPosition
@@ -30,6 +43,20 @@ public class Ship extends Entity {
 		}
 	}
 	
+	/**
+	 * This method creates a new object of the type Ship with default paramaters.'
+	 * Default parameters for velocity are 0 and 0.
+	 * Default parameters for position are 0 and 0.
+	 * Default parameter for Orientation is 0.
+	 * Default parameter for radius is 10.
+	 * Default parameter for mass is 0. (Gets adjusted by extended constructor, by invoking this.setMass).
+	 */
+	@Raw
+	public Ship(){
+		this(0, 0, 0, 0, 10, 0, 0);
+	}
+	
+	
 	public double getMinimumRadius(){
 		return this.minimumRadius;
 	}
@@ -37,20 +64,7 @@ public class Ship extends Entity {
 	private double minimumRadius = 10;
 
 	
-	/**
-	 * This method creates a new object of the type Ship with default paramaters.'
-	 * Default parameters for velocity are 0 and 0.
-	 * Default parameters for position are 0 and 0.
-	 * Default parameter for Orientation is 0.
-	 * Default parameter for radius is 10.
-	 */
-	public Ship(){
-		this.setVelocity(0, 0);
-		this.setPosition(0,0);
-		this.setOrientation(0);
-		this.setRadius(10);
-	}
-	
+
 	
 	/**
 	 * Checks if the given double is a valid mass for the current ship.
@@ -65,6 +79,7 @@ public class Ship extends Entity {
 	 * 			| if (Double.isNaN(mass))
 	 * 				result = false
 	 */
+	@Raw // Possible to invoke method against objects that does not satisfy all invariants.
 	public void setMass(double mass){
 		if (this.isValidMass(mass)){
 			this.mass = mass;
@@ -74,6 +89,11 @@ public class Ship extends Entity {
 		}
 	}
 	
+	
+	/**
+	 * Returns the mass of the Ship.
+	 * @return this.mass
+	 */
 	public double getMass(){
 		return this.mass;
 	}
@@ -81,6 +101,13 @@ public class Ship extends Entity {
 	
 	private double mass;
 	
+	
+	/**
+	 * Checks whether the given mass is a valid mass for any Ship.
+	 * @param mass
+	 * 		| The mass to check.
+	 * @return True if and only if the given mass is a number and greater than (4/3)*density*PI*(radius**3)
+	 */
 	
 	public boolean isValidMass(double mass){
 		return (!Double.isNaN(mass) && mass > 4.0 * this.density * Math.PI * Math.pow(this.getRadius(),3) / 3.0);
@@ -99,15 +126,15 @@ public class Ship extends Entity {
 	private double minimumShipRadius = 10;
 	
 	/**
-  	 * Enables the thruster of the current ship if not enabled yet.
- 	 * 
+  	 * Enables the thruster of the current ship.
  	 */
+	
  	public void thrustOn(){
 		this.thrusterState = true;  		
 		}
 			
 	/**
-	 * Disables the thruster of the ship.
+	 * Disables the thruster of the current ship.
 	 */
 	 public void thrustOff(){
 		this.thrusterState = false;
@@ -115,13 +142,22 @@ public class Ship extends Entity {
 		
 	
 	/**
-	 * 
-	 * @return Returns the current state of the thruster.
-	 * 			| returns this.thrusterState
+	 * Returns the current state of the thruster.
+	 * @return this.thrusterState
+	 * 			| returns true if thrusterState = true
+	 * 			| returns false if thrusterState = false
 	 */
 	public boolean inspectThruster(){
 		return this.thrusterState;
 	}
+	
+	
+	/**
+	 * Returns the acceleration of the ship.
+	 * @return thrusterForce/mass if the mass is not 0 and the thrusterState = true
+	 * 			else returns 0.
+	 */
+	
 	
 	public double getShipAcceleration(){
 		if(this.getMass() != 0 && this.inspectThruster()){
@@ -148,6 +184,7 @@ public class Ship extends Entity {
 		this.setOrientation(this.getOrientation() + angle);
 	}
 	
+	@Deprecated
 	public void thrust(double a){
 		if (a < 0){
 			a = 0;
@@ -155,12 +192,19 @@ public class Ship extends Entity {
 		
 	}
 	
-	/**
-	 * 
+	/** 
 	 * @param a
-	 * 			The ship's acceleration, which equals the thrusterforce divided by the ship's total mass.
-	 * @post	The velocity to be added to the current velocity.
-	 * 	
+	 * 		 | The ship's acceleration, which equals the thrusterforce divided by the ship's total mass.
+	 * @param dt
+	 * 		 | The given time duration of thrust.
+	 * @effect in the case that the ship's acceleration is negative, a = 0 and nothing happens to the velocity.
+	 * @effect The velocity is updated based on the ship's acceleration and the time duration of thrust given 
+	 * if the newly calculated velocity is valid.
+	 * 		 | new.getVelocity[0] = this.getVelocity[0] + a*cos(this.getOrientation)*dt
+	 * 		 | new.getVelocity[1] = this.getVelocity[1] + a*sin(this.getOrientation)*dt
+	 * @effect if the newly calculated velocity isn't valid (greater than the max velocity maxVelocity) the 
+	 * velocity gets updated to the max velocity maxVelocity without changing the new direction of the velocity.
+	 * @post	The new velocity is adjusted and isn't greater than the max velocity maxVelocity.
 	 */
 	public void thrust(double a, double dt){
 		if (a <= 0){
@@ -177,16 +221,12 @@ public class Ship extends Entity {
 		}
 		
 		else {
-			
 			// De xvelocity gained (verliest) wat yvelocity verliest (gained), vandaar sin en cos omgewisseld
-			
+
 			double newMaxXVelocity = newXVelocity - (tempVelocity - this.getMaxVelocity())*Math.sin(this.getOrientation());
 			double newMaxYVelocity = newYVelocity - (tempVelocity - this.getMaxVelocity())*Math.cos(this.getOrientation());
-			
-			
 			this.setVelocity(newMaxXVelocity, newMaxYVelocity);
-			
-			
+					
 		}
 		
 	}
@@ -199,8 +239,7 @@ public class Ship extends Entity {
 		return this.allBulletsShip;
 	}
 	
-	/**
-	 * 
+	/** 
 	 * @param bullet
 	 * @post The given bullet is loaded on the ship, thus the velocity and position is equal to the velocity and position of the current ship.
 	 * 			| bullet.getPosition == this.getPosition
@@ -335,10 +374,20 @@ public class Ship extends Entity {
 		return this.isTerminated;
 	}
 	
+	/**
+	 * returns the thrusterForce of the ship.
+	 * @return this.thrusterForce
+	 */
 	public double getThrusterForce() {
-		return thrusterForce;
+		return this.thrusterForce;
 	}
 
+	/**
+	 * @param thrusterForce
+	 * 		 | thrusterForce is the force of the thruster of the ship.
+	 * @effect
+	 * 		 | sets thrusterForce to the new thrusterForce.
+	 */
 	public void setThrusterForce(double thrusterForce) {
 		this.thrusterForce = thrusterForce;
 	}
@@ -346,6 +395,8 @@ public class Ship extends Entity {
 	private boolean isTerminated = false;
 	
 
+	
+	
 	public void shipCollision(Ship otherShip){
 
 		double deltaRX = otherShip.getPosition()[0] - this.getPosition()[0];

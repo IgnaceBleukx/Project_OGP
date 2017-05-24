@@ -82,14 +82,14 @@ public class World {
 	 */
 	
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException{
-		if (ship != null && ship.getWorld() == null && ship.getPosition()[0] + ship.getRadius() <= this.getDimension()[0]
-									&& ship.getPosition()[1] + ship.getRadius() <= this.getDimension()[1])
-		{
-			this.getAllShips().add(ship);
-			ship.setWorld(this);
+		try{
+			if (ship.getWorld() == null){
+				this.allShips.add(ship);
+				ship.setWorld(this);
+			}
 		}
-		else{
-			throw new IllegalArgumentException("The ship is null or out of bounds");
+		catch(NullPointerException exc){
+			throw new IllegalArgumentException();
 		}
 	}
 	
@@ -101,13 +101,12 @@ public class World {
 
 	
 	public void removeShipFromWorld(Ship ship) throws IllegalArgumentException{
-		
-		if (ship != null && this.getAllShips().contains(ship)){
-			this.getAllShips().remove(ship);
-			ship.setWorld(null);
+		try{
+		this.allShips.remove(ship);
+		ship.setWorld(null);
 		}
-		else{
-			throw new IllegalArgumentException("The given ship is null or the world does not contain the given ship");
+		catch(NullPointerException exc){
+			throw new IllegalArgumentException();
 		}
 		
 	}
@@ -233,17 +232,6 @@ public class World {
 	}
 	
 	private Set<Planetoid> allPlanetoids = new HashSet<Planetoid>();
-	
-	public Set<MinorPlanet> getAllMinorPlanets(){
-		HashSet<MinorPlanet> minorPlanets = new HashSet<MinorPlanet>();
-		for (Planetoid planetoid : this.getAllPlanetoids()){
-			minorPlanets.add(planetoid);
-		}
-		for (Asteroid asteroid : this.getAllAsteroids()){
-			minorPlanets.add(asteroid);
-		}
-		return minorPlanets;
-	}
 	
 	@Deprecated
 	public Entity[] getEntitiesNextCollision1(){
