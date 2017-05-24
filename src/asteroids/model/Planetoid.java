@@ -2,6 +2,12 @@ package asteroids.model;
 
 import java.util.Random;
 
+/**
+ * A class of Planetoids with an X-Position, Y-Position, X-Velocity, Y-Velocity, Radius and Total Travel Distance.
+ * Subclass of MinorPlanet.
+ *
+ */
+
 public class Planetoid extends MinorPlanet {
 
 	

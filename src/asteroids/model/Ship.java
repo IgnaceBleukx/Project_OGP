@@ -12,7 +12,7 @@ import be.kuleuven.cs.som.annotate.Raw;
  * Subclass of class Entity
  * 
  * @invar The mass of a ship must be a valid mass.
- * 			| isValidMass(getMass())
+ * 		 | isValidMass(getMass())
  * 
  */
 

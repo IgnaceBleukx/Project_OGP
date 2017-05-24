@@ -3,6 +3,12 @@ package asteroids.model;
 /**
  * A class of Entities. Super class of classes Ship, Bullet and MinorPlanet.
  * 
+ * @invar The velocity of an Entity must be valid.
+ * 		 | isValidVelocity(getVelocity()[0],getVelocity()[1])
+ * @invar The position of an Entity must be valid.
+ * 		 | isValidPosition(getPosition()[0],getPosition()[1])
+ * @invar The radius of an Entity must be valid.
+ * 		 | isValidRadius(getRadius())
  *
  */
 public class Entity {

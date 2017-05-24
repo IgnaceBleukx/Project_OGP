@@ -216,8 +216,12 @@ public class Facade implements asteroids.part3.facade.IFacade{
 	}
 
 	public void addBulletToWorld(World world, Bullet bullet) throws ModelException {
+		try{
 		world.addBulletToWorld(bullet);
 		bullet.setWorld(world);
+		}catch (IllegalArgumentException exc){
+			throw new ModelException("The bullet can't be added to the world");
+		}
 		
 	}
 

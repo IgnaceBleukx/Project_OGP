@@ -5,6 +5,12 @@ import java.util.Set;
 
 import asteroids.part2.CollisionListener;
 
+/**
+ * A class of Worlds with a width and a height.
+ * @invar The dimension of the world must be valid.
+ * 		 | isValidDimension(getDimension()[0],getDimension()[1])
+ */
+
 public class World {
 	
 	/**
@@ -139,14 +145,24 @@ public class World {
 	
 	public void addBulletToWorld(Bullet bullet) throws IllegalArgumentException{
 		try{
-		this.allBulletsWorld.add(bullet);
-		bullet.setWorld(this);
-		}
-		catch(NullPointerException exc){
+			boolean toAddToWorld = true;
+			for(Entity otherEntity : this.getAllShips()){
+				if (bullet.overlap(otherEntity)){
+					toAddToWorld = false;
+				}
+			}
+			if(toAddToWorld){
+				this.allBulletsWorld.add(bullet);
+				bullet.setWorld(this);
+			}
+			else{
+				throw new IllegalArgumentException();
+			}
+		}catch (NullPointerException exc){
 			throw new IllegalArgumentException();
 		}
-		
 	}
+
 	
 	/**@param bullet
 	 * @throws IllegalArgumentException
