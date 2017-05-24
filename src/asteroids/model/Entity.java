@@ -1,5 +1,10 @@
 package asteroids.model;
 
+/**
+ * A class of Entities. Super class of classes Ship, Bullet and MinorPlanet.
+ * 
+ *
+ */
 public class Entity {
 	
 	/**

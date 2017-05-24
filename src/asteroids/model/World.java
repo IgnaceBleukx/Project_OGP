@@ -5,7 +5,7 @@ import java.util.Set;
 
 import asteroids.part2.CollisionListener;
 
-public class World extends Entity {
+public class World {
 	
 	/**
 	 * @param width
