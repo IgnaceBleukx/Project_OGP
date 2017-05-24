@@ -22,9 +22,12 @@ public class BreakStatement extends VoidStatement{
 	private SourceLocation sourceLocation; 
 	
 	@Override
-	public void execute() throws ModelException{
+	public void execute() throws ModelException, BreakException{
 		if (! getWhileState()){
 		throw new ModelException("Break used outside while");
+		}
+		else{
+			throw new BreakException();
 		}
 	}
 }

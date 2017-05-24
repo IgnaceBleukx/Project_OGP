@@ -31,16 +31,11 @@ public class ReturnStatement extends ValueStatement {
 	}
 	
 	@Override
-	public double execute() throws ModelException{
+	public double execute() throws ModelException, BreakException{
 		if (getFunction() == null){
 			throw new ModelException("The returnstatement does not occur in a functionbody");
 		}
-		if (getValue() instanceof ValueExpression){
-				passInformation(getValue());
-				return ((ValueExpression) getValue()).evaluate();
-		}
-		else{
-			throw new ModelException("The expression does not evaluate to a value and thus cannot be returned");
-		}
+		passInformation(getValue());
+		return ((ValueExpression) getValue()).evaluate();
 	}
 }

@@ -5,7 +5,7 @@ import asteroids.util.ModelException;
 
 public class VoidStatement extends Statement {
 
-	public void execute() throws ModelException {
+	public void execute() throws ModelException, BreakException {
 		throw new IllegalStateException("This method should be overwritten by all subclasses of 'Statement'");
 	}
 }

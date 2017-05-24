@@ -3,6 +3,9 @@ package asteroids.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import Expressions.ValueVariable;
+import Expressions.Variable;
+import Statements.BreakException;
 import Statements.Statement;
 import Statements.ValueStatement;
 import Statements.VoidStatement;
@@ -55,25 +58,51 @@ public class Program {
 		printedObjects.add(object);
 	}
 	
-	public List<Object> getVariables() {
+	public List<Variable> getVariables() {
 		return variables;
 	}
-	public void addVariable(Object variable) {
+	public void addVariable(Variable variable) {
 		this.variables.add(variable);
 	}
 
-	private List<Object> variables = new ArrayList<Object>();
+	private double time;
 	
-	public List<Object> execute(double dt) throws ModelException{
-		if (getMain() instanceof ValueStatement){
-			((ValueStatement) getMain()).execute();
-		}
-		if (getMain() instanceof VoidStatement){
-			((VoidStatement) getMain()).execute();
-		}
-		return getPrintedObjects();
-		
+	public double getTime(){
+		return this.time;
+	}
+	public void setTime(double d){
+		this.time = d;
+	}
+	
+	private boolean insterrupted = false;
+	
+	public boolean isInsterrupted() {
+		return insterrupted;
 	}
 
+	public void setInsterrupted(boolean insterrupted) {
+		this.insterrupted = insterrupted;
+	}
 	
+	private List<Variable> variables = new ArrayList<Variable>();
+	
+	public List<Object> execute(double dt) throws ModelException{
+		if (dt + getTime() > 0.2){
+			try{
+				setTime(getTime() + dt % 0.2);
+				if (getMain() instanceof ValueStatement){
+					((ValueStatement) getMain()).execute();
+				}
+				if (getMain() instanceof VoidStatement){
+					((VoidStatement) getMain()).execute();
+				}
+				return getPrintedObjects();
+			}catch(BreakException e){
+				throw new IllegalStateException("The breakException should have been catched by the while-statement");
+			}
+		}
+		else{
+			return null;
+		}
+	}	
 }

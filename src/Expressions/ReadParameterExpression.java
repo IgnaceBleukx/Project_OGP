@@ -2,6 +2,7 @@ package Expressions;
 
 import java.util.List;
 
+import Statements.BreakException;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.util.ModelException;
 
@@ -32,7 +33,7 @@ public class ReadParameterExpression extends ValueExpression{
 	}
 	
 	@Override
-	public  double evaluate() throws ModelException{
+	public  double evaluate() throws ModelException, NumberFormatException, BreakException{
 		if (getFunction() != null){
 			List<Expression> parameters = getFunction().getParameters();
 			try{

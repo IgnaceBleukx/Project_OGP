@@ -1,6 +1,13 @@
 package Statements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Expressions.Expression;
+import Expressions.ValueExpression;
+import Expressions.ValueVariable;
+import Expressions.Variable;
+import asteroids.model.programs.Function;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.util.ModelException;
 
@@ -29,27 +36,38 @@ public class AssignementStatement extends VoidStatement {
 	private Expression value;
 	private String variableName;
 	
-	public void execute() throws ModelException{
+	public void execute() throws ModelException, BreakException{
 		if (getProgram() == null){
 			throw new ModelException("The variable is not part of a program");
 		}
+		passInformation(getValue());
 		if (getFunction() != null){
-			for (Object variable : getFunction().getVariables()){
-				if (((AssignementStatement) variable).getVariableName().equals(this.getVariableName())){
-					((AssignementStatement) variable).setValue(this.getValue());
+			for (Variable variable : getFunction().getVariables()){
+				if (variable.getName().equals(this.getVariableName())){
+					variable.setValue(((ValueExpression) this.getValue()).evaluate());
 					return;
 				}
 			}
-			getFunction().addVariable(this);
+			getFunction().addVariable(new Variable(((ValueExpression) getValue()).evaluate(),getVariableName()));
+			return;
 		}
 		else{
-			for (Object variable : getProgram().getVariables()){
-				if (((AssignementStatement) variable).getVariableName().equals(this.getVariableName())){
-					((AssignementStatement) variable).setValue(this.getValue());
+			List<String> functionNames = new ArrayList<String>();
+			for (Function function : getProgram().getFunctions()){
+				functionNames.add(function.getFunctionName());
+			}
+			if (functionNames.contains(getVariableName())){
+				throw new ModelException("The variableName is the same as a functioName");
+			}
+			for (Variable variable : getProgram().getVariables()){
+				if (variable.getName().equals(this.getVariableName())){
+					variable.setValue(((ValueExpression) this.getValue()).evaluate());
 					return;
 				}
 			}
-			getProgram().addVariable(this);
+			getProgram().addVariable(new Variable(((ValueExpression)this.getValue()).evaluate(),this.getVariableName()));
+			return;
+			
 		}
 	}
 	

@@ -1,5 +1,6 @@
 package Expressions;
 
+import Statements.BreakException;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.util.ModelException;
 
@@ -29,7 +30,7 @@ public class NotExpression extends BooleanExpression {
 	}
 
 	@Override
-	public boolean evaluate() throws ModelException{
+	public boolean evaluate() throws ModelException, BreakException{
 		if (getExpression() instanceof BooleanExpression){
 			try {
 				passInformation(getExpression());

@@ -3,7 +3,7 @@ package Statements;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.util.ModelException;
 
-public class FireStatement extends VoidStatement {
+public class FireStatement extends ActionStatement {
 
 	public FireStatement(SourceLocation location){
 		setSourceLocation(location);

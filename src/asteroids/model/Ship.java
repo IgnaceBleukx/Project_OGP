@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import be.kuleuven.cs.som.annotate.Raw;
+
 
 
 /**
@@ -51,7 +51,7 @@ public class Ship extends Entity {
 	 * Default parameter for radius is 10.
 	 * Default parameter for mass is 0. (Gets adjusted by extended constructor, by invoking this.setMass).
 	 */
-	@Raw
+	
 	public Ship(){
 		this(0, 0, 0, 0, 10, 0, 0);
 	}
@@ -79,7 +79,7 @@ public class Ship extends Entity {
 	 * 			| if (Double.isNaN(mass))
 	 * 				result = false
 	 */
-	@Raw // Possible to invoke method against objects that does not satisfy all invariants.
+	 // Possible to invoke method against objects that does not satisfy all invariants.
 	public void setMass(double mass){
 		if (this.isValidMass(mass)){
 			this.mass = mass;

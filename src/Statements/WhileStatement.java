@@ -42,28 +42,22 @@ public class WhileStatement extends VoidStatement {
 	private SourceLocation sourceLocation;
 	
 	@Override
-	public void execute() throws ModelException{
+	public void execute() throws ModelException, BreakException{
 		if (getCondition() instanceof BooleanExpression){
 			passInformation(getCondition());
-			try{
-				while (((BooleanExpression) getCondition()).evaluate()){
-					passInformation(getBody());
-					getBody().setWhileState(true);
-					if (getBody() instanceof BreakStatement){
-						return;
-					}
+			while (((BooleanExpression) getCondition()).evaluate()){
+				passInformation(getBody());
+				getBody().setWhileState(true);
+				try{
 					if (getBody() instanceof ValueStatement){
 						((ValueStatement) getBody()).execute();	
 					}
 					if (getBody() instanceof VoidStatement){
 						((VoidStatement) getBody()).execute();
 					}
+				}catch(BreakException e){
+					return;
 				}
-			}catch (IllegalStateException e){
-				throw new ModelException("Break used outside while");
-			}	
-			catch (ModelException e){
-				return;
 			}
 		}
 		else{

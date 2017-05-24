@@ -3,12 +3,13 @@ package Expressions;
 import Statements.Statement;
 import asteroids.model.Program;
 import asteroids.model.programs.Function;
+import asteroids.util.ModelException;
 
 public class Expression {
 
 	private Function function;
 	private Program program;
-
+	
 	public Function getFunction() {
 		return function;
 	}

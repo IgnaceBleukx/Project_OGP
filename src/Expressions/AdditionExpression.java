@@ -1,5 +1,6 @@
 package Expressions;
 
+import Statements.BreakException;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.util.ModelException;
 
@@ -37,7 +38,7 @@ public class AdditionExpression extends ValueExpression {
 	}
 	
 	@Override
-	public double evaluate() throws ModelException{
+	public double evaluate() throws ModelException, BreakException{
 		if (getEx1() instanceof ValueExpression && getEx2() instanceof ValueExpression){
 			passInformation(getEx1());
 			passInformation(getEx2());

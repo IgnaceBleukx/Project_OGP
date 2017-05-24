@@ -32,31 +32,29 @@ public class ReadVariableExpression extends ValueExpression {
 		this.variableName = variableName;
 	}
 	
-	@Override
 	public double evaluate() throws ModelException{
-			List<Object> programVariables = getProgram().getVariables();
-			Expression toReturn = null;
-			for (Object globalVariable : programVariables){
-				if (((AssignementStatement) globalVariable).getVariableName().equals(getVariableName())){
-					toReturn = ((AssignementStatement) globalVariable).getValue();
-				}
-			}
-			if(getFunction() != null){
-				List<Object> functionVariables = getFunction().getVariables();
-				for (Object localVariable : functionVariables){
-					if (((AssignementStatement) localVariable).getVariableName().equals(getVariableName())){
-						toReturn = ((AssignementStatement) localVariable).getValue();
+			Variable toReturn = null;
+			if (getProgram() != null){
+				List<Variable> globalVariables = getProgram().getVariables();
+				for (Variable variable : globalVariables){
+					if (variable.getName().equals(this.getVariableName())){
+						toReturn = variable;
 					}
 				}
 			}
-			
-			if(toReturn != null){
-				passInformation(toReturn);
-				return ((ValueExpression) toReturn).evaluate();
+			if (getFunction() != null){
+				List<Variable> localVariables = getFunction().getVariables();
+				for(Variable variable : localVariables){
+					if (variable.getName().equals(this.getVariableName())){
+						toReturn = variable; 
+					}
+				}
 			}
-			else{
-				throw new ModelException("The variable does not occur in the current functionbody or program");
+			if(toReturn == null){
+				throw new ModelException("The variable is undefined");
 			}
+			return toReturn.getValue();
+						
 	}
 
 

@@ -3,7 +3,7 @@ package Statements;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.util.ModelException;
 
-public class ThrustOffStatement extends VoidStatement{
+public class ThrustOffStatement extends ActionStatement{
 	
 	public ThrustOffStatement(SourceLocation location){
 		setSourceLocation(location);

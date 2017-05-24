@@ -1,5 +1,6 @@
 package Expressions;
 
+import Statements.BreakException;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.util.ModelException;
 
@@ -22,7 +23,7 @@ public class SqrtExpression extends ValueExpression {
 	}
 	
 	@Override
-	public double evaluate() throws ModelException{
+	public double evaluate() throws ModelException, BreakException{
 		if (getExpression() instanceof ValueExpression){
 			passInformation(getExpression());
 			return Math.sqrt(((ValueExpression) getExpression()).evaluate());

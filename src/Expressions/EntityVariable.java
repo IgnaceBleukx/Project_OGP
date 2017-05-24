@@ -1,5 +1,5 @@
 package Expressions;
 
-public class EntityVariable {
+public class EntityVariable extends EntityExpression {
 
 }

@@ -1,8 +1,9 @@
 package Statements;
 
 import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 
-public class SkipStatement extends VoidStatement {
+public class SkipStatement extends ActionStatement {
 
 	public SkipStatement(SourceLocation location){
 		setSourceLocation(location);
@@ -19,6 +20,9 @@ public class SkipStatement extends VoidStatement {
 
 
 	private SourceLocation sourceLocation;
-	public void execute(){
+	public void execute() throws ModelException{
+		if (this.getFunction() != null){
+			throw new ModelException("SkipStatement in functionbody");
+		}
 	}
 }
