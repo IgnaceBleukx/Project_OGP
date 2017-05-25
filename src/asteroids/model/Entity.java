@@ -4,7 +4,7 @@ import be.kuleuven.cs.som.taglet.*;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- * A class of Entities. Super class of classes Ship, Bullet and MinorPlanet.
+ * A class that represents a entity. Superclass of classes Ship, Bullet and MinorPlanet.
  * 
  * @Invar The velocity of an Entity must be valid.
  * 		 | isValidVelocity(getVelocity()[0],getVelocity()[1])
