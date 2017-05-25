@@ -5,7 +5,9 @@ import java.util.List;
 
 import Expressions.ValueVariable;
 import Expressions.Variable;
+import Statements.ActionStatement;
 import Statements.BreakException;
+import Statements.SequenceStatement;
 import Statements.Statement;
 import Statements.ValueStatement;
 import Statements.VoidStatement;
@@ -17,8 +19,30 @@ public class Program {
 	public Program(List<Function> functions, Statement main){
 		setFunctions(functions);
 		setMain(main);
-		getMain().setProgram(this); 
+		getMain().setProgram(this);
 	}
+	
+	public boolean getFirstRun(){
+		return this.firstRun;
+	}
+	
+	public boolean firstRun = true;
+	
+	public void setFirstRunFalse(){
+		this.firstRun = false;
+	}
+	
+	public double getTimeNeeded() {
+		return timeNeeded;
+	}
+
+	public void setTimeNeeded(double timeNeeded) {
+		this.timeNeeded = timeNeeded;
+	}	
+	
+	private double timeNeeded = 0;
+	
+	
 	
 	public List<Function> getFunctions() {
 		return functions;
@@ -58,6 +82,10 @@ public class Program {
 		printedObjects.add(object);
 	}
 	
+	public void clearPrintedObject(){
+		printedObjects.clear();
+	}
+	
 	public List<Variable> getVariables() {
 		return variables;
 	}
@@ -74,6 +102,8 @@ public class Program {
 		this.time = d;
 	}
 	
+	
+	
 	private boolean insterrupted = false;
 	
 	public boolean isInsterrupted() {
@@ -87,22 +117,41 @@ public class Program {
 	private List<Variable> variables = new ArrayList<Variable>();
 	
 	public List<Object> execute(double dt) throws ModelException{
-		if (dt + getTime() > 0.2){
+		System.out.println("gettime= " +getTime());
 			try{
-				setTime(getTime() + dt % 0.2);
+				setTime(getTime()+dt);
+				
 				if (getMain() instanceof ValueStatement){
 					((ValueStatement) getMain()).execute();
 				}
 				if (getMain() instanceof VoidStatement){
 					((VoidStatement) getMain()).execute();
 				}
-				return getPrintedObjects();
+				if(getFirstRun()){
+					setTimeOneLap(getTimeNeeded());
+					setFirstRunFalse();
+				}
+				setTimeOneLap(getTimeOneLap()-dt);
+				if (getTimeOneLap() > 0){
+					clearPrintedObject();
+					return null;	
+				}
+				else{
+					return getPrintedObjects();
+				}
 			}catch(BreakException e){
 				throw new IllegalStateException("The breakException should have been catched by the while-statement");
 			}
-		}
-		else{
-			return null;
-		}
-	}	
+	}
+
+	
+	public double getTimeOneLap() {
+		return timeOneLap;
+	}
+
+	public void setTimeOneLap(double timeOneLap) {
+		this.timeOneLap = timeOneLap;
+	}
+
+	private double timeOneLap = 0;
 }

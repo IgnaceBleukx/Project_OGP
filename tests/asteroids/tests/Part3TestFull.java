@@ -1885,6 +1885,7 @@ public class Part3TestFull {
     score += 5;
     results = facade.executeProgram(ship1, 0.57);
     Object[] expecteds = { 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 0.0 };
+    System.out.println("resresults=" + results);
     assertArrayEquals(expecteds, results.toArray());
     score += 15;
   }
@@ -1910,6 +1911,7 @@ public class Part3TestFull {
         + "    t := t + (a*sumfac(a + -1.0));" + "    a := a + -1.0; " + "  }" + "  return t; " + "} "
         + "print sumfac(4.0); ";
     Program program = ProgramParser.parseProgramFromString(code, programFactory);
+    System.out.println("programrecursivefunction= " + program.getFunctions().get(0).getBody());
     facade.loadProgramOnShip(ship1, program);
     List<Object> results = facade.executeProgram(ship1, 0.3);
     Object[] expecteds = { 60.0 };

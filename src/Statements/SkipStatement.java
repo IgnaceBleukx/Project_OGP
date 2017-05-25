@@ -24,5 +24,16 @@ public class SkipStatement extends ActionStatement {
 		if (this.getFunction() != null){
 			throw new ModelException("SkipStatement in functionbody");
 		}
+		else {
+			if(this.getProgram().getFirstRun()){
+				this.getProgram().setTimeNeeded(this.getProgram().getTimeNeeded()+0.2);
+			}
+			if(!getExecutedState()){
+				if(this.getProgram().getTime() >= 0.2){
+					this.getProgram().setTime(this.getProgram().getTime()-0.2);
+					setExecutedState(true);
+				}
+			}
+		}
 	}
 }

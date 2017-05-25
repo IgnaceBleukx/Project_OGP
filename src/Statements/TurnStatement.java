@@ -35,7 +35,18 @@ public class TurnStatement extends ActionStatement {
 		if(getAngle() instanceof ValueExpression){
 			try {
 				passInformation(getAngle());
-				this.getProgram().getShip().rotate(((ValueExpression) getAngle()).evaluate());
+				if(this.getProgram().getFirstRun()){
+					this.getProgram().setTimeNeeded(this.getProgram().getTimeNeeded()+0.2);
+				}
+				if(!getExecutedState()){
+					if(this.getProgram().getTime() >= 0.2){
+						this.getProgram().getShip().rotate(((ValueExpression) getAngle()).evaluate());
+						this.getProgram().setTime(this.getProgram().getTime()-0.2);
+						setExecutedState(true);
+					}
+				}
+				
+				
 			} catch (ModelException e) {
 				throw new ModelException("ModelException in TurnStatement");
 			}

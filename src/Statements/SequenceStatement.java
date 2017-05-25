@@ -42,11 +42,30 @@ public class SequenceStatement extends ValueStatement {
 			statementToHandle = getStatements().get(index);
 			passInformation(statementToHandle);
 			if (statementToHandle instanceof ValueStatement){
+				if(statementToHandle instanceof ActionStatement){
+					if(((ActionStatement) statementToHandle).getExecutedState()){
+						((ActionStatement) statementToHandle).setExecutedState(false);
+					}
+					else{ ((ValueStatement) statementToHandle).execute();
+					}
+				}
+				else {
 				((ValueStatement) statementToHandle).execute();
+				}
 			}
+		
 			if (statementToHandle instanceof VoidStatement){
+				if(statementToHandle instanceof ActionStatement){
+					if(((ActionStatement) statementToHandle).getExecutedState()){
+						((ActionStatement) statementToHandle).setExecutedState(false);
+					}
+					else ((VoidStatement) statementToHandle).execute();
+				}
+				else {
 				((VoidStatement) statementToHandle).execute();
+				}
 			}
+				
 			index++;
 		}
 		if (getStatements().get(getStatements().size()-1) instanceof ValueStatement){

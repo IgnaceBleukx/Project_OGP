@@ -28,8 +28,16 @@ public class ThrustOffStatement extends ActionStatement{
 			throw new ModelException("ThrustOff action in functio body");
 		}
 		else{
-			this.getProgram().getShip().thrustOn();
+			if(this.getProgram().getFirstRun()){
+				this.getProgram().setTimeNeeded(this.getProgram().getTimeNeeded()+0.2);
+			}
+			if(!getExecutedState()){
+				if(this.getProgram().getTime() >= 0.2){
+					this.getProgram().getShip().thrustOff();
+					this.getProgram().setTime(this.getProgram().getTime()-0.2);
+					setExecutedState(true);
+				}
+			}
 		}
 	}
-
 }
