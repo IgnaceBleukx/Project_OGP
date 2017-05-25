@@ -210,7 +210,7 @@ public class Bullet extends Entity {
 	 * @post If the bullet collides with a horizontal boundary, its Y-velocity is set tot the negative of its previous Y-velocity.
 	 * 			| if (yPosition == world.yDimension - this.radius || yPosition == this.radius)
 	 *  					new.getVelocity()[1] = -this.getVelocity()[0]
-	 * @post If the bullet	 collides with a vertical boundary, its X-Velocity is set to the negative of its previous X-velocity.
+ 	 * @post If the bullet	 collides with a vertical boundary, its X-Velocity is set to the negative of its previous X-velocity.
 	 * 			| if (xPosition == world.xDimension - this.radius || xPosition == this.radius)
 	 *  					new.getVelocity()[0] = -this.getVelocity()[0]
 	 */
