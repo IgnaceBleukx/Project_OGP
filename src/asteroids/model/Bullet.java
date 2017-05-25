@@ -214,6 +214,7 @@ public class Bullet extends Entity {
 	 * 			| if (xPosition == world.xDimension - this.radius || xPosition == this.radius)
 	 *  					new.getVelocity()[0] = -this.getVelocity()[0]
 	 */
+	@Override
 	public void boundaryCollision() {
 		if (this.getBoundaryCollisions() < this.getMaxBoundaryCollisions()){
 			this.addBoundaryCollision();
