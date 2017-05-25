@@ -226,18 +226,14 @@ public class Facade implements asteroids.part3.facade.IFacade{
 
 	public void addBulletToWorld(World world, Bullet bullet) throws ModelException {
 		try{
-		world.addBulletToWorld(bullet);
-		bullet.setWorld(world);
-		}catch (IllegalArgumentException exc){
-			throw new ModelException("The bullet can't be added to the world");
+			world.addBulletToWorld(bullet);
+		}catch(IllegalArgumentException e){
+			throw new ModelException("The bullet is out of bounds or null");
 		}
-		
 	}
 
 	public void removeBulletFromWorld(World world, Bullet bullet) throws ModelException {
-		world.removeBulletFromWorld(bullet);
-		bullet.setWorld(null);
-		
+		world.removeBulletFromWorld(bullet);		
 	}
 
 	public Set<? extends Bullet> getBulletsOnShip(Ship ship) throws ModelException {

@@ -2,8 +2,11 @@ package asteroids.model;
 
 import asteroids.util.ModelException;
 
+import be.kuleuven.cs.som.taglet.*;
+import be.kuleuven.cs.som.annotate.*;
+
 /**
- * A class of Entities. Super class of classes Ship, Bullet and MinorPlanet.
+ * A class that represents a entity. Superclass of classes Ship, Bullet and MinorPlanet.
  * 
  * @invar The velocity of an Entity must be valid.
  * 		 | isValidVelocity(getVelocity()[0],getVelocity()[1])
@@ -54,19 +57,20 @@ public class Entity {
 	}
 	
 	/**
-	 * 
+	 * This method return the maximum velocity of the entity.
 	 * @return Returns the maximum velocity of the current Entity.
 	 */
 	public double getMaxVelocity(){
 		return this.maxVelocity;
 	}
+	
 	private double xVelocity;
 	private double yVelocity;
 	private final double maxVelocity = 300000;
 	
 	/**
-	 * 
-	 * @return Returns the current orientation of the ship.
+	 * This method returns the current orientation of the entity, expressed in radians.
+	 * @return Returns the current orientation of the entity.
 	 * 			| result = this.orientation
 	 */
 	public double getOrientation() {
@@ -74,11 +78,12 @@ public class Entity {
 	}
 
 	/**
+	 * Sets the orientation of the current entity to the given parameter 'orientation'.
 	 * @param orientation
-	 * @pre  The value of the parameter orientation must be larger than or equal to 0 and smaller than or equal to 2 * pi.
-	 * 			| 0 <= orientation <= 2 * pi
+	 * @Pre  The value of the parameter orientation must be larger than or equal to 0 and smaller than or equal to 2 * pi.
+	 * 			| this.isValidOrientation(this.getOrientation)
 	 * @post Sets the current orientation of the ship to the parameter orientation.
-	 * 			| new.orientation = orientation 
+	 * 			| new.getOrientation() = orientation 
 	 */
 	public void setOrientation(double orientation){
 		if(isValidOrientation(orientation)){
@@ -100,40 +105,35 @@ public class Entity {
 
 	
 	/**
-	 * @throws NullPointerException if the position of the ship is not initialized.
-	 * 			| if xPosition == 0.0d || yPosition == 0.0d:
-	 * 					throw NullPointerException
+	 *This method returns the position of the current ship in an array. 
 	 * @return Returns the current position of the ship in an array of length 2 with the xPosition on index 0 and yPosition on index 1.
 	 * 			result = [xPosition, yPosition]
 	 */
 	public double[] getPosition(){		
-		double[] position;
-		position = new double[] {this.xPosition, this.yPosition};
-		return position;		
+		return new double[] {this.xPosition, this.yPosition};		
 	}
 	
 	/**
 	 * 
-	 * @param xPosition
-	 * @param yPosition
-	 * @return returns true if both xVelocity and yVelocity are real numbers.
-	 * @return returns false if xVelocity or yVelocity is not a real number.
-	 * 			| return (xPosition != NaN && yPosition != yPosition)
-	 * 
+	 * @Param xPosition The position along the x-axis that must be checked if it is valid.
+	 * @Raram yPosition The position along the y-axis that must be checked if it is valid.
+	 * @Return returns true if both xVelocity and yVelocity are real numbers.
+	 * @Return returns false if xVelocity or yVelocity is not a real number.
+	 * 			| return (xPosition != NaN && yPosition != yPosition) 
 	 */
 	public boolean isValidPosition(double xPosition, double yPosition){
 		return (!Double.isNaN(xPosition) && !Double.isNaN(yPosition));
 	}
 	
 	/**
-	 * @param xPosition
-	 * @param yPosition
-	 * @throws IllegalArgumentException if the given xPosition or yPosition is not a valid number.
+	 * @param xPosition The position along the x-axis to witch the current Entity must be set.
+	 * @param yPosition The position along the y-axis to witch the current Entity must be set.
+	 * @throws IllegalArgumentException if the given xPosition or yPosition is not valid.
 	 * 			| if (xPosition == NaN || yPosition == NaN)
-	 * 					throw IllegalArgumentException	 * 					
+	 * 					throw IllegalArgumentException	  					
 	 * @post Sets the current position of the ship to the parameters xPosition and yPosition.
-	 * 			| new.xPosition = xPosition
-	 * 			| new.yPosition = yPosition
+	 * 			| new.getXPosition()[0] = xPosition
+	 * 			| new.getYPosition()[1] = yPosition
 	 */
 	public void setPosition(double xPosition, double yPosition) throws IllegalArgumentException{
 		if (!isValidPosition(xPosition, yPosition)){
@@ -150,13 +150,12 @@ public class Entity {
 	
 	
 	/**
-	 * 
-	 * @param radius
+	 * @param radius: The radius to witch the current Entity must be set.
 	 * @throws IllegalArgumentException if the radius is not valid.
 	 *			| if (! isValidRadius(radius)
 	 *				throw IllegalArgumentException
 	 * @post Sets the radius of the ship on the parameter radius.
-	 * 			| new.radius = radius
+	 * 			| new.getRadius() = radius
 	 */			
 	public void setRadius(double radius) throws IllegalArgumentException{
 		if (!isValidRadius(radius)){
@@ -168,12 +167,11 @@ public class Entity {
 	}
 	
 	/**
-	 * 
-	 * @param radius
-	 * 			The radius to check.
+	 * @param radius: The radius to check.
 	 * @return True if the radius is larger than or or equal to the minimum radius. 
-	 * @return False if the radius smaller or the given radius is not a number.
-	 * 	
+	 * @return False if the radius smaller or the given radius is not a number or the current entity is a ship and the radius is below
+	 * 			the minimumshipradius or the entity is a minorPlanet and the radius is smaller than the minimumradius of the minorplanet.
+	 * 			| see code
 	 */
 	public boolean isValidRadius(double radius){
 		if (!Double.isNaN(radius)){
@@ -195,8 +193,8 @@ public class Entity {
 
 
 	/**
-	 * 
-	 * @return Returns the current radius of the ship.
+	 * This method returns the current radius of the entity.
+	 * @return Returns the current radius of the entity.
 	 * 			| result = this.radius
 	 */
 	public double getRadius(){
@@ -205,12 +203,11 @@ public class Entity {
 	private double radius;
 	
 	/**
-	 * 
-	 * @param time
+	 * @param time: The time over which the current entity must be advanced.
 	 * @throws IllegalArgumentException throws a new exception of the type IllegalArgumentException if the give time is negative.
 	 * @post Updates the position of the current entity according to the given time and its velocity.
-	 * 			new.getVelocity()[0] = this.getVelocity()[0] * time
-	 * 			new.getVelocity()[1] = this.getVelocity()[1] * time
+	 * 			new.getPosition()[0] = this.getVelocity()[0] * time
+	 * 			new.getPosition()[1] = this.getVelocity()[1] * time
 	 */
 	public void move(double time) throws IllegalArgumentException{
 		if (time < 0){
@@ -223,8 +220,12 @@ public class Entity {
 	}
 	
 	/**
+	 * This method returns the time in seconds until the border of the current entity collapses with the boundary of the world it is positionned in.
+	 * @return Returns the time in seconds until the current entity collides for the first time with a boundary of its world.
+	 * 			| this.move(result)
+	 * 			| new.getPosition()[0] = this.getWorld.getDimension()[0] - this.getRadius ||   new.getPosition()[0] = this.getRadius
+	 * 			   || new.getPosition()[1] = this.getWorld.getDimension()[1] - this.getRadius ||   new.getPosition()[1] = this.getRadius
 	 * 
-	 * @return Returns the time in seconds until the current entity collides for the first time with a boundary.
 	 */
 	public double getTimeCollisionBoundary(){
 		double boundaryTime = Double.POSITIVE_INFINITY;
@@ -260,29 +261,27 @@ public class Entity {
 	}
 
 	 /**
-	  * 
-	  * @param otherEntity
-	  * @return returns true if the current entity overlaps with the other entity or the current entity equals the other entity.
+	  * @param otherEntity: The other entity that might overlap with the current entity.
+	  * @return Returns true if the current entity overlaps with the other entity or the current entity equals the other entity.
 	  * 			| return (this.equals(otherEntity) || this.getDistanceBetween(otherEntity) < 0
 	  */
 	public boolean overlap(Entity otherEntity){
 		if (this == otherEntity){
 			return true;
 		}
-		
 		if (this.getDistanceBetween(otherEntity) < 0){
 			return true;
 		}
-		
 		else {
 			return false;
 		}
 	}
 	
 	/**
-	 * 
-	 * @param otherEntity
+	 * @param otherEntity: The other entity to witch the distance must be measured.
 	 * @return Returns the distance between the 2 outer borders of the current entity and the other entity.
+	 * 			| result = sqrt((this.getPosition()[0] - otherEntity.getPosition()[0]) ** 2 + 
+	 * 								(this.getPosition()[1] - otherEntity.getPosition()[1]) ** 2) - this.getRadius() - otherEntity.getRadius()
 	 */
 	public double getDistanceBetween(Entity otherEntity){
 		if (this == otherEntity){
@@ -294,12 +293,13 @@ public class Entity {
 	}
 	
 	/**
-	 * 
+	 * This method returns the position where the entity hits the border of its wirld.
 	 * @return Returns the position of the next boundary collision of the current entity in
 	 * 			an array of 2 doubles with the xPosition on index 0 and the yPosition on index 1.
+	 * 			| this.move(this.getTimeCollisionBoundary())
+	 * 			| result = new.getPosition()[0] +- this.getRadius() || result = new.getPosition()[1] +- this.getRadius()
 	 */
 	public double[] getPositionCollisionBoundary(){
-		System.out.println("timecol=" + this.getTimeCollisionBoundary());
 		if (this.getWorld() != null && this.getTimeCollisionBoundary() != Double.POSITIVE_INFINITY){
 			double[] boundaryColPos;
 			double xPosColBound = this.getVelocity()[0]*this.getTimeCollisionBoundary() + this.getPosition()[0];
@@ -326,9 +326,11 @@ public class Entity {
 		}
 
 	/**
-	 * 
-	 * @param otherEntity
+	 * @param otherEntity: The other entity to witch the collisiontime must be calculated
 	 * @return Returns the time in seconds until the current entity collides with the other entity.
+	 * 			| this.move(result)
+	 * 			| otherEntity.move(result)
+	 * 			| new.getDistanceBetween(otherEntity) = 0
 	 */
 	public double getTimeCollisionEntity(Entity otherEntity){
 		double deltaRX = otherEntity.getPosition()[0] - this.getPosition()[0];
@@ -349,30 +351,11 @@ public class Entity {
 		}
 	}
 	
-	@Deprecated
-	public double[] getPositionCollisionEntity1(Entity otherEntity) throws IllegalArgumentException{
-	try{
-	if (this.getTimeCollisionEntity(otherEntity) == Double.POSITIVE_INFINITY){
-		return null;
-	}
-	
-	else {
-		double[] PosCollapse;
-		double xPosCollapse = (((this.getPosition()[0]+this.getTimeCollisionEntity(otherEntity)*this.getVelocity()[0])*otherEntity.getRadius())+
-				((otherEntity.getPosition()[0]+this.getTimeCollisionEntity(otherEntity)*this.getVelocity()[0])*this.getRadius())) /
-				(this.getRadius()+otherEntity.getRadius());
-		double yPosCollapse = (((this.getPosition()[1]+this.getTimeCollisionEntity(otherEntity)*this.getVelocity()[1])*otherEntity.getRadius())+
-				((otherEntity.getPosition()[1]+this.getTimeCollisionEntity(otherEntity)*otherEntity.getVelocity()[1])*this.getRadius())) /
-				(this.getRadius()+otherEntity.getRadius());
-		PosCollapse = new double[] {xPosCollapse, yPosCollapse};
-		return PosCollapse;
-	}
-	}catch (IllegalArgumentException e){
-		throw new IllegalArgumentException();
-	}
-	
-}
-	
+	/**
+	 * This function determines if the entity is out of bounds of the world. 
+	 * @param world: The world in witch the entity must be checked if it is out of bounds.
+	 * @return see code
+	 */
 	public boolean isOutOfBounds(World world){
 		if (this.getPosition()[0] - this.getRadius() < 0 || this.getPosition()[1] - this.getRadius() < 0){
 			return true;
@@ -385,6 +368,11 @@ public class Entity {
 		}
 	}
 
+	/**
+	 * 
+	 * @param otherEntity
+	 * @return
+	 */
 	public double[] getPositionCollisionEntity(Entity otherEntity){
 		if (this.getTimeCollisionEntity(otherEntity) != Double.POSITIVE_INFINITY){
 			double timeToCollision = this.getTimeCollisionEntity(otherEntity);
@@ -406,42 +394,58 @@ public class Entity {
 		}
 	}
 	
+	/**
+	 * This method resolves a boundary collision of an entity.
+	 * @Post If the entity collides with a horizontal boundary, its y-velocity is negated, otherwise its x-velocity is negated.
+	 * 			| new.getVelocity()[0] = -this.getVelocity()[0] || new.getVelocity()[1] = -this.getVelocity()[1]
+	 */
 	public void boundaryCollision(){
-		System.out.println("this.getposition[0] = " + this.getPosition()[0]);
-		System.out.println("this.getposition[1] = " + this.getPosition()[1]);
-		System.out.println("this.getradius = " + this.getRadius());
-		System.out.println("this.getworlddimensionX = " + this.getWorld().getDimension()[0]);
-		System.out.println("this.getworlddimensionY = " + this.getWorld().getDimension()[1]);
-		System.out.println("this.getradius*0.99=  " + this.getRadius()*0.99);
-		System.out.println("test = " + this.getPositionCollisionBoundary()[0]);
-		System.out.println("test = " + this.getPositionCollisionBoundary()[1]);
 		double xPosColBound = this.getPositionCollisionBoundary()[0];
 		double yPosColBound = this.getPositionCollisionBoundary()[1];
-		
 		if (xPosColBound == 0 || xPosColBound == this.getWorld().getDimension()[0]){
-			System.out.println("negative x velocity");
 			this.setVelocity(-this.getVelocity()[0], this.getVelocity()[1]);
 		}
 		if (yPosColBound == 0 || yPosColBound == this.getWorld().getDimension()[1]){
-			System.out.println("negative y velocity");
 			this.setVelocity(this.getVelocity()[0], -this.getVelocity()[1]);
 		}
 		
 
 	}
 	
+	/**
+	 * This method sets the world of the current entity to the given parameter world.
+	 * @param world: The world the entity must be set in.
+	 * @Post The world of the current entity is set to the parameter world.
+	 * 			| new.getWorld() = world
+	 */
 	public void setWorld(World world){
 		this.world = world;
 	}
+	
+	/**
+	 * This method returs the world the current entity is set in.
+	 * @return Returns the world of the current entity.
+	 * 				| result = this.world
+	 */
 	public World getWorld(){
 		return this.world;
 	}
+	
+	/**
+	 * This method deterimines if the world given is a valid one.
+	 * @param world: The world that must be checked.
+	 * @return Returns false if and only if the world is null.
+	 * 			| result = world != null
+	 */
 	public boolean isValidWorld(World world){
 		return world != null;
 	}
 	
+	/**
+	 * This method is overwritten by all subclasses of Entity.
+	 */
 	public void terminate(){
-		//This method is overrided by all subclasses of Entity.
+		throw new IllegalStateException("This method should be overwritten by all subclasses of Entity");
 	}
 
 	private World world;

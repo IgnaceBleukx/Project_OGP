@@ -169,8 +169,7 @@ public class World {
 			}
 		}catch (NullPointerException exc){
 			throw new IllegalArgumentException();
-		}
-	}
+		}	}
 
 	
 	/**@param bullet
