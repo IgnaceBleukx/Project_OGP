@@ -2,18 +2,23 @@ package asteroids.model;
 
 
 
-
+/**
+ * A class that represents a bullet, subclass of Entity.
+ * @author Ignace Bleukx and Mats Ruell
+ * @Invar The mass of the bullet will always be valid.
+ * 			| this.isValidMass(this.getMass()
+ * @Invar The bullet will always be placed in a world or loaded on a ship but not both.
+ * 			| !((this.getWorld() != null && this.getShip() != null) && (this.getWorld() == null && this.getShip() == null))
+ */
 public class Bullet extends Entity {
 	
 	/**
+	 * This method creates a new object of type Bullet with given parameters.
 	 * @param x
 	 * @param y
 	 * @param xVelocity
 	 * @param yVelocity
 	 * @param radius
-	 * @throws IllegalArgumentException
-	 * 			If one of the given parameters is invalid, a new exception of the type IllegalArgumentException will be thrown.
-	 * This method creates a new object of type Bullet with given parameters.
 	 */
 	public Bullet (double x, double y, double xVelocity, double yVelocity, double radius) {
 		this.setPosition(x, y);
@@ -21,8 +26,7 @@ public class Bullet extends Entity {
 		this.setRadius(radius);
 		this.setMass();
 	}
-
-
+	
 	/**
 	 * 
 	 * @param radius
@@ -67,20 +71,23 @@ public class Bullet extends Entity {
 	}
 	
 	private double radius;
-
 	
-	
+	/**
+	 * This method sets the mass of the current bullet.
+	 * @post The mass of the bullet equals to 4/3 * density * pi * radius**3
+ * 				| see code
+	 */
 	public void setMass(){
 		this.mass = 4.0 * this.density * Math.PI * Math.pow(this.getRadius(),3) / 3.0;
 	}
 	
+	/**
+	 * This method retuens the mass of the current bullet.
+	 * @return Returns the mass of the current bullet.
+	 */
 	public double getMass(){
 		return this.mass;
 	}
-	
-//	public boolean isValidMass(double mass){
-//		return (mass != Double.NaN && mass >= (4/3) * Math.PI * Math.pow(this.getRadius(),3) * this.density);
-//	}
 	
 	private double mass;
 	public final double density = 7.8E12;
@@ -119,6 +126,12 @@ public class Bullet extends Entity {
 		return ship.getWorld() == this.getWorld() && ship != null;
 		}
 	
+	/**
+	 * This method sets the bulletscource to the given ship.
+	 * @param ship The ship where the bullet is fired from.
+	 * @post The bulletscource is equal to the ship.
+	 * 			| new.getBulletScource().equals(ship)
+	 */
 	public void setBulletScource(Ship ship){
 		this.bulletScource = ship;
 	}
@@ -173,32 +186,64 @@ public class Bullet extends Entity {
 	
 	/**
 	 * Returns the collisionstate of the current bullet.
-	 * @return Returns the collisionstate
+	 * @return Returns the collisionstate of the bullet.
+	 * 			| return this.collisionState
 	 */
 	public boolean getCollisionState(){
 		return this.canCollide;
 	}
+	
 	private boolean canCollide = true;
-
+	
+	/**
+	 * This method sets the amout of boundary collisions of the current bullet.
+	 * @param boundaryCollisions: The amount of boundary collisions of the bullet.
+	 * @Post The amount of boundary collisions is set to the parameter.
+	 * 			|new.getBoundaryCollisions == boundaryCollisions
+	 */
 	public void setBoundaryCollisions(int boundaryCollisions){
 		this.boundaryCollisions = boundaryCollisions;
 	}
 	
+	/**
+	 * This method increases the amount of boundarycollisions by 1.
+	 * @Post The amount of boundarycollisions is increased with 1.
+	 * 			| new.getBoundaryCollisions() = this.getBoundaryCollisions() +1
+	 */
 	public void addBoundaryCollision(){
 		this.boundaryCollisions += 1;
 	}
 	
+	/**
+	 * This method returns the amount of boundarycollisions of the current bullet.
+	 * @return Returns the amount of boundarycollisions of the current bullet.
+	 * 			| return this.boundaryCollisions
+	 */
 	public int getBoundaryCollisions(){
 		return this.boundaryCollisions;
 	}
+	
 	private int boundaryCollisions = 0;
 
+	/**
+	 * This method sets the maximum of boundarycollisions of the bullet.
+	 * @param collisions The maximum of boundarycollisions.
+	 * @Post The maximum of boundarycollisions is set to the parameter.
+	 * 	`		| new.getMaxBoundaryCollisions() == collisions
+	 */
 	public void setMaxBoundaryCollisions(int collisions){
 		this.maxBoundaryCollisions = collisions;
 	}
+	
+	/**
+	 * This method returns the maximum of boundarycollisions of the bullet.
+	 * @return Returns the maximum amount of boundarycollisions of the bullet.
+	 * 			| return this.maxBoundaryCollisions
+	 */
 	public int getMaxBoundaryCollisions(){
 		return this.maxBoundaryCollisions;
 	}
+	
 	private int maxBoundaryCollisions = 2;
 
 	/**
@@ -268,7 +313,6 @@ public class Bullet extends Entity {
 		}
 		
 	}
-
 
 }
 

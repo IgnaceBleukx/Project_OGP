@@ -1,20 +1,15 @@
 package asteroids.model;
 
-import asteroids.util.ModelException;
-
-import be.kuleuven.cs.som.taglet.*;
-import be.kuleuven.cs.som.annotate.*;
-
 /**
- * A class that represents a entity. Superclass of classes Ship, Bullet and MinorPlanet.
- * 
- * @invar The velocity of an Entity must be valid.
+ * A class that represents a entity with a x-velocity, a y-velocity, a x-position, a y-position and a radius
+ * Superclass of classes Ship, Bullet and MinorPlanet.
+ * @author Ignace Bleukx and Mats Ruell
+ * @Invar The velocity of an Entity must be valid.
  * 		 | isValidVelocity(getVelocity()[0],getVelocity()[1])
- * @invar The position of an Entity must be valid.
+ * @Invar The position of an Entity must be valid.
  * 		 | isValidPosition(getPosition()[0],getPosition()[1])
- * @invar The radius of an Entity must be valid.
+ * @Invar The radius of an Entity must be valid.
  * 		 | isValidRadius(getRadius())
- *
  */
 public class Entity {
 	

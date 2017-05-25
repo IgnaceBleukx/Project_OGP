@@ -6,10 +6,10 @@ import java.util.Set;
 
 
 /**
- * A Class of Ships with an X-Velocity, Y-Velocity, X-Position, Y-Position, Orientation, Radius and Mass.
+ * A Class of Ships with an X-Velocity, Y-Velocity, X-Position, Y-Position, Orientation, Radius and Mass and a thruster that can be enabled and disabled.
  * Subclass of class Entity
- * 
- * @invar The mass of a ship must be a valid mass.
+ * @author Ignace Bleukx and Mats Ruell
+ * @Invar The mass of a ship must be a valid mass.
  * 		 | isValidMass(getMass())
  * 
  */
