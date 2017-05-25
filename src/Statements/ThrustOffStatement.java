@@ -25,10 +25,10 @@ public class ThrustOffStatement extends ActionStatement{
 	@Override
 	public void execute() throws ModelException{
 		if (this.getFunction() != null){
-			throw new ModelException("ThrustOff action in functio body");
+			throw new ModelException("ThrustOff action in function body");
 		}
 		else{
-			this.getProgram().getShip().thrustOn();
+			this.getProgram().getShip().thrustOff();
 		}
 	}
 

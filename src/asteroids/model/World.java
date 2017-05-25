@@ -7,31 +7,35 @@ import asteroids.part2.CollisionListener;
 
 /**
  * A class of Worlds with a width and a height.
- * @invar The dimension of the world must be valid.
+ * @author Ignace Bleukx  and Mats Ruell
+ * @Invar The dimension of the world will always be valid.
  * 		 | isValidDimension(getDimension()[0],getDimension()[1])
  */
 
 public class World {
 	
 	/**
-	 * @param width
-	 * @param height
-	 * This method creates a new object of type World with given parameters and sets the Dimension of the world.
+	 * This method creates an empty world with dimensions according to the given parameters.
+	 * @param width:  The width of the new World.
+	 * @param height: The height of the new World.
+	 * @returns An emtpy world with the given width and heigth.
+	 * 			| result.getAllEntities().isEmpty()
+	 * 			| result.getDimension()[0] = width
+	 * 			| result.getDimension()[1] = height
 	 */
-	
 	public World (double width, double height){
 		this.setDimension(width, height);
 	}
 	
 	/**
+	 * This method sets the Dimension of the world.
 	 * @param width
 	 * @param height
-	 * This method sets the Dimension of the world.
-	 * 		| new.width = width
-	 * 		| new.height = height
-	 * 	
-	 */
-	
+	 * @post The new dimensions of the world equal the given parameters if they are valid, otherwise, the dimensions
+	 * 			of the world are Double.MaxValue and Double.MaxValue.
+	 * 		| new.getDimension()[0] = width || new.getDimension()[0] = Double.MaxValue
+	 * 		| new.getDimension()[1] = height || new.getDimension()[1] = Double.MaxValue
+	 */	
 	public void setDimension(double width, double height){
 		if (this.isValidDimension(width, height)){
 			this.width = width;
@@ -44,56 +48,64 @@ public class World {
 	}
 	
 	/**
-	 * 
+	 * This method returns the dimensions of the current World.
 	 * @return Returns the dimension of the world in an array of length 2 with this.width on index 0 and this.height on index 1.
-	 * 				| return {this.width, this.height}
+	 * 				| result = {this.width, this.height}
 	 */
-	
 	public double[] getDimension(){
 		return new double[]{this.width, this.height};
 	}
 	
 	/**
-	 * @param width
-	 * @param height
+	 * @param width The height that must be checked.
+	 * @param height The height that must be checked.
 	 * @return Returns true if the width and height of world lie in the range 0 to Double.MAX_VALUE.
+	 * 			| see code
 	 */
-
 	public boolean isValidDimension(double width, double height){
 		return (width > 0 && height > 0 && !Double.isNaN(width) && !Double.isNaN(height) && Double.isFinite(width) && Double.isFinite(height));
 	}
 	
-	/**
-	 * @return Returns the set of all the ships in this world.
-	 */
+	private double width;
+	private double height;
 	
+	/**
+	 * This method returns a set containing all ships currently placed in this world.
+	 * @return Returns the set of all the ships in this world.
+	 * 			| if (ship.getWorld() == this
+	 * 				result.contains(ship)
+	 */	
 	public Set<Ship> getAllShips() {
-		return allShips;
+		return this.allShips;
 	}
 	
-	/**@param allShips
-	 *  This method sets all ships in this world from allShips.
+	/**
+	 * This method sets all ships in this world from allShips.
+	 * @param allShips
 	 *  		| new.allShips = allShips
 	 */
-	
 	public void setAllShips(Set<Ship> allShips){
 		this.allShips = allShips;
 		
 	}
 	
-	/**@param ship
-	 * @throws IllegalArgumentException
-	 * 			If given parameter is invalid, a new exception of the type IllegalArgumentException will be thrown.
+	/**
 	 * This method adds the Ship 'ship' to the set of all ships in the world 'allShips'.
-	 */
-	
+	 * @param ship: The ship that must be added to the world.
+	 * @throws IllegalArgumentException: If the given ships equals null of the ship is already placed in a world 
+	 * 				or the ship is out of bounds of this world, or the ship would overlap with another entity in the world,
+	 * 					a new exception of the type IllegalArgumentException will be thrown.
+	 * @Post The world contains the given ship and the world of the ship is set to this one.
+	 * 			| new.getAllShips().contains(ship)
+	 * 			| new.getWorld().equals(this)
+	 */	
 	public void addShipToWorld(Ship ship) throws IllegalArgumentException{
-		if (ship == null || !(ship.getWorld() == null) || ship.isOutOfBounds(this)){
+		if (ship == null || ship.getWorld() != null || ship.isOutOfBounds(this)){
 			throw new IllegalArgumentException("The ship is null or out of bounds or is already in a World");
 		}
 		boolean toAddToWorld = true;
-		for(Ship otherShip : this.getAllShips()){
-			if (ship.overlap(otherShip)){
+		for(Entity entity : this.getAllEntities()){
+			if (ship.overlap(entity)){
 				toAddToWorld = false;
 			}
 		}
@@ -106,13 +118,14 @@ public class World {
 		}
 	}
 	
-	/**@param ship
-	 * @throws IllegalArgumentException
-	 * 			If given parameter is invalid, a new exception of the type IllegalArgumentException will be thrown.
+	/**
 	 * This method removes the Ship 'ship' from the set of all ships in the world 'allShips'.
+	 * @param ship: the ship that must be removed from the world.
+	 * @throws IllegalArgumentException: If the ship to remove is not placed in the world, a new IllegalArgumentExcpetion will be thrown.
+	 * @Post The world does not contain the given ship and the world of the ship is set to null.
+	 * 			| !new.getAllShips().contains(ship)
+	 * 			| new.getWorld() = null
 	 */
-
-	
 	public void removeShipFromWorld(Ship ship) throws IllegalArgumentException{
 		
 		if (ship != null && this.getAllShips().contains(ship)){
@@ -126,42 +139,47 @@ public class World {
 	}
 	
 	/**
-	 * @return Returns the set of all the bullets in this world.
-	 */
-		
+	 * This method returns a HashSet of all the bullets currently placed in the world.
+	 * @return Returns a set of all the bullets in this world.
+	 * 			| if bullet.getWorld().equals(this)
+	 * 				result.contains(bullet)
+	 */		
 	public Set<Bullet> getAllBullets() {
 		return allBulletsWorld;
 	}
 	
 	/**
-	 * @param allBullets
+	 * @param allBullets: The that contains all the bullets that must be set.
 	 * @post This method sets all the bullets in this world from 'allBullets'
-	 * 			| new.allBulletsWorld = allBullets
+	 * 			| new.getAllBulletsWorld() = allBullets
 	 */
-
 	public void setAllBullets(Set<Bullet> allBullets){
 		this.allBulletsWorld = allBullets;
 		
 	}
 	
-	/**@param bullet
-	 * @throws IllegalArgumentException
-	 * 			If given parameter is invalid, a new exception of the type IllegalArgumentException will be thrown.
+	/**
 	 * This method adds the Bullet 'bullet' to the set of all bullets in the world 'allBulletsWorld'.
+	 * @param bullet The bullet that must be added to this world.
+	 * @throws IllegalArgumentException
+	 * 			If the given bullet is already part of a world or the bullet is null or the bullet would overlap with another entity, 
+	 * 				an new IllegalArgumentExcpetion is thrown.
+	 * @Post The world contains the bullet and the world of the bullet is set to this world.
+	 * 			| new.getAllBullets().contains(bullet)
+	 * 			| bullet.getWorld().equals(this)
 	 */
-	
 	public void addBulletToWorld(Bullet bullet) throws IllegalArgumentException{
 		try{
 			boolean toAddToWorld = true;
-			for(Ship otherShip : this.getAllShips()){
+			for(Entity entity : this.getAllEntities()){
 				if (bullet.getBulletScource() == null){	
-					if (bullet.overlap(otherShip)){
+					if (bullet.overlap(entity)){
 						toAddToWorld = false;
 					}
 				}
 			}
 			if(toAddToWorld){
-				this.allBulletsWorld.add(bullet);
+				this.getAllBullets().add(bullet);
 				bullet.setWorld(this);
 			}
 			else{
@@ -172,14 +190,15 @@ public class World {
 		}	}
 
 	
-	/**@param bullet
+	/**
+	 * This method removes the bullet from the current world.
+	 * @param bullet: The bullet that must be removed from this world.
 	 * @throws IllegalArgumentException
 	 * 			If the given bullet is not part of the set of this.getAllBullets, a exception of the type IllegalArgumentException will be thrown.
-	 * This method removes the Bullet 'bullet' from the set of all bullets in the world 'allBulletsWorld' if it is part of the world.
-	 * 			| if (this.getAllBullets().contains(bullet)
-	 * 					! new.getAllbullets().contains(bullet)
-	 */
-	
+	 * @Post The bullet is removed from the world and the world of the bullet is set to null.
+	 * 			| !new.getAllBullets().contains(bullet)
+	 * 			| bullet.getWorld() == null
+	 */	
 	public void removeBulletFromWorld(Bullet bullet) throws IllegalArgumentException{
 		try{
 		this.allBulletsWorld.remove(bullet);
@@ -190,6 +209,12 @@ public class World {
 		}
 	}
 	
+	/**
+	 * This method returns a set of all entities placed in the world.
+	 * @return Returns a HashSet of all the entities in this world.
+	 * 			| if (entity.getWorld().equals(this)
+	 * 				result.contains(entity)
+	 */
 	public Set<? extends Entity> getAllEntities(){
 
 		Set<Entity> allEntities = new HashSet<Entity>();
@@ -208,6 +233,13 @@ public class World {
 		return allEntities;
 	}
 	
+	/**
+	 * Returns the entity on the given position, if there is none, it returns null.
+	 * @param x The x-coordinate of the entity that must be returned.
+	 * @param y The y-coordinate of the entity that must be returned.
+	 * @return The entity at position (x,y) in this world.
+	 * 			| result.getPosition().equals{x,y}
+	 */
 	public Entity getEntityAt(double x, double y){
 		for (Entity object: this.getAllEntities()){
 			if (object.getPosition()[0] == x && object.getPosition()[1] == y){
@@ -217,8 +249,14 @@ public class World {
 		return null;
 		}
 	
+	/**
+	 * This method adds the asteroid to the world.
+	 * @param asteroid The asteroid to be added.
+	 * @post The world contains the asteroid.
+	 * 			| new.getAllAsteroids().contains(asteroid)
+	 */
 	public void addAsteroid(Asteroid asteroid){
-		allAsteroids.add(asteroid);
+		this.getAllAsteroids().add(asteroid);
 		asteroid.setWorld(this);
 	}
 	
@@ -267,36 +305,8 @@ public class World {
 			minorPlanets.add(asteroid);
 		}
 		return minorPlanets;
-	}
-	
-	@Deprecated
-	public Entity[] getEntitiesNextCollision1(){
-		Entity collisionEntity1 = null;
-		Entity collisionEntity2 = null;
-		double nextCollisionTime = Double.POSITIVE_INFINITY;
-		for(Entity entity1:this.getAllEntities()){
-			if (entity1.getTimeCollisionBoundary() < nextCollisionTime && entity1.getTimeCollisionBoundary() >= 0){
-				nextCollisionTime = entity1.getTimeCollisionBoundary();
-				collisionEntity1 = entity1;
-				collisionEntity2 = null;
-			}
-			for(Entity entity2:this.getAllEntities()){
-				if (entity1.equals(entity2)){
-					continue;
-				}
-				else{
-					if (entity1.getTimeCollisionEntity(entity2) < nextCollisionTime){
-						nextCollisionTime = entity1.getTimeCollisionEntity(entity2);
-						collisionEntity1 = entity1;
-						collisionEntity2 = entity2;
-					}
-				}
-			}
-		}
-		Entity[] collisionEntities = {collisionEntity1,collisionEntity2};
-		return collisionEntities;
-	}
-	
+	}	
+		
 	public Entity[] getEntitiesNextCollision(){
 		double nextCollisionTime = Double.POSITIVE_INFINITY;
 		Entity collisionEntity1 = null;
@@ -304,11 +314,9 @@ public class World {
 		boolean boundary = false;
 		for (Entity entity1 : this.getAllEntities()){
 			for (Entity entity2 : this.getAllEntities()){
-				
 				if (entity1 == entity2) {
 					if (entity1.getTimeCollisionBoundary() < nextCollisionTime && entity1.getTimeCollisionBoundary() >= 0){
 						nextCollisionTime = entity1.getTimeCollisionBoundary();
-						System.out.println("This is getTimeCollisionBoundary =" +entity1.getTimeCollisionBoundary());
 						boundary = true;
 						collisionEntity1 = entity1;
 						collisionEntity2 = null;
@@ -317,9 +325,7 @@ public class World {
 				
 				if (!entity1.equals(entity2)){
 					if (entity1.getTimeCollisionEntity(entity2) < nextCollisionTime && entity1.getTimeCollisionEntity(entity2) >= 0){
-						
 						nextCollisionTime = entity1.getTimeCollisionEntity(entity2);
-						System.out.println("Nextcollisiontime =" + nextCollisionTime);
 						boundary = false;
 						collisionEntity1 = entity1;
 						collisionEntity2 = entity2;
@@ -334,7 +340,6 @@ public class World {
 			}
 		}
 		Entity[] collisionEntities = new Entity[]{collisionEntity1, collisionEntity2};
-		System.out.println("collisionEntities[0] =" + collisionEntities[0]);
 		return collisionEntities;
 	}
 	
@@ -345,26 +350,19 @@ public class World {
 		if (dt < 0 || Double.isNaN(dt)){
 			throw new IllegalArgumentException();
 		}
-		
 		else if (entitiesNextCollision[0] == null){
 		}
-		
 		else if (entitiesNextCollision[1] != null){
 			nextCollisionTime = entitiesNextCollision[0].getTimeCollisionEntity(entitiesNextCollision[1]);
 		}
-		
 		else{
 			nextCollisionTime = entitiesNextCollision[0].getTimeCollisionBoundary();
 		}
-		
-		
 		if (nextCollisionTime > dt){
 			for(Entity entity : this.getAllEntities()){
 				entity.move(dt);
 				if (entity instanceof Ship && ((Ship) entity).inspectThruster() == true){
-					((Ship) entity).thrust(((Ship) entity).getShipAcceleration(),dt);
-
-					
+					((Ship) entity).thrust(((Ship) entity).getShipAcceleration(),dt);		
 				}
 			}
 		}
@@ -372,15 +370,11 @@ public class World {
 			
 			for (Entity entity: this.getAllEntities()){
 				entity.move(nextCollisionTime);
-				System.out.println("xposentity= " + entity.getPosition()[0]);
-				System.out.println("yposentity= " + entity.getPosition()[1]);
 				if (entity instanceof Ship && ((Ship) entity).inspectThruster() == true){
 					((Ship) entity).thrust(((Ship) entity).getShipAcceleration(),nextCollisionTime);
-					
 				}
 			}
 			if (entitiesNextCollision[1] == null){
-				
 				if (collisionListener != null) {
 					double x = entitiesNextCollision[0].getPositionCollisionBoundary()[0];
 					double y = entitiesNextCollision[0].getPositionCollisionBoundary()[1];
@@ -388,35 +382,23 @@ public class World {
 				}
 				this.collisionResolver(entitiesNextCollision[0]);
 			}
-			else{
-
-				
+			else{		
 				if (collisionListener != null) {
 					double x = entitiesNextCollision[0].getPositionCollisionEntity(entitiesNextCollision[1])[0];
 					double y = entitiesNextCollision[0].getPositionCollisionEntity(entitiesNextCollision[1])[1];
 				collisionListener.objectCollision(entitiesNextCollision[0], entitiesNextCollision[1], x, y);
 				}
-				
 				this.collisionResolver(entitiesNextCollision[0],entitiesNextCollision[1]);
 			}
-			
-
-			System.out.println("dt=" + dt);
-			System.out.println("nextCollisionTime=" + nextCollisionTime);
-			this.evolve(dt - nextCollisionTime, collisionListener);	
-			
+			this.evolve(dt - nextCollisionTime, collisionListener);
 		}
-		
 	}
 
 	public void collisionResolver(Entity entity1, Entity entity2){
-		System.out.println("Entity 1 = " + entity1.toString());
-		System.out.println("Entity 2 = " + entity2.toString());
 		if (entity1 instanceof Ship && entity2 instanceof Ship){
 			((Ship) entity1).shipCollision((Ship) entity2);
 		}
 		else if (entity1 instanceof Ship && entity2 instanceof Bullet){
-			System.out.println("bulletentity2=" + (Bullet)entity2);
 			((Bullet)entity2).collision(entity1);
 		}
 		else if (entity1 instanceof Bullet && entity2 instanceof Ship){
@@ -447,15 +429,12 @@ public class World {
 	}
 	
 	public void collisionResolver(Entity entity){
-		System.out.println("collisionresolver entity = " + entity);
 		if (entity instanceof Bullet){
-			System.out.println("I resolved bullet boundary collision");
 			((Bullet)entity).boundaryCollision();
 		}
 		else if(entity instanceof Ship || entity instanceof Asteroid) {
 			entity.boundaryCollision();
 		}
-			
 	}
 	
 	public void terminate(){
@@ -475,8 +454,7 @@ public class World {
 	}
 	
 	private boolean isTerminated = false;
-	private double width;
-	private double height;
+
 	private Set<Ship> allShips = new HashSet<Ship>();
 	private Set<Bullet> allBulletsWorld = new HashSet<Bullet>();
 	
