@@ -397,20 +397,39 @@ public class Entity {
 		
 
 	}
+	
 	/**
-	 * 
-	 * @param world
+	 * This method sets the world of the current entity to the given parameter world.
+	 * @param world: The world the entity must be set in.
+	 * @Post The world of the current entity is set to the parameter world.
+	 * 			| new.getWorld() = world
 	 */
 	public void setWorld(World world){
 		this.world = world;
 	}
+	
+	/**
+	 * This method returs the world the current entity is set in.
+	 * @return Returns the world of the current entity.
+	 * 				| result = this.world
+	 */
 	public World getWorld(){
 		return this.world;
 	}
+	
+	/**
+	 * This method deterimines if the world given is a valid one.
+	 * @param world: The world that must be checked.
+	 * @return Returns false if and only if the world is null.
+	 * 			| result = world != null
+	 */
 	public boolean isValidWorld(World world){
 		return world != null;
 	}
 	
+	/**
+	 * This method is overwritten by all subclasses of Entity.
+	 */
 	public void terminate(){
 		throw new IllegalStateException("This method should be overwritten by all subclasses of Entity");
 	}
