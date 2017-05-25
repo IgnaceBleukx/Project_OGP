@@ -3,15 +3,12 @@ package asteroids.model;
 import java.util.Random;
 
 /**
+ * @author Ignace Bleukx and Mats Ruell
  * A class of Planetoids with an X-Position, Y-Position, X-Velocity, Y-Velocity, Radius and Total Travel Distance.
  * Subclass of MinorPlanet.
- *
  */
 
 public class Planetoid extends MinorPlanet {
-
-	
-	private Object Random;
 
 	public Planetoid(double xPosition, double yPosition, double xVelocity, double yVelocity, double radius, double totalTravelDistance){
 		this.setPosition(xPosition, yPosition);
@@ -27,6 +24,10 @@ public class Planetoid extends MinorPlanet {
 	}
 	
 	
+	/**
+	 * This method moves the current planetoid during a given time dt. If the planetoid shrinks below its minimum radius, it is terminated.
+	 * @param dt: The time over which the planetoid must be evolved.
+	 */
 	@Override
 	public void move(double dt){
 		if (dt < 0){
@@ -36,16 +37,25 @@ public class Planetoid extends MinorPlanet {
 			double calculatedDistance = Math.sqrt(Math.pow(this.getVelocity()[0] * dt,2) +Math.pow(this.getVelocity()[1] * dt,2)); 
 			this.setPosition(this.getPosition()[0] + this.getVelocity()[0] * dt, this.getPosition()[1] + this.getVelocity()[1] *dt);
 			if (this.isValidRadius(this.getRadius() - 0.000001*calculatedDistance)){
-			this.setRadius(this.getRadius() - 0.000001 * calculatedDistance);
-			this.totalTraveledDistance += calculatedDistance;
+				this.setRadius(this.getRadius() - 0.000001 * calculatedDistance);
+				this.setTotalTraveledDistance(getTotalTraveledDistance() + calculatedDistance);
 			}
-			
 			else{ 
 				this.terminate();
 			}
 		}
 	}
 	
+	/**
+	 * This method terminated the current planetoid. If its radius was larger than or equal to 30 the moment before it was terminated,
+	 * 	2 new asteroids will be born out of the planetoid with a radius half of the current planetoid and a speed of double the speed
+	 * 		of the current planetoid.
+	 * @post The planetoid is removed from the world, if the radius was larger than or equal to 30, 2 new asteroids will be added to the world.
+	 * 			| if (this.getRadius() >= 30)
+	 * 				newworld.getAllAsteroids().size() = world.getAllAsteroids().size + 2
+	 * 			| new.isTerminated()
+	 * 				
+	 */
 	@Override
 	public void terminate(){
 		if (this.getWorld() != null){
@@ -69,6 +79,10 @@ public class Planetoid extends MinorPlanet {
 		this.isTerminated =true;
 	}
 	
+	/**
+	 * This method returns if the Planetoid is terminated.
+	 * @return Return   
+	 */
 	public boolean isTerminated(){
 		return this.isTerminated;
 	}

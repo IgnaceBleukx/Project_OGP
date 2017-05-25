@@ -172,7 +172,7 @@ public class Ship extends Entity {
 	}
 	
 	private boolean thrusterState;
-	private double thrusterForce = 1.1E18;
+	private double thrusterForce = 1.1E19;
 	
 	/**
 	 * 
