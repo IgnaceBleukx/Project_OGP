@@ -54,20 +54,19 @@ public class Ship extends Entity {
 	 * Default parameter for radius is 10.
 	 * Default parameter for mass is 0. (Gets adjusted by extended constructor, by invoking this.setMass).
 	 */
-	
 	public Ship(){
 		this(0, 0, 0, 0, 10, 0, 0);
 	}
 	
-	
+	/**
+	 * 
+	 * @return
+	 */
 	public double getMinimumRadius(){
 		return this.minimumRadius;
 	}
 	
 	private double minimumRadius = 10;
-
-	
-
 	
 	/**
 	 * Checks if the given double is a valid mass for the current ship.
@@ -94,13 +93,12 @@ public class Ship extends Entity {
 	
 	
 	/**
-	 * Returns the mass of the Ship.
+	 * This method returns the mass of the Ship.
 	 * @return this.mass
 	 */
 	public double getMass(){
 		return this.mass;
 	}
-	
 	
 	private double mass;
 	
@@ -110,8 +108,8 @@ public class Ship extends Entity {
 	 * @param mass
 	 * 		| The mass to check.
 	 * @return True if and only if the given mass is a number and greater than (4/3)*density*PI*(radius**3)
+	 * 			| return mass >= (4/3)*density*PI*(radius**3)
 	 */
-	
 	public boolean isValidMass(double mass){
 		return (!Double.isNaN(mass) && mass > 4.0 * this.density * Math.PI * Math.pow(this.getRadius(),3) / 3.0);
 	}
@@ -120,24 +118,17 @@ public class Ship extends Entity {
 	
 	
 	/**
-	 * 
-	 * @return Returns the minimum radius of the ship.
-	 */
-	public double getMinimumShipRadius(){
-		return this.minimumShipRadius;
-	}
-	private double minimumShipRadius = 10;
-	
-	/**
   	 * Enables the thruster of the current ship.
+  	 * @Post | new.inspectThruster() = true
  	 */
-	
  	public void thrustOn(){
 		this.thrusterState = true;  		
 		}
 			
 	/**
 	 * Disables the thruster of the current ship.
+	 * @post The thruster is disabled.
+	 * 			| new.instpectThruster() = false
 	 */
 	 public void thrustOff(){
 		this.thrusterState = false;
@@ -157,11 +148,9 @@ public class Ship extends Entity {
 	
 	/**
 	 * Returns the acceleration of the ship.
-	 * @return thrusterForce/mass if the mass is not 0 and the thrusterState = true
-	 * 			else returns 0.
-	 */
-	
-	
+	 * @return Returns the thrusterforce devided by the mass if the thruster is enabeled and 0 if it is not.
+	 * 			| see code
+	 */	
 	public double getShipAcceleration(){
 		if(this.getMass() != 0 && this.inspectThruster()){
 			return (this.getThrusterForce())/(this.getMass());
@@ -171,6 +160,14 @@ public class Ship extends Entity {
 		}
 	}
 	
+	/**
+	 * This method returns the thrusterForce of the ship.
+	 * @return this.thrusterForce
+	 */
+	public double getThrusterForce() {
+		return this.thrusterForce;
+	}
+
 	private boolean thrusterState;
 	private double thrusterForce = 1.1E18;
 	
@@ -235,8 +232,9 @@ public class Ship extends Entity {
 	}
 	
 	/**
-	 * 
+	 * Returns all the bullets currently loaded on the ship.
 	 * @return Returns a hash set of all bullets loaded on the ship.
+	 * 			| return this.allBulletsShip
 	 */
 	public Set<Bullet> getAllBulletsShip() {
 		return this.allBulletsShip;
@@ -266,6 +264,14 @@ public class Ship extends Entity {
 		}
 	}
 	
+	/**
+	 * This method loads a number of given bullets on the ship.
+	 * @param bullets: The collection of bullets that must be loaded on the ship.
+	 * @throws IllegalArgumentException if one of the bullets is not valid, the method throws a new IllegalArgumentException.
+	 * @Post The ship contains all of the bullets in the collection.
+	 * 			| for (bullet : bullets)
+	 * 					new.getBulletsOnShip().contains(bullet)
+	 */
 	public void loadBulletsOnShip(Collection<Bullet> bullets) throws IllegalArgumentException{
 		try{
 			for (Bullet bullet : bullets){
@@ -276,9 +282,11 @@ public class Ship extends Entity {
 			throw new IllegalArgumentException();
 		}
 	}
+	
 	/**
-	 * 
+	 * This method returns the amount of bullets loaded on the ship.
 	 * @return Returns the amount of bullets loaded on the ship.
+	 * 			| return this.getAllBulletsOnShip().size()
 	 */
 	public int getNbBulletsOnShip() {
 		return this.allBulletsShip.size();
@@ -305,6 +313,7 @@ public class Ship extends Entity {
 			throw new IllegalArgumentException();
 		}
 	}
+	
 	/**
 	 * 
 	 * @throws IndexOutOfBoundsException
@@ -315,27 +324,21 @@ public class Ship extends Entity {
 		if (this.getWorld() != null && this.getNbBulletsOnShip() > 0){
 			Bullet bulletToBeFired = allBulletsShip.iterator().next();
 			this.removeBulletFromShip(bulletToBeFired);
-
 			bulletToBeFired.setCollisionState(true);
 			bulletToBeFired.setBulletScource(this);
 			double meetingpointX = this.getPosition()[0] + this.getRadius() * Math.cos(this.getOrientation());
 			double meetingpointY = this.getPosition()[1] + this.getRadius() * Math.sin(this.getOrientation());
-		
 			double bulletPosX = meetingpointX + bulletToBeFired.getRadius() * Math.cos(this.getOrientation());
 			double bulletPosY = meetingpointY + bulletToBeFired.getRadius() * Math.sin(this.getOrientation());
 			bulletToBeFired.setPosition(bulletPosX, bulletPosY);
-		
 			double xVelocityBullet = this.getVelocity()[0] + Math.cos(this.getOrientation()) * 250;
 			double yVelocityBullet = this.getVelocity()[1] + Math.sin(this.getOrientation()) * 250;
 			bulletToBeFired.setVelocity(xVelocityBullet, yVelocityBullet);
-					
 			this.getWorld().addBulletToWorld(bulletToBeFired);
-			
 			if (bulletToBeFired.isOutOfBounds(bulletToBeFired.getWorld())){
 				bulletToBeFired.terminate();
 				return;
 			}
-			
 			for (Entity entity : this.getWorld().getAllEntities()){
 				if (bulletToBeFired.overlap(entity) && !bulletToBeFired.equals(entity)){
 					this.getWorld().collisionResolver(bulletToBeFired,entity);
@@ -344,16 +347,10 @@ public class Ship extends Entity {
 					break;
 				}
 			}
-			
-			
-		
 		}
-
 	}
 
 	private Set<Bullet> allBulletsShip = new HashSet<Bullet>();
-	
-	
 	private double maxNbOfBullets = 15;
 	
 	/**
@@ -373,8 +370,9 @@ public class Ship extends Entity {
 		this.getWorld().removeShipFromWorld(this);
 		this.isTerminated = true;
 	}
+	
 	/**
-	 * 
+	 * This method returns if true if the ship is terminated and returns false if it is not terminated.
 	 * @return Returns true if the current ship is terminated, returns false if it is not.
 	 * 			| returns this.isTerminated
 	 */
@@ -382,31 +380,14 @@ public class Ship extends Entity {
 		return this.isTerminated;
 	}
 	
+	private boolean isTerminated = false;	
+	
 	/**
-	 * returns the thrusterForce of the ship.
-	 * @return this.thrusterForce
+	 * This method resolves a collision with another ship.
+	 * @param otherShip The other ship witch collide with this one.
+	 * @Post The velocity of this ship and the other ship are updated to represent the collision.
 	 */
-	public double getThrusterForce() {
-		return this.thrusterForce;
-	}
-
-	/**
-	 * @param thrusterForce
-	 * 		 | thrusterForce is the force of the thruster of the ship.
-	 * @effect
-	 * 		 | sets thrusterForce to the new thrusterForce.
-	 */
-	public void setThrusterForce(double thrusterForce) {
-		this.thrusterForce = thrusterForce;
-	}
-
-	private boolean isTerminated = false;
-	
-
-	
-	
 	public void shipCollision(Ship otherShip){
-
 		double deltaRX = otherShip.getPosition()[0] - this.getPosition()[0];
 		double deltaRY = otherShip.getPosition()[1] - this.getPosition()[1];
 		double deltaVX = otherShip.getVelocity()[0] - this.getVelocity()[0];
@@ -423,13 +404,26 @@ public class Ship extends Entity {
 
 	}
 	
+	/**
+	 * The program is loaded on the ship.
+	 * @param program
+	 * @Post The program is loaded on the ship.
+	 * 			| new.getProgram == program
+	 */
 	public void loadProgram(Program program){
 		this.program = program;
 		this.getShipProgram().setShip(this);
 	}
+	
+	/**
+	 * This method returns the program of the ship.
+	 * @return Returns the program of the ship.
+	 * 			| return this.program
+	 */
 	public Program getShipProgram(){
 		return this.program;
 	}
+	
 	private Program program;
 	
 	

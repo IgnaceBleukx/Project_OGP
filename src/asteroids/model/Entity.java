@@ -175,7 +175,7 @@ public class Entity {
 	 */
 	public boolean isValidRadius(double radius){
 		if (!Double.isNaN(radius)){
-			if (this instanceof Ship && ((Ship)this).getMinimumShipRadius() > radius){
+			if (this instanceof Ship && ((Ship)this).getMinimumRadius() > radius){
 					return false;
 			}
 			else if (this instanceof MinorPlanet && ((MinorPlanet)this).getMinimumRadius() > radius){
