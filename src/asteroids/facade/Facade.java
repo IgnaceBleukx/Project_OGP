@@ -361,7 +361,11 @@ public class Facade implements asteroids.part3.facade.IFacade{
 
 	@Override
 	public void addAsteroidToWorld(World world, Asteroid asteroid) throws ModelException {
-		world.addAsteroid(asteroid);
+		try{
+			world.addAsteroid(asteroid);
+		}catch (IllegalArgumentException e){
+			throw new ModelException("The asterois is null or overlaps with another entity");
+		}
 	}
 
 	@Override
@@ -377,7 +381,11 @@ public class Facade implements asteroids.part3.facade.IFacade{
 
 	@Override
 	public void addPlanetoidToWorld(World world, Planetoid planetoid) throws ModelException {
-		world.addPlanetoid(planetoid);
+		try{
+			world.addPlanetoid(planetoid);
+		}catch (IllegalArgumentException e){
+			throw new ModelException("The planetoid is null or overlaps with antoher Entity");
+		}
 	}
 
 	@Override
