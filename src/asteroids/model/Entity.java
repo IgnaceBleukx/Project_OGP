@@ -1,5 +1,7 @@
 package asteroids.model;
 
+import asteroids.util.ModelException;
+
 /**
  * A class of Entities. Super class of classes Ship, Bullet and MinorPlanet.
  * 
@@ -78,8 +80,20 @@ public class Entity {
 	 * @post Sets the current orientation of the ship to the parameter orientation.
 	 * 			| new.orientation = orientation 
 	 */
-	public void setOrientation(double orientation) {
-		this.orientation = orientation;
+	public void setOrientation(double orientation){
+		if(isValidOrientation(orientation)){
+			this.orientation = orientation;
+
+		}
+	}
+	
+	public boolean isValidOrientation(double orientation) {
+		if(0 <= orientation && orientation <= 2*Math.PI){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	private double orientation;

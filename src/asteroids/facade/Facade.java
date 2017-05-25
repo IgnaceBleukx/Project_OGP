@@ -52,7 +52,11 @@ public class Facade implements asteroids.part3.facade.IFacade{
 	}
 
 	public double getShipOrientation(Ship ship) throws ModelException{
+		try{
 		return ship.getOrientation();
+		}catch (IllegalArgumentException exc){
+			throw new ModelException("The orientation is illegal");
+		}
 	}
 	
 	
@@ -66,7 +70,12 @@ public class Facade implements asteroids.part3.facade.IFacade{
 	}
 	
 	public void turn(Ship ship, double angle) throws ModelException{
+		try{
 		ship.rotate(angle);
+		}catch (IllegalArgumentException exc){
+			throw new ModelException("Can not turn if the angle is illegal");
+		}
+		
 	}
 
 	public double getDistanceBetween(Ship ship1, Ship ship2) throws ModelException{

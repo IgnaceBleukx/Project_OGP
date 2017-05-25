@@ -61,8 +61,13 @@ public class AssignementStatement extends VoidStatement {
 			}
 			for (Variable variable : getProgram().getVariables()){
 				if (variable.getName().equals(this.getVariableName())){
+					if (this.getValue() instanceof ValueExpression){
 					variable.setValue(((ValueExpression) this.getValue()).evaluate());
 					return;
+					}
+					else {
+						throw new ModelException("Wrong type");
+					}
 				}
 			}
 			getProgram().addVariable(new Variable(((ValueExpression)this.getValue()).evaluate(),this.getVariableName()));

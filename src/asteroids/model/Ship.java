@@ -35,9 +35,14 @@ public class Ship extends Entity {
 		try{
 			this.setVelocity(xVelocity, yVelocity);
 			this.setPosition(xPosition, yPosition);
-			this.setOrientation(orientation);
 			this.setRadius(radius);
 			this.setMass(mass);
+			if (isValidOrientation(orientation)){
+				this.setOrientation(orientation);
+			}
+			else {
+				throw new IllegalArgumentException();
+			}
 		}catch(IllegalArgumentException exc){
 			throw new IllegalArgumentException();
 		}
@@ -249,6 +254,11 @@ public class Ship extends Entity {
 		if (bullet == null || !(bullet.getWorld() == null)){
 			throw new IllegalArgumentException();
 		}
+		
+		if (-bullet.getDistanceBetween(this) < 2*bullet.getRadius() && bullet.getBulletScource() != this){
+			throw new IllegalArgumentException();
+		}
+		
 		else if (this.getNbBulletsOnShip() < this.maxNbOfBullets){
 			this.allBulletsShip.add(bullet);
 			bullet.setShip(this);
