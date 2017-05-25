@@ -35,15 +35,9 @@ public class ReadParameterExpression extends ValueExpression{
 	@Override
 	public  double evaluate() throws ModelException, NumberFormatException, BreakException{
 		if (getFunction() != null){
-			List<Expression> parameters = getFunction().getParameters();
+			List<Parameter> parameters = getFunction().getParameters();
 			try{
-				if (parameters.get(Integer.parseInt(getParameterName().substring(1))-1) instanceof ValueExpression){
-					passInformation(parameters.get(Integer.parseInt(getParameterName().substring(1))-1));
-					return ((ValueExpression) parameters.get(Integer.parseInt(getParameterName().substring(1))-1)).evaluate();
-				}
-				else{
-					throw new ModelException("The parameter given does not evaluate to a value");
-				}
+				return parameters.get(Integer.parseInt(getParameterName().substring(1))-1).getValue();
 			}catch(IndexOutOfBoundsException e){
 				throw new ModelException("To little parameters given");
 			}

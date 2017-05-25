@@ -81,7 +81,8 @@ public class Planetoid extends MinorPlanet {
 	
 	/**
 	 * This method returns if the Planetoid is terminated.
-	 * @return Return   
+	 * @return Returns true if the planetoid is terminated, returns false if it is not.
+	 * 			| return this.isTerminated
 	 */
 	public boolean isTerminated(){
 		return this.isTerminated;
@@ -89,21 +90,46 @@ public class Planetoid extends MinorPlanet {
 	
 	private boolean isTerminated;
 	
+	/**
+	 * This method returns the density of the planetoid.
+	 * @return Returns the density of the planetoid.
+	 * 			| return this.density
+	 */
 	@Override
 	public double getDensity(){
 		return this.density;
 	}
+	
 	private double density = 0.917E12;
 	
+	/**
+	 * This method returns the total travaled distance of the planetoid.
+	 * @return The total traveled distance of the planetoid.
+	 * 			| return this.totalTraveledDistance
+	 */
 	public double getTotalTraveledDistance(){
 		return this.totalTraveledDistance;
 	}
+	
+	/**
+	 * This method sets the total traveled distance of the planetoid.
+	 * @param totalTraveledDistance
+	 * @Post The total traveled distance equals the parameter totalTraveledDistance.
+	 * 			| new.getTotalTraveledDistance() = totalTraveledDistance
+	 */
 	public void setTotalTraveledDistance(double totalTraveledDistance){
 		this.totalTraveledDistance = totalTraveledDistance;
 	}
 	
 	private double totalTraveledDistance;
 
+	/**
+	 * This method resolves a collisision between a ship and a planetoid.
+	 * The ship will be teleported to another place in the world, keeping its current velocity and radius, if the ship spawns on another entity,
+	 * 	the ship is terminated. 
+	 * @param ship: The ship that collides with this planetoid.
+	 * 
+	 */
 	public void shipPlanetoidCollision(Ship ship) {
 		Random randomGen = new Random();
 		ship.setPosition(randomGen.nextDouble()*this.getWorld().getDimension()[0],randomGen.nextDouble()*this.getWorld().getDimension()[1]);

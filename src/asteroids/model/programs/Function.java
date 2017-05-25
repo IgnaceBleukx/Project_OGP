@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Expressions.Expression;
+import Expressions.Parameter;
 import Expressions.ValueVariable;
 import Expressions.Variable;
 import Statements.BreakException;
@@ -28,7 +29,7 @@ public class Function {
 	private SourceLocation sourceLocation;
 	private Function function;
 	private boolean whileState = false;
-	private List<Expression> parameters = new ArrayList<Expression>();
+
 	
 	public Program getProgram() {
 		return program;
@@ -75,12 +76,14 @@ public class Function {
 	public void setWhileState(boolean whileState) {
 		this.whileState = whileState;
 	}
-	public List<Expression> getParameters() {
+	public List<Parameter> getParameters() {
 		return parameters;
 	}
-	public void setParameters(List<Expression> parameters) {
-		this.parameters = parameters;
+	public void addParameter(Parameter parameter) {
+		this.parameters.add(parameter);
 	}
+	
+	private List<Parameter> parameters = new ArrayList<Parameter>();
 	private List<Variable> variables = new ArrayList<Variable>();
 	
 	

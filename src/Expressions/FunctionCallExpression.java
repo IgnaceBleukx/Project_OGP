@@ -52,7 +52,10 @@ public class FunctionCallExpression extends ValueExpression {
 			throw new ModelException("The given functionname does not refer to a function in the program");
 		}
 		passInformation(functionToExecute);
-		functionToExecute.setParameters(getActualArgs());
+		for(Expression expression : getActualArgs()){
+			passInformation(expression);
+			functionToExecute.addParameter(new Parameter(((ValueExpression) expression).evaluate()));
+		}
 		return (double) functionToExecute.execute();
 	}
 }
